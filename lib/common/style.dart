@@ -2,25 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommonStyle {
-  static double buttonHeight = 48.h;
-
   // 标题Style
   static TextStyle titleStyle = TextStyle(
     fontSize: fontLg,
     fontWeight: FontWeight.bold,
-    color: CommonColors.theme.shade400,
-  );
-
-  // 内容Style
-  static TextStyle contentStyle = TextStyle(
-    fontSize: fontMd,
-    color: CommonColors.theme.shade300,
   );
 
   // 次要内容Style
   static TextStyle secondaryStyle = TextStyle(
     fontSize: fontSm,
-    color: CommonColors.theme.shade200,
+    color: CommonColors.theme.shade300,
   );
 
   // 圆角

@@ -22,7 +22,7 @@ class ComImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
+      borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       child: CachedNetworkImage(
         imageUrl: src,
         placeholder: (context, url) => Container(

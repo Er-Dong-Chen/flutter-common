@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_chen_common/widgets/base/com_empty.dart';
+import 'package:flutter_chen_common/widgets/base/com_loading.dart';
 import 'package:flutter_chen_common/widgets/refresh/back_top_widget.dart';
-import 'package:flutter_chen_common/widgets/refresh/empty_widget.dart';
 import 'package:flutter_chen_common/widgets/refresh/refresh_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -51,6 +52,7 @@ class RefreshListWidget<T> extends StatelessWidget {
   final Widget Function(T item, int index) itemBuilder;
   final Function(T item, int index)? onItemClick;
   final Widget? empty;
+  final double? emptyTop;
   final int crossAxisCount;
   final double spacing;
   final bool showList;
@@ -64,6 +66,7 @@ class RefreshListWidget<T> extends StatelessWidget {
     this.crossAxisCount = 2,
     this.spacing = 12,
     this.showList = true,
+    this.emptyTop,
   });
 
   @override
@@ -74,15 +77,16 @@ class RefreshListWidget<T> extends StatelessWidget {
     } else if (controller.isLoading) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.only(top: 260.h),
-          child: const CupertinoActivityIndicator(radius: 16),
+          padding: EdgeInsets.only(
+              top: emptyTop != null ? (emptyTop! + 60.h) : 260.h),
+          child: const ComLoading(),
         ),
       );
     } else if (data.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.only(top: 160.h),
-          child: empty ?? const EmptyWidget(),
+          padding: EdgeInsets.only(top: emptyTop != null ? emptyTop! : 200.h),
+          child: empty ?? const ComEmpty(),
         ),
       );
     } else if (!showList) {

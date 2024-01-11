@@ -16,6 +16,9 @@ class ComTextField extends StatelessWidget {
   final Widget? suffix;
   final bool readOnly;
   final double? radius;
+  final Color? color;
+  final double? height;
+  final EdgeInsets? padding;
 
   const ComTextField({
     super.key,
@@ -31,20 +34,24 @@ class ComTextField extends StatelessWidget {
     this.readOnly = false,
     this.radius,
     this.onTap,
+    this.color,
+    this.height,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 52.h,
-      padding: EdgeInsets.only(
-        top: 4.h,
-        bottom: 4.h,
-        left: radius != null ? 18.w : 24.w,
-      ),
+      height: height ?? 52.h,
+      padding: padding ??
+          EdgeInsets.only(
+            top: 4.h,
+            bottom: 4.h,
+            left: radius != null ? 18.w : 24.w,
+          ),
       decoration: BoxDecoration(
-        color: CommonColors.theme.shade100,
+        color: color ?? CommonColors.theme.shade100,
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       ),
       child: TextField(

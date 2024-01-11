@@ -1,11 +1,10 @@
 name: flutter_chen_common
 description: "A Flutter Common package For Helper and Widgets."
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 
 environment:
-  sdk: '>=3.2.1 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:

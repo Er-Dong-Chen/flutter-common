@@ -38,7 +38,7 @@ class ComContainer extends StatelessWidget {
           EdgeInsets.symmetric(
               horizontal: CommonStyle.spaceMd, vertical: CommonStyle.spaceMd),
       decoration: BoxDecoration(
-        color: color ?? Colors.white,
+        color: color ?? Theme.of(context).colorScheme.inversePrimary,
         image: image,
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
         boxShadow: [
