@@ -11,10 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class UpdateHelper {
-  static String apkName = 'flutterApp.apk';
-  static dynamic taskId;
-
-  static getPackageInfo() async {
+  static Future<PackageInfo> getPackageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     return packageInfo;
   }
@@ -25,31 +22,32 @@ class UpdateHelper {
 
     final per = await PermissionHelper.checkPermission([Permission.storage]);
     if (!per) {
-      CommonHelper.showToast("下载失败，请开启相关权限后再操作");
+      CommonHelper.showToast("Please enable related permissions");
     }
 
     final path = await _apkLocalPath;
-    File file = File(path + '/' + apkName);
+    PackageInfo packageInfo = await getPackageInfo();
+    File file = File(path + '/' + packageInfo.appName);
     if (await file.exists()) await file.delete();
 
     WidgetsFlutterBinding.ensureInitialized();
     await FlutterDownloader.initialize();
 
-    CommonHelper.showToast("开始下载");
-    taskId = await FlutterDownloader.enqueue(
+    CommonHelper.showToast("Start download");
+    final taskId = await FlutterDownloader.enqueue(
         url: url,
         savedDir: path,
-        fileName: apkName,
+        fileName: packageInfo.appName,
         showNotification: true,
         openFileFromNotification: true);
 
     FlutterDownloader.registerCallback((id, status, progress) {
       DownloadTaskStatus downloadTaskStatus = DownloadTaskStatus.values[status];
       if (downloadTaskStatus == DownloadTaskStatus.failed) {
-        CommonHelper.showToast("下载失败");
+        CommonHelper.showToast("Download failed");
       }
       if (taskId == id && downloadTaskStatus == DownloadTaskStatus.complete) {
-        CommonHelper.showToast("下载完成");
+        CommonHelper.showToast("Download complete");
         _installApk();
       }
     });
@@ -57,7 +55,8 @@ class UpdateHelper {
 
   static Future _installApk() async {
     String path = await _apkLocalPath;
-    await OpenFile.open('$path/$apkName');
+    PackageInfo packageInfo = await getPackageInfo();
+    await OpenFile.open('$path/${packageInfo.appName}');
   }
 
   static get _apkLocalPath async {

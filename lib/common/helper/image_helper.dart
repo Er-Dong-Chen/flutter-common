@@ -69,23 +69,24 @@ class ImageHelper {
     final isPermission = await PermissionHelper.checkPermission(
         [Permission.photos, Permission.storage]);
     if (!isPermission) {
-      CommonHelper.showToast("请先开启相关权限");
+      CommonHelper.showToast("Please enable related permissions");
       return false;
     }
     final result = await ImageGallerySaver.saveFile(filePath);
     if (!result) {
-      CommonHelper.showToast("保存失败");
+      CommonHelper.showToast("Save fail");
       return false;
     }
-    CommonHelper.showToast("保存成功");
+    CommonHelper.showToast("Save success");
     return true;
   }
 
   // 选择图片Action
   static Future showActionSheet(ValueChanged<String> callBack,
-      {bool crop = true}) async {
+      {bool crop = true, List<Widget>? actions, Widget? cancel}) async {
     CommonHelper.showActionSheet(
-        actions: [const Text("相册选择"), const Text("拍摄照片")],
+        actions: actions ?? [const Text("相册选择"), const Text("拍摄照片")],
+        cancel: cancel,
         onConfirm: (val) async {
           List<Permission> permissionList = [
             Permission.storage,
@@ -94,7 +95,7 @@ class ImageHelper {
           final permissions =
               await PermissionHelper.checkPermission([permissionList[val]]);
           if (!permissions) {
-            return CommonHelper.showToast('请开启${val == 0 ? '相册' : '相机'}权限后再操作');
+            return CommonHelper.showToast('Please enable related permissions');
           }
           dynamic img;
           if (val == 0) {

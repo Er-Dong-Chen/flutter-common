@@ -46,51 +46,6 @@ class CommonHelper {
     BotToast.closeAllLoading();
   }
 
-  static void showDialog({
-    Widget? title,
-    required Widget content,
-    List<Widget>? actions,
-    bool barrierDismissible = true,
-  }) {
-    actions = actions ?? [];
-    Widget baseAlertDialog = AlertDialog(
-      titlePadding: const EdgeInsets.only(top: 24, right: 24, left: 24),
-      contentPadding: const EdgeInsets.all(0),
-      backgroundColor: Theme.of(Get.context!).dialogBackgroundColor,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16))),
-      title: title,
-      titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: content,
-          ),
-          if (actions.isNotEmpty) ...[
-            Padding(
-                padding: const EdgeInsets.all(24),
-                child: Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: actions.length > 1
-                        ? actions
-                        : [
-                            Expanded(
-                              child: actions[0],
-                            )
-                          ]))
-          ]
-        ],
-      ),
-      buttonPadding: EdgeInsets.zero,
-    );
-
-    Get.dialog(baseAlertDialog, barrierDismissible: barrierDismissible);
-  }
-
   static void showAlertDialog({
     Widget? title,
     required Widget content,
@@ -102,7 +57,7 @@ class CommonHelper {
     Get.dialog(CupertinoAlertDialog(
       title: title ??
           const Center(
-            child: Text("温馨提示"),
+            child: Text("System Tips"),
           ),
       content: Padding(
         padding: const EdgeInsets.only(top: 12),
@@ -127,7 +82,7 @@ class CommonHelper {
     List<Widget>? actions,
     Widget? cancel,
     VoidCallback? onCancel,
-    Function(int val)? onConfirm,
+    ValueChanged<int>? onConfirm,
   }) {
     actions = actions ?? [];
     List<CupertinoActionSheetAction> actionsList = [];
@@ -153,89 +108,71 @@ class CommonHelper {
     );
   }
 
-  static showDatePicker({
-    Function(DateTime date)? onConfirm,
-  }) {
+  static showDatePicker(
+      {Function(DateTime date)? onConfirm,
+      String? cancelText,
+      String? confirmText,
+      bool useSafeArea = false}) {
     DateTime date = DateTime.now();
     showModalBottomSheet(
       context: Get.context!,
-      builder: (BuildContext context) => Container(
+      useSafeArea: useSafeArea,
+      builder: (BuildContext context) => SizedBox(
         height: 300.h,
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).dialogBackgroundColor,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: CommonStyle.spaceMd,
-                    left: CommonStyle.spaceLg,
-                    right: CommonStyle.spaceLg),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.back(),
-                      child: Text(
-                        "取消",
-                        style: CommonStyle.titleStyle,
-                      ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  top: CommonStyle.spaceMd,
+                  left: CommonStyle.spaceLg,
+                  right: CommonStyle.spaceLg),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: Text(
+                      cancelText ?? "Cancel",
+                      style: CommonStyle.titleStyle,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        onConfirm?.call(date);
-                        Get.back();
-                      },
-                      child: Text(
-                        "确定",
-                        style: CommonStyle.titleStyle
-                            .copyWith(color: CommonColors.theme),
-                      ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      onConfirm?.call(date);
+                      Get.back();
+                    },
+                    child: Text(
+                      confirmText ?? "Confirm",
+                      style: CommonStyle.titleStyle
+                          .copyWith(color: CommonColors.theme),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 250.h,
-                child: CupertinoDatePicker(
-                    mode: CupertinoDatePickerMode.date,
-                    onDateTimeChanged: (DateTime newDate) {
-                      date = newDate;
-                    }),
-              )
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 250.h,
+              child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  onDateTimeChanged: (DateTime newDate) {
+                    date = newDate;
+                  }),
+            )
+          ],
         ),
       ),
     );
   }
 
-  static showBottomSheet({
-    required Widget content,
-  }) {
-    showModalBottomSheet(
-      context: Get.context!,
-      builder: (BuildContext context) => Container(
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).dialogBackgroundColor,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: content,
-        ),
-      ),
-    );
+  static void showModal(Widget content) {
+    BotToast.showWidget(
+        toastBuilder: (_) {
+          return content;
+        },
+        groupKey: "modal");
+  }
+
+  static void closeModal() {
+    BotToast.removeAll("modal");
   }
 }

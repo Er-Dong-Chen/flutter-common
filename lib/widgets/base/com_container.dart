@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 
 class ComContainer extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   final AlignmentGeometry? alignment;
   final double? width;
   final double? height;
@@ -15,7 +15,7 @@ class ComContainer extends StatelessWidget {
 
   const ComContainer({
     super.key,
-    required this.child,
+    this.child,
     this.alignment,
     this.width,
     this.height,

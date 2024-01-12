@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_chen_common/common/utils/log_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CacheHelper {
@@ -20,7 +20,7 @@ class CacheHelper {
     if (appDocDir.existsSync()) {
       await deleteDirectory(appDocDir);
     } else {
-      Log.d('Cache directory does not exist');
+      debugPrint('Cache directory does not exist');
     }
   }
 
