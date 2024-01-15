@@ -1,3 +1,7 @@
+## 0.0.4
+
+* TODO: Feat some widgets and pref code.
+
 ## 0.0.3
 
 * TODO: Pref for batter customization.

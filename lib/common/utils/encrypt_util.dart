@@ -11,6 +11,13 @@ class EncryptUtil {
     return encodeStr.toString();
   }
 
+  /// md5 加密
+  static String encodeMd5(String data) {
+    var content = const Utf8Encoder().convert(data);
+    var digest = md5.convert(content);
+    return digest.toString();
+  }
+
   /// Base64加密
   static String encodeBase64(String data) {
     var content = utf8.encode(data);

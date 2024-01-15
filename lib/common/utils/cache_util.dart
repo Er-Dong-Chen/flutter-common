@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
-class CacheHelper {
+class CacheUtil {
   static Future<String> getCacheSize() async {
     final Directory tempDir = await getTemporaryDirectory();
     double size = 0.0;
@@ -12,7 +12,7 @@ class CacheHelper {
         size += await entity.length();
       }
     }
-    return formatFileSize(size);
+    return formatMemorySize(size);
   }
 
   static Future<void> clearCache() async {
@@ -36,13 +36,20 @@ class CacheHelper {
     await dir.delete();
   }
 
-  static String formatFileSize(double size) {
-    size = size / 1024;
-    if (size > 1024) {
-      size = size / 1024;
-      return "${size.toStringAsFixed(2)}MB";
+  static String formatMemorySize(final double byteSize, {int precision = 2}) {
+    if (byteSize < 0) {
+      return '0B';
+    } else if (byteSize < 1024) {
+      return '${byteSize}B';
+    } else if (byteSize < 1048576) {
+      var size = (byteSize / 1024).toStringAsFixed(precision);
+      return '${size}KB';
+    } else if (byteSize < 1073741824) {
+      var size = (byteSize / 1048576).toStringAsFixed(precision);
+      return '${size}MB';
     } else {
-      return "${size.toStringAsFixed(2)}KB";
+      var size = (byteSize / 1073741824).toStringAsFixed(precision);
+      return '${size}GB';
     }
   }
 }

@@ -59,4 +59,8 @@ class CommonColors {
       900: Color(0xFFfe8c00), // 其他色
     },
   );
+
+  // 主题渐变色
+  static Gradient primaryGradient =
+      LinearGradient(colors: [theme.shade800, theme.shade500]);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/common/utils/function_util.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ComButton extends StatelessWidget {
   final Widget child;
@@ -24,6 +25,7 @@ class ComButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (gradient != null) {
       return Container(
+        height: 42.h,
         decoration: BoxDecoration(
           gradient: gradient,
           borderRadius: BorderRadius.circular(30.0),

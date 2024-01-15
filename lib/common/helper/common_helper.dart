@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/widgets/base/com_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -106,6 +107,68 @@ class CommonHelper {
         ),
       ),
     );
+  }
+
+  static void showDialog({
+    required Widget content,
+    Widget? title,
+    List<Widget>? actions,
+    String? cancelText,
+    String? confirmText,
+    VoidCallback? onConfirm,
+    MainAxisAlignment? actionsAlignment,
+    bool close = false,
+  }) {
+    Get.dialog(Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          title: Center(child: title),
+          content: content,
+          actions: actions ??
+              <Widget>[
+                SizedBox(
+                  height: 42,
+                  width: 120.w,
+                  child: ComButton(
+                    plain: true,
+                    child: Text(cancelText ?? 'Cancel'),
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 42,
+                  width: 120.w,
+                  child: ComButton(
+                    gradient: CommonColors.primaryGradient,
+                    child: Text(cancelText ?? 'Confirm'),
+                    onPressed: () {
+                      onConfirm?.call();
+                    },
+                  ),
+                ),
+              ],
+          actionsAlignment: actionsAlignment ?? MainAxisAlignment.spaceAround,
+        ),
+        Visibility(
+          visible: close,
+          child: IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            icon: const Icon(
+              Icons.cancel_outlined,
+              size: 36,
+              color: Colors.white60,
+            ),
+            onPressed: () {
+              Navigator.pop(Get.context!);
+            },
+          ),
+        )
+      ],
+    ));
   }
 
   static showDatePicker(

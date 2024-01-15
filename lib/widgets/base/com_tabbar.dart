@@ -4,14 +4,17 @@ import 'package:flutter_chen_common/common/style.dart';
 class ComTabBar extends StatelessWidget {
   final int length;
   final List<Widget> tabs;
+  final int initialIndex;
+  final ValueChanged<int>? onTap;
   final TabAlignment? tabAlignment;
   final BoxDecoration? indicator;
+  final double indicatorBottom;
+  final double indicatorWidth;
   final Color? labelColor;
   final EdgeInsets? labelPadding;
   final Color? unselectedLabelColor;
   final TextStyle? labelStyle;
   final bool? isScrollable;
-  final ValueChanged<int>? onTap;
 
   const ComTabBar({
     super.key,
@@ -25,11 +28,15 @@ class ComTabBar extends StatelessWidget {
     this.labelPadding,
     this.isScrollable,
     this.onTap,
+    this.initialIndex = 0,
+    this.indicatorBottom = 8,
+    this.indicatorWidth = 12,
   });
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: initialIndex,
       length: length,
       child: TabBar(
         tabAlignment: tabAlignment ?? TabAlignment.start,
@@ -38,8 +45,8 @@ class ComTabBar extends StatelessWidget {
         isScrollable: isScrollable ?? true,
         indicator: indicator ??
             CustomUnderlineTabIndicator(
-                indicatorBottom: 8,
-                indicatorWidth: 10,
+                indicatorBottom: indicatorBottom,
+                indicatorWidth: indicatorWidth,
                 borderSide: BorderSide(
                   width: 3,
                   color: labelColor ?? CommonColors.theme.shade500,

@@ -16,10 +16,13 @@ class ComConfig {
     }
   }
 
-  static config({MaterialColor? theme}) {
+  static config({MaterialColor? theme, Gradient? primaryGradient}) {
     /// 配置主题
     if (theme != null) {
       CommonColors.theme = theme;
+    }
+    if (primaryGradient != null) {
+      CommonColors.primaryGradient = primaryGradient;
     }
   }
 }

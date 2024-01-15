@@ -5,6 +5,6 @@ class ComLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoActivityIndicator(radius: 16);
+    return const Center(child: CupertinoActivityIndicator(radius: 16));
   }
 }

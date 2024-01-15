@@ -66,8 +66,8 @@ class ImageHelper {
 
   // 保存图片
   static Future<bool> saveImage(filePath) async {
-    final isPermission = await PermissionHelper.checkPermission(
-        [Permission.photos, Permission.storage]);
+    final isPermission =
+        await PermissionHelper.checkPermission([Permission.storage]);
     if (!isPermission) {
       CommonHelper.showToast("Please enable related permissions");
       return false;

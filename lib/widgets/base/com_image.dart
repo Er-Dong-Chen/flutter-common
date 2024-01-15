@@ -32,7 +32,7 @@ class ComImage extends StatelessWidget {
         errorWidget: (context, url, error) => Container(
           color: CommonColors.theme.shade100,
           child: Icon(
-            Icons.error,
+            Icons.terrain,
             color: CommonColors.theme.shade200,
           ),
         ),
