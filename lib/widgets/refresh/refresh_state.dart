@@ -20,13 +20,13 @@ class PagingResponse<T> {
   List<T> data = <T>[];
 
   PagingResponse({
-    this.total = 1,
+    this.total = 0,
     required this.data,
   });
 
   factory PagingResponse.fromMapJson(Map<String, dynamic> json) {
     return PagingResponse(
-      total: json['total'] == null ? 1 : json['total'] as int,
+      total: json['total'] == null ? 0 : json['total'] as int,
       data: json['records'] == null ? [] : json['records'] as List<T>,
     );
   }

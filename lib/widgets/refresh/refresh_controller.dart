@@ -70,6 +70,10 @@ abstract class PagingController<M> extends GetxController {
     /// 判断是否有更多数据
     if (pagingState.dataList.length < pagingState.pageSize) {
       pagingState.hasMore = false;
+    } else {
+      if (pagingData.total > 0) {
+        pagingState.hasMore = pagingState.pageNum - 1 < pagingData.total;
+      }
     }
 
     /// 更新界面

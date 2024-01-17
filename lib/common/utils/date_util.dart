@@ -26,6 +26,54 @@ Map<int, int> monthDay = {
 
 /// Date Util.
 class DateUtil {
+  static String getTimeAgoForChatByMs(int milliSecond,
+      {String languageCode = 'en', bool short = false}) {
+    var nowTime = DateTime.now();
+    var dateTime = DateTime.fromMillisecondsSinceEpoch(milliSecond);
+    if (nowTime.year != dateTime.year) {
+      return DateUtil.formatDate(dateTime,
+          format:
+              languageCode == "zh" ? "yyyy年MM月dd HH:mm" : "yyyy-MM-dd HH:mm");
+    } else if (nowTime.month != dateTime.month) {
+      return DateUtil.formatDate(dateTime,
+          format: languageCode == "zh" ? "M月dd HH:mm" : "M-dd HH:mm");
+    } else if (nowTime.day != dateTime.day) {
+      if (isYesterdayByMs(milliSecond, DateTime.now().millisecondsSinceEpoch)) {
+        return languageCode == "zh" ? "昨天" : "Yesterday";
+      }
+      if (isWeek(milliSecond)) {
+        var weekday = getWeekdayByMs(milliSecond,
+            languageCode: languageCode, short: short);
+        return "$weekday ${DateUtil.formatDate(dateTime, format: "HH:mm")}";
+      }
+      return DateUtil.formatDate(dateTime,
+          format: languageCode == "zh" ? "M月dd HH:mm" : "M-dd HH:mm");
+    } else {
+      final threeMinutesAgo = nowTime.subtract(const Duration(minutes: 3));
+      if (dateTime.isAfter(threeMinutesAgo) && dateTime.isBefore(nowTime)) {
+        return languageCode == "zh" ? "刚刚" : "just now";
+      } else {
+        return DateUtil.formatDate(dateTime, format: "HH:mm");
+      }
+    }
+  }
+
+  static String getTimeAgoByMs(int milliSecond, {String languageCode = 'en'}) {
+    var dateTime = DateTime.fromMillisecondsSinceEpoch(milliSecond);
+    final difference = DateTime.now().difference(dateTime);
+    if (difference.inMinutes < 3) {
+      return languageCode == "zh" ? "刚刚" : "just now";
+    } else if (difference.inMinutes < 60) {
+      return "${difference.inMinutes}${languageCode == "zh" ? "分钟前" : "minutes ago"}";
+    } else if (difference.inHours < 24) {
+      return "${(difference.inHours).toInt()}${languageCode == "zh" ? "小时前" : "hours ago"}";
+    } else if (difference.inDays < 365) {
+      return "${(difference.inDays).toInt()}${languageCode == "zh" ? "天前" : "days ago"}";
+    } else {
+      return "${difference.inDays ~/ 365}${languageCode == "zh" ? "年前" : "years ago"}";
+    }
+  }
+
   /// get DateTime By DateStr.
   static DateTime? getDateTime(String dateStr, {bool? isUtc}) {
     DateTime? dateTime = DateTime.tryParse(dateStr);
