@@ -11,10 +11,6 @@ class Log {
         printTime: false)),
   );
 
-  static void t(dynamic message) {
-    _logger.t(message);
-  }
-
   static void d(dynamic message) {
     _logger.d(message);
   }

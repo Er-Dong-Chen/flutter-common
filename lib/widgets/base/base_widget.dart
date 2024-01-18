@@ -6,7 +6,8 @@ import 'com_state_layout.dart';
 class BaseWidget extends StatelessWidget {
   final String? title;
   final AppBar? appbar;
-  final Widget content;
+  final Color? backgroundColor;
+  final Widget body;
   final Widget? empty;
   final Widget? loading;
   final Widget? noNetwork;
@@ -16,7 +17,8 @@ class BaseWidget extends StatelessWidget {
     super.key,
     this.title,
     this.appbar,
-    required this.content,
+    this.backgroundColor,
+    required this.body,
     this.status,
     this.empty,
     this.loading,
@@ -27,6 +29,7 @@ class BaseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: appbar ??
           AppBar(
             leading: IconButton(
@@ -36,7 +39,7 @@ class BaseWidget extends StatelessWidget {
             title: Text('$title'),
           ),
       body: ComStateLayout(
-        content: content,
+        content: body,
         status: status,
         loading: loading,
         empty: empty,

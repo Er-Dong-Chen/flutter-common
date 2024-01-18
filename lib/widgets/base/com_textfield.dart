@@ -9,6 +9,8 @@ class ComTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? obscureText;
   final int? maxLines;
+  final int? minLines;
+  final bool? expands;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onTap;
   final Function()? onEditingComplete;
@@ -17,8 +19,9 @@ class ComTextField extends StatelessWidget {
   final bool readOnly;
   final double? radius;
   final Color? color;
-  final double? height;
   final EdgeInsets? padding;
+  final FocusNode? focusNode;
+  final bool? autoFocus;
 
   const ComTextField({
     super.key,
@@ -27,6 +30,7 @@ class ComTextField extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.maxLines = 1,
+    this.minLines = 1,
     this.onChanged,
     this.onEditingComplete,
     this.prefix,
@@ -35,19 +39,17 @@ class ComTextField extends StatelessWidget {
     this.radius,
     this.onTap,
     this.color,
-    this.height,
     this.padding,
+    this.focusNode,
+    this.autoFocus = false,
+    this.expands = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: height ?? 52.h,
       padding: padding ??
           EdgeInsets.only(
-            top: 4.h,
-            bottom: 4.h,
             left: radius != null ? 18.w : 24.w,
           ),
       decoration: BoxDecoration(
@@ -57,10 +59,12 @@ class ComTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         readOnly: readOnly,
+        focusNode: focusNode,
+        autofocus: autoFocus!,
         decoration: InputDecoration(
             hintText: hintText ?? "请输入",
             hintStyle: TextStyle(
-              color: CommonColors.theme.shade200,
+              color: CommonColors.theme.shade300,
             ),
             border: InputBorder.none,
             prefixIcon: prefix,
@@ -68,6 +72,8 @@ class ComTextField extends StatelessWidget {
         keyboardType: keyboardType,
         obscureText: obscureText ?? false,
         maxLines: maxLines,
+        minLines: minLines,
+        expands: expands!,
         onChanged: (val) {
           onChanged?.call(val);
         }.debounce(),

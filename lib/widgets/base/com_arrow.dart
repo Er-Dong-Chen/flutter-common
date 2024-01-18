@@ -13,7 +13,7 @@ class ComArrow extends StatelessWidget {
     return Icon(
       isBack ? Icons.arrow_back_ios : Icons.arrow_forward_ios,
       size: size ?? CommonStyle.fontMd,
-      color: color ?? CommonColors.theme.shade300,
+      color: color ?? CommonColors.theme.shade400,
     );
   }
 }

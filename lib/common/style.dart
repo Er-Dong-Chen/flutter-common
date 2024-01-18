@@ -49,9 +49,9 @@ class CommonColors {
     <int, Color>{
       50: Color(0xfff8f6f9), // 背景色
       100: Color(0xFFEEEEEE), // 占位色
-      200: Color(0xFF909399), // 文字占位色
-      300: Color(0xFF606266), // 次要内容色
-      400: Color(0xFF303133), // 主要内容色
+      200: Color(0xFFDFE1E6), // 文字占位色
+      300: Color(0xFF909399), // 次要内容色
+      400: Color(0xFF606266), // 主要内容色
       500: Color(0xFFFF5721), // 主题色
       600: Color(0xFFFE5A37), // 浅主题色
       700: Color(0xFFf83600), // 深主题色

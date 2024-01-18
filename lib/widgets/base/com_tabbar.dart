@@ -54,7 +54,7 @@ class ComTabBar extends StatelessWidget {
         labelColor: labelColor ?? CommonColors.theme.shade500,
         labelStyle: labelStyle ?? CommonStyle.titleStyle,
         unselectedLabelColor:
-            unselectedLabelColor ?? CommonColors.theme.shade300,
+            unselectedLabelColor ?? CommonColors.theme.shade400,
         overlayColor:
             MaterialStateProperty.resolveWith((Set<MaterialState> states) {
           return Colors.transparent;
