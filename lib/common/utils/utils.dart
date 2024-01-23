@@ -42,7 +42,7 @@ class CommonUtils {
     SystemChannels.textInput.invokeMethod('TextInput.clearClient');
   }
 
-  ///将颜色字符串转化为color
+  /// 将颜色字符串转化为color
   static Color parseColor(String color,
       {Color defaultColor = Colors.transparent}) {
     if (color.isEmpty) {
@@ -64,6 +64,35 @@ class CommonUtils {
       return color;
     }
     return defaultColor;
+  }
+
+  /// 判断是否为亮色
+  static bool isColorLight(Color color) {
+    num r = color.red / 255.0;
+    num g = color.green / 255.0;
+    num b = color.blue / 255.0;
+
+    if (r <= 0.03928) {
+      r /= 12.92;
+    } else {
+      r = pow((r + 0.055) / 1.055, 2.4);
+    }
+
+    if (g <= 0.03928) {
+      g /= 12.92;
+    } else {
+      g = pow((g + 0.055) / 1.055, 2.4);
+    }
+
+    if (b <= 0.03928) {
+      b /= 12.92;
+    } else {
+      b = pow((b + 0.055) / 1.055, 2.4);
+    }
+
+    final luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    return luminance >
+        0.179; // 根据WCAG 2.0 Level AA标准，对比度阈值大约为4.5:1，对应的亮度阈值约为0.179
   }
 
   /// Generates a random integer that represents a Hex color.

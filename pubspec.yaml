@@ -1,6 +1,6 @@
 name: flutter_chen_common
 description: "A Flutter Common package For Helper and Widgets."
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 
 environment:
@@ -34,13 +34,13 @@ dependencies:
   # 版本更新
   package_info_plus: ^5.0.0             # App信息
   path_provider: ^2.0.0                 # 文件路径
-  flutter_downloader: ^1.0.0           # App内下载
+  flutter_downloader: ^1.0.0            # App下载
   open_file: ^3.0.0                     # 打开文件
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -49,9 +49,9 @@ class ComTabBar extends StatelessWidget {
                 indicatorWidth: indicatorWidth,
                 borderSide: BorderSide(
                   width: 3,
-                  color: labelColor ?? CommonColors.theme.shade500,
+                  color: labelColor ?? CommonColors.theme,
                 )),
-        labelColor: labelColor ?? CommonColors.theme.shade500,
+        labelColor: labelColor ?? CommonColors.theme,
         labelStyle: labelStyle ?? CommonStyle.titleStyle,
         unselectedLabelColor:
             unselectedLabelColor ?? CommonColors.theme.shade400,

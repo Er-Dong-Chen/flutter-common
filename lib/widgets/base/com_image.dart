@@ -28,14 +28,14 @@ class ComImage extends StatelessWidget {
           color: CommonColors.theme.shade100,
           child: Icon(
             Icons.terrain,
-            color: CommonColors.theme.shade400,
+            color: CommonColors.theme.shade200,
           ),
         ),
         errorWidget: (context, url, error) => Container(
           color: CommonColors.theme.shade100,
           child: Icon(
             Icons.terrain,
-            color: CommonColors.theme.shade300,
+            color: CommonColors.theme.shade200,
           ),
         ),
         fadeOutDuration: const Duration(milliseconds: 300),

@@ -30,11 +30,12 @@ class ImageHelper {
   }
 
   // 选取单图
-  static Future<String> pickImage(ImageSource source, bool crop) async {
+  static Future<String> pickImage(
+      {required ImageSource source, bool crop = false}) async {
     final ImagePicker picker = ImagePicker();
     var img = await picker.pickImage(
         source: source, maxWidth: 1080, imageQuality: 95);
-    return await uploadImage(img, crop);
+    return await uploadImage(img, crop: crop);
   }
 
   // 多图上传
@@ -51,7 +52,7 @@ class ImageHelper {
   }
 
   // 单图上传
-  static Future<String> uploadImage(pickedFile, bool crop) async {
+  static Future<String> uploadImage(pickedFile, {bool crop = false}) async {
     if (pickedFile == null) {
       return '';
     }
@@ -83,7 +84,7 @@ class ImageHelper {
 
   // 选择图片Action
   static Future showActionSheet(ValueChanged<String> callBack,
-      {bool crop = true, List<Widget>? actions, Widget? cancel}) async {
+      {bool crop = false, List<Widget>? actions, Widget? cancel}) async {
     CommonHelper.showActionSheet(
         actions: actions ?? [const Text("相册选择"), const Text("拍摄照片")],
         cancel: cancel,
@@ -99,9 +100,9 @@ class ImageHelper {
           }
           dynamic img;
           if (val == 0) {
-            img = await pickImage(ImageSource.gallery, crop);
+            img = await pickImage(source: ImageSource.gallery, crop: crop);
           } else {
-            img = await pickImage(ImageSource.camera, crop);
+            img = await pickImage(source: ImageSource.camera, crop: crop);
           }
           Get.back();
           if (img != null) {
