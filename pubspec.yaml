@@ -1,6 +1,6 @@
 name: flutter_chen_common
 description: "A Flutter Common package For Helper and Widgets."
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 
 environment:
@@ -49,9 +49,9 @@ dev_dependencies:
 flutter:
 
   # To add assets to your package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+   assets:
+     - assets/
+     - assets/images/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
