@@ -10,6 +10,9 @@ class ComButton extends StatelessWidget {
   final bool? plain;
   final bool disable;
   final Gradient? gradient;
+  final double radius;
+  final Color? color;
+  final EdgeInsets? padding;
 
   const ComButton({
     super.key,
@@ -19,6 +22,9 @@ class ComButton extends StatelessWidget {
     this.style,
     this.plain = false,
     this.disable = false,
+    this.radius = 30.0,
+    this.color,
+    this.padding,
   });
 
   @override
@@ -28,10 +34,13 @@ class ComButton extends StatelessWidget {
         height: 42.h,
         decoration: BoxDecoration(
           gradient: gradient,
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(radius),
         ),
         child: FilledButton(
-          style: FilledButton.styleFrom(backgroundColor: Colors.transparent),
+          style: FilledButton.styleFrom(
+            padding: padding,
+            backgroundColor: Colors.transparent,
+          ),
           onPressed: disable
               ? null
               : () {
@@ -49,9 +58,15 @@ class ComButton extends StatelessWidget {
       return OutlinedButton(
         style: style ??
             OutlinedButton.styleFrom(
-                side: BorderSide(
-              color: CommonColors.theme,
-            )),
+              padding: padding,
+              foregroundColor: color,
+              side: BorderSide(
+                color: color ?? CommonColors.theme,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius),
+              ),
+            ),
         onPressed: disable
             ? null
             : () {
@@ -61,7 +76,14 @@ class ComButton extends StatelessWidget {
       );
     }
     return FilledButton(
-      style: style,
+      style: style ??
+          FilledButton.styleFrom(
+            padding: padding,
+            backgroundColor: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius),
+            ),
+          ),
       onPressed: disable
           ? null
           : () {

@@ -13,7 +13,7 @@ class ComEmpty extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         image ??
-            Image.asset("package/flutter_chen_common/assets/images/empty.png",
+            Image.asset("packages/flutter_chen_common/assets/images/empty.png",
                 width: 120.0, height: 120.0),
         message ??
             Text(
