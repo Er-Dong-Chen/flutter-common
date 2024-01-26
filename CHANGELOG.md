@@ -1,3 +1,7 @@
+## 1.0.0
+
+* TODO: Stable version.
+
 ## 0.0.9
 
 * TODO: Pref widgets.

@@ -25,20 +25,15 @@ class RefreshWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        RefreshConfiguration(
-          hideFooterWhenNotFull: false,
-          child: SmartRefresher(
-            enablePullDown: enablePullDown,
-            enablePullUp: enablePullUp && controller.pagingState.hasMore,
-            controller: controller.refreshController,
-            onRefresh: controller.onRefresh,
-            onLoading: controller.onLoadMore,
-            scrollController: controller.scrollController,
-            header: const ClassicHeader(),
-            footer: const ClassicFooter(),
-            child: CustomScrollView(
-              slivers: slivers,
-            ),
+        SmartRefresher(
+          enablePullDown: enablePullDown,
+          enablePullUp: enablePullUp && controller.pagingState.hasMore,
+          controller: controller.refreshController,
+          onRefresh: controller.onRefresh,
+          onLoading: controller.onLoadMore,
+          scrollController: controller.scrollController,
+          child: CustomScrollView(
+            slivers: slivers,
           ),
         ),
         BackTopWidget(controller.scrollController)

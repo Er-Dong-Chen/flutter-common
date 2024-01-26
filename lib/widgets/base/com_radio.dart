@@ -6,6 +6,8 @@ class ComRadio extends StatelessWidget {
   final double size;
   final Color? activeColor;
   final Color? color;
+  final Widget? selectIcon;
+  final Widget? unselectIcon;
 
   const ComRadio({
     super.key,
@@ -13,6 +15,8 @@ class ComRadio extends StatelessWidget {
     this.size = 24,
     this.activeColor,
     this.color,
+    this.selectIcon,
+    this.unselectIcon,
   });
 
   @override
@@ -23,13 +27,16 @@ class ComRadio extends StatelessWidget {
         return FadeTransition(opacity: animation, child: child);
       },
       child: !value
-          ? Icon(
-              CupertinoIcons.circle,
-              size: size,
-              color: color ?? Colors.grey.shade400,
-            )
-          : Icon(CupertinoIcons.check_mark_circled_solid,
-              size: size, color: activeColor ?? Theme.of(context).primaryColor),
+          ? unselectIcon ??
+              Icon(
+                CupertinoIcons.circle,
+                size: size,
+                color: color ?? Colors.grey.shade400,
+              )
+          : selectIcon ??
+              Icon(CupertinoIcons.check_mark_circled_solid,
+                  size: size,
+                  color: activeColor ?? Theme.of(context).primaryColor),
     );
   }
 }

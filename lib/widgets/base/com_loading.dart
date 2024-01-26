@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 
 class ComLoading extends StatelessWidget {
-  const ComLoading({super.key});
+  final double size;
+  const ComLoading({super.key, this.size = 16});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: CupertinoActivityIndicator(radius: 16));
+    return Center(child: CupertinoActivityIndicator(radius: size));
   }
 }

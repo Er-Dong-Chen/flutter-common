@@ -12,6 +12,7 @@ class ComContainer extends StatelessWidget {
   final double? radius;
   final double? shadow;
   final DecorationImage? image;
+  final BoxDecoration? decoration;
 
   const ComContainer({
     super.key,
@@ -25,6 +26,7 @@ class ComContainer extends StatelessWidget {
     this.margin,
     this.shadow,
     this.image,
+    this.decoration,
   });
 
   @override
@@ -37,19 +39,21 @@ class ComContainer extends StatelessWidget {
       padding: padding ??
           EdgeInsets.symmetric(
               horizontal: CommonStyle.spaceMd, vertical: CommonStyle.spaceMd),
-      decoration: BoxDecoration(
-        color: color ?? Theme.of(context).colorScheme.inversePrimary,
-        image: image,
-        borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: shadow ?? 0.0,
-            // spreadRadius: 1,
-            // offset: Offset(0, 0),
+      decoration: decoration ??
+          BoxDecoration(
+            color: color ?? Theme.of(context).colorScheme.inversePrimary,
+            image: image,
+            borderRadius:
+                BorderRadius.circular(radius ?? CommonStyle.roundedMd),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: shadow ?? 0.0,
+                // spreadRadius: 1,
+                // offset: Offset(0, 0),
+              ),
+            ],
           ),
-        ],
-      ),
       child: child,
     );
   }

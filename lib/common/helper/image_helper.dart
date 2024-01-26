@@ -107,6 +107,8 @@ class ImageHelper {
           Get.back();
           if (img != null) {
             callBack.call(img);
+          } else {
+            CommonHelper.showToast("fail");
           }
         });
   }
