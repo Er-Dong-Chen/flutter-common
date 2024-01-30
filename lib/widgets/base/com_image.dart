@@ -6,6 +6,8 @@ class ComImage extends StatelessWidget {
   final String src;
   final double? width;
   final double? height;
+  final double? minWidth;
+  final double? minHeight;
   final double? radius;
   final BoxFit fit;
 
@@ -16,6 +18,8 @@ class ComImage extends StatelessWidget {
     this.height,
     this.radius,
     this.fit = BoxFit.cover,
+    this.minWidth,
+    this.minHeight,
   });
 
   @override
@@ -41,8 +45,8 @@ class ComImage extends StatelessWidget {
         fadeOutDuration: const Duration(milliseconds: 300),
         fadeInDuration: const Duration(milliseconds: 500),
         fit: fit,
-        width: width,
-        height: height,
+        width: src.isNotEmpty ? width : minWidth,
+        height: src.isNotEmpty ? height : minHeight,
       ),
     );
   }

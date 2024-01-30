@@ -4,20 +4,20 @@ class PermissionHelper {
   /// 检测是否有权限
   /// [permissionList] 权限申请列表
   static Future<bool> checkPermission(List<Permission> permissionList) async {
-    ///一个新待申请权限列表
+    /// 一个新待申请权限列表
     List<Permission> newPermissionList = [];
 
-    ///遍历当前权限申请列表
+    /// 遍历当前权限申请列表
     for (Permission permission in permissionList) {
       PermissionStatus status = await permission.status;
 
-      ///如果不是允许状态就添加到新的申请列表中
+      /// 如果不是允许状态就添加到新的申请列表中
       if (!status.isGranted) {
         newPermissionList.add(permission);
       }
     }
 
-    ///如果需要重新申请的列表不是空的
+    /// 如果需要重新申请的列表不是空的
     if (newPermissionList.isNotEmpty) {
       PermissionStatus permissionStatus =
           await requestPermission(newPermissionList);

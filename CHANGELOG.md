@@ -1,3 +1,7 @@
+## 1.0.1
+
+* TODO: Feat base widget and Multiple pop.
+
 ## 1.0.0
 
 * TODO: Stable version.

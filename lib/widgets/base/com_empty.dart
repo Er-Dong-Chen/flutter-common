@@ -11,6 +11,7 @@ class ComEmpty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         image ??
             Image.asset("packages/flutter_chen_common/assets/images/empty.png",

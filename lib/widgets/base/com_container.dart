@@ -46,12 +46,14 @@ class ComContainer extends StatelessWidget {
             borderRadius:
                 BorderRadius.circular(radius ?? CommonStyle.roundedMd),
             boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: shadow ?? 0.0,
-                // spreadRadius: 1,
-                // offset: Offset(0, 0),
-              ),
+              if (shadow != null) ...[
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: shadow ?? 0.0,
+                  // spreadRadius: 1,
+                  // offset: Offset(0, 0),
+                )
+              ],
             ],
           ),
       child: child,

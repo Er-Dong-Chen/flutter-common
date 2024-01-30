@@ -1,6 +1,6 @@
 name: flutter_chen_common
 description: "A Flutter Common package For Helper and Widgets."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 
 environment:
@@ -16,7 +16,7 @@ dependencies:
   shared_preferences: ^2.0.0            # 本地缓存
   permission_handler: ^11.0.0           # 权限获取
   flutter_screenutil: ^5.0.0            # 屏幕适应
-  logger: ^2.0.0                        # 日志打印
+  logger: ">=1.0.0 <5.0.0"              # 日志打印
   pull_to_refresh: ^2.0.0               # 刷新
   flutter_staggered_grid_view: ^0.7.0   # 瀑布流
   bot_toast: ^4.0.0                     # 消息提示
@@ -27,7 +27,7 @@ dependencies:
   photo_view: ^0.14.0                   # 图片预览
   cached_network_image: ^3.0.0          # 图片缓存
   image_gallery_saver: ^2.0.0           # 图片保存
-  image_cropper: ^4.0.0                 # 图片裁剪
+  image_cropper: ">=4.0.0 <6.0.0"       # 图片裁剪
   multi_image_picker_view: ^1.0.0       # 图片选择
   card_swiper : ^3.0.0                  # 图片轮播
 

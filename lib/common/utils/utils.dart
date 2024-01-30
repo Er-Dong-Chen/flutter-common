@@ -21,9 +21,10 @@ class CommonUtils {
 
   /// 获取剪切板内容
   static getClipboardData() async {
-    var clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+    ClipboardData? clipboardData =
+        await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData != null) {
-      return clipboardData;
+      return clipboardData.text;
     }
   }
 
