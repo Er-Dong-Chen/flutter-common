@@ -10,7 +10,7 @@ class ComContainer extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final Color? color;
   final double? radius;
-  final double? shadow;
+  final double elevation;
   final DecorationImage? image;
   final BoxDecoration? decoration;
 
@@ -24,7 +24,7 @@ class ComContainer extends StatelessWidget {
     this.color,
     this.radius,
     this.margin,
-    this.shadow,
+    this.elevation = 0,
     this.image,
     this.decoration,
   });
@@ -46,10 +46,10 @@ class ComContainer extends StatelessWidget {
             borderRadius:
                 BorderRadius.circular(radius ?? CommonStyle.roundedMd),
             boxShadow: [
-              if (shadow != null) ...[
+              if (elevation > 0) ...[
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: shadow ?? 0.0,
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: elevation,
                   // spreadRadius: 1,
                   // offset: Offset(0, 0),
                 )

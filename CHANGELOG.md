@@ -1,3 +1,7 @@
+## 1.0.2
+
+* TODO: Pref widgets for use more scenes.
+
 ## 1.0.1
 
 * TODO: Feat base widget and Multiple pop.

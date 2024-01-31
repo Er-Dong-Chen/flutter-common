@@ -222,8 +222,7 @@ class CommonHelper {
             actions: actions ??
                 <Widget>[
                   SizedBox(
-                    height: 42,
-                    width: 120.w,
+                    width: 100.w,
                     child: ComButton(
                       plain: true,
                       child: Text(cancelText ?? 'Cancel'),
@@ -233,8 +232,7 @@ class CommonHelper {
                     ),
                   ),
                   SizedBox(
-                    height: 42,
-                    width: 120.w,
+                    width: 100.w,
                     child: ComButton(
                       gradient: CommonColors.primaryGradient,
                       child: Text(cancelText ?? 'Confirm'),
