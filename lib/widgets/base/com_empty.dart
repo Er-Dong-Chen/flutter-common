@@ -14,8 +14,7 @@ class ComEmpty extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         image ??
-            Image.asset("packages/flutter_chen_common/assets/images/empty.png",
-                width: 120.0, height: 120.0),
+            Image.asset("assets/images/empty.png", width: 120.0, height: 120.0),
         message ??
             Text(
               "暂无数据",

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,103 +61,27 @@ class CommonHelper {
     VoidCallback? onCancel,
     VoidCallback? onConfirm,
     bool barrierDismissible = true,
-    bool? isIOSStyle,
   }) {
-    Widget baseAlertDialog;
-    if ((isIOSStyle == null && Platform.isAndroid) ||
-        (isIOSStyle != null && !isIOSStyle)) {
-      baseAlertDialog = AlertDialog(
-        contentPadding: const EdgeInsets.all(0),
-        title: title ??
-            const Center(
-              child: Text("Tips"),
-            ),
-        titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: content,
-            ),
-            Divider(
-              thickness: 0.5,
-              height: 0,
-              color: Get.isDarkMode ? Colors.white : Colors.black12,
-            ),
-            SizedBox(
-              height: 46.h,
-              width: double.infinity,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        height: double.infinity,
-                        alignment: Alignment.center,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16)),
-                        ),
-                        child: cancel ?? const Text("Cancel"),
-                      ),
-                      onTap: () =>
-                          onCancel != null ? onCancel.call() : Get.back(),
-                    ),
-                  ),
-                  VerticalDivider(
-                    thickness: 0.5,
-                    width: 0,
-                    color: Get.isDarkMode ? Colors.white : Colors.black12,
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        height: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: confirm ?? const Text("Confirm"),
-                      ),
-                      onTap: () => onConfirm?.call(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      baseAlertDialog = CupertinoAlertDialog(
-        title: title ??
-            const Center(
-              child: Text("Tips"),
-            ),
-        content: Padding(
-          padding: const EdgeInsets.only(top: 12),
-          child: content,
-        ),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
-            child: cancel ?? const Text('Cancel'),
+    Widget baseAlertDialog = CupertinoAlertDialog(
+      title: title ??
+          const Center(
+            child: Text("Tips"),
           ),
-          CupertinoDialogAction(
-            onPressed: () => onConfirm?.call(),
-            child: confirm ?? const Text('Confirm'),
-          ),
-        ],
-      );
-    }
+      content: Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: content,
+      ),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
+          child: cancel ?? const Text('Cancel'),
+        ),
+        CupertinoDialogAction(
+          onPressed: () => onConfirm?.call(),
+          child: confirm ?? const Text('Confirm'),
+        ),
+      ],
+    );
 
     Get.dialog(
       baseAlertDialog,

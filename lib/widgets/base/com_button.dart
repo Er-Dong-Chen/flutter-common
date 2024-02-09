@@ -39,7 +39,7 @@ class ComButton extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           gradient: gradient,
-          color: (color ?? Theme.of(context).primaryColor)
+          color: (color ?? Theme.of(context).colorScheme.primary)
               .withOpacity(loading && elevation == 0 ? 0.5 : 1),
           borderRadius: BorderRadius.circular(radius),
           boxShadow: [
@@ -104,10 +104,11 @@ class ComButton extends StatelessWidget {
       style: style ??
           FilledButton.styleFrom(
             padding: padding,
-            backgroundColor: (color ?? Theme.of(context).primaryColor)
+            backgroundColor: (color ?? Theme.of(context).colorScheme.primary)
                 .withOpacity(loading ? 0.5 : 1),
             disabledBackgroundColor:
-                (color ?? Theme.of(context).primaryColor).withOpacity(0.5),
+                (color ?? Theme.of(context).colorScheme.primary)
+                    .withOpacity(0.5),
             disabledForegroundColor: Colors.white.withOpacity(0.5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(radius),

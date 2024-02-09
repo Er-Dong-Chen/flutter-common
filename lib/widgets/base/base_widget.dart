@@ -67,8 +67,7 @@ class BaseWidget extends StatelessWidget {
         return Center(
           child: noNetwork ??
               ComEmpty(
-                image: Image.asset(
-                    "packages/flutter_chen_common/assets/images/no_network.png"),
+                image: Image.asset("assets/images/no_network.png"),
                 message: Column(
                   children: [
                     Text(

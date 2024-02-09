@@ -36,7 +36,7 @@ class ComRadio extends StatelessWidget {
           : selectIcon ??
               Icon(CupertinoIcons.check_mark_circled_solid,
                   size: size,
-                  color: activeColor ?? Theme.of(context).primaryColor),
+                  color: activeColor ?? Theme.of(context).colorScheme.primary),
     );
   }
 }
