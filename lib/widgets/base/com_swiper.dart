@@ -14,7 +14,7 @@ class ComSwiper extends StatelessWidget {
   final ValueChanged<int>? onTap;
   final double height;
   final EdgeInsets? margin;
-  final double radius;
+  final double? radius;
   final SwipeStyle style;
   final String? name;
 
@@ -22,7 +22,7 @@ class ComSwiper extends StatelessWidget {
     super.key,
     required this.images,
     this.height = 160.0,
-    this.radius = 8.0,
+    this.radius,
     this.style = SwipeStyle.dots,
     this.onTap,
     this.name,
@@ -35,7 +35,8 @@ class ComSwiper extends StatelessWidget {
       height: height,
       margin: margin,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
+          borderRadius: BorderRadius.all(
+              Radius.circular(radius ?? CommonStyle.roundedSm))),
       child: Swiper(
         onTap: onTap,
         itemBuilder: (context, index) => name != null

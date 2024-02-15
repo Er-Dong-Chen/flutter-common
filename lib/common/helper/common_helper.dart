@@ -60,6 +60,7 @@ class CommonHelper {
     Widget? confirm,
     VoidCallback? onCancel,
     VoidCallback? onConfirm,
+    List<CupertinoDialogAction>? actions,
     bool barrierDismissible = true,
   }) {
     Widget baseAlertDialog = CupertinoAlertDialog(
@@ -71,16 +72,17 @@ class CommonHelper {
         padding: const EdgeInsets.only(top: 12),
         child: content,
       ),
-      actions: <CupertinoDialogAction>[
-        CupertinoDialogAction(
-          onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
-          child: cancel ?? const Text('Cancel'),
-        ),
-        CupertinoDialogAction(
-          onPressed: () => onConfirm?.call(),
-          child: confirm ?? const Text('Confirm'),
-        ),
-      ],
+      actions: actions ??
+          <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
+              child: cancel ?? const Text('Cancel'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () => onConfirm?.call(),
+              child: confirm ?? const Text('Confirm'),
+            ),
+          ],
     );
 
     Get.dialog(

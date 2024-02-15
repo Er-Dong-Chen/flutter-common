@@ -16,13 +16,17 @@ class ComConfig {
     }
   }
 
-  static config({MaterialColor? theme, Gradient? primaryGradient}) {
+  static config(
+      {MaterialColor? theme, Gradient? primaryGradient, double? radius}) {
     /// 配置主题
     if (theme != null) {
       CommonColors.theme = theme;
     }
     if (primaryGradient != null) {
       CommonColors.primaryGradient = primaryGradient;
+    }
+    if (radius != null) {
+      CommonStyle.rounded = radius;
     }
   }
 }

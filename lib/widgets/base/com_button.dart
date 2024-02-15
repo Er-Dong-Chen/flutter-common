@@ -9,7 +9,7 @@ class ComButton extends StatelessWidget {
   final bool? plain;
   final bool disable;
   final Gradient? gradient;
-  final double radius;
+  final double? radius;
   final double elevation;
   final Color? shadowColor;
   final Color? color;
@@ -24,7 +24,7 @@ class ComButton extends StatelessWidget {
     this.style,
     this.plain = false,
     this.disable = false,
-    this.radius = 30.0,
+    this.radius,
     this.color,
     this.padding,
     this.loading = false,
@@ -41,11 +41,11 @@ class ComButton extends StatelessWidget {
           gradient: gradient,
           color: (color ?? Theme.of(context).colorScheme.primary)
               .withOpacity(loading && elevation == 0 ? 0.5 : 1),
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
           boxShadow: [
             if (elevation > 0) ...[
               BoxShadow(
-                color: shadowColor ?? Colors.black.withOpacity(0.3),
+                color: shadowColor ?? Theme.of(context).colorScheme.shadow,
                 blurRadius: elevation,
               )
             ],
@@ -87,7 +87,8 @@ class ComButton extends StatelessWidget {
                     .withOpacity(loading || disable ? 0.5 : 1),
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(radius),
+                borderRadius:
+                    BorderRadius.circular(radius ?? CommonStyle.rounded),
               ),
             ),
         onPressed: disable
@@ -111,7 +112,8 @@ class ComButton extends StatelessWidget {
                     .withOpacity(0.5),
             disabledForegroundColor: Colors.white.withOpacity(0.5),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius),
+              borderRadius:
+                  BorderRadius.circular(radius ?? CommonStyle.rounded),
             ),
           ),
       onPressed: disable

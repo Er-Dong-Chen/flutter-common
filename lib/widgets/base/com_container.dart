@@ -12,6 +12,7 @@ class ComContainer extends StatelessWidget {
   final Color? color;
   final double? radius;
   final double elevation;
+  final Color? shadowColor;
   final DecorationImage? image;
   final BoxDecoration? decoration;
 
@@ -28,6 +29,7 @@ class ComContainer extends StatelessWidget {
     this.elevation = 0,
     this.image,
     this.decoration,
+    this.shadowColor,
   });
 
   @override
@@ -52,7 +54,7 @@ class ComContainer extends StatelessWidget {
             boxShadow: [
               if (elevation > 0) ...[
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: shadowColor ?? Theme.of(context).colorScheme.shadow,
                   blurRadius: elevation,
                   // spreadRadius: 1,
                   // offset: Offset(0, 0),

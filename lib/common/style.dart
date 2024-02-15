@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommonStyle {
   // 标题Style
@@ -27,12 +26,12 @@ class CommonStyle {
   static double spaceXl = 36.0;
 
   // 字体
-  static double fontXs = 10.0.sp;
-  static double fontSm = 12.0.sp;
-  static double fontMd = 14.0.sp;
-  static double fontLg = 16.0.sp;
-  static double fontXl = 18.0.sp;
-  static double fontXXl = 20.0.sp;
+  static double fontXs = 10.0;
+  static double fontSm = 12.0;
+  static double fontMd = 14.0;
+  static double fontLg = 16.0;
+  static double fontXl = 18.0;
+  static double fontXXl = 20.0;
 
   // 图片尺寸
   static double imageXs = 32.0;
@@ -52,11 +51,11 @@ class CommonColors {
       200: Color(0xFFDFE1E6), // 文字占位色
       300: Color(0xFF909399), // 次要内容色
       400: Color(0xFF606266), // 主要内容色
-      500: Color(0xFFFF5721), // 主题色
-      600: Color(0xFFFE5A37), // 浅主题色
-      700: Color(0xFFf83600), // 深主题色
-      800: Color(0xFFFE5A37), // 次主题色
-      900: Color(0xFFfe8c00), // 其他色
+      500: Color(0xFF3783FD), // 主题色
+      600: Color(0xFF3783FD), // 浅主题色
+      700: Color(0xFF3783FD), // 深主题色
+      800: Color(0xFF3783FD), // 次主题色
+      900: Color(0xFF3783FD), // 其他色
     },
   );
 

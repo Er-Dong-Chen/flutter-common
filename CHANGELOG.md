@@ -1,3 +1,7 @@
+## 1.0.4
+
+* TODO: Pref widgets for custom config.
+
 ## 1.0.3
 
 * TODO: Pref widgets for theme.

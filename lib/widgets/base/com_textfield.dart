@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/common/utils/function_util.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ComTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -22,6 +21,8 @@ class ComTextField extends StatelessWidget {
   final EdgeInsets? padding;
   final FocusNode? focusNode;
   final bool? autoFocus;
+  final BoxDecoration? boxDecoration;
+  final InputDecoration? inputDecoration;
 
   const ComTextField({
     super.key,
@@ -43,6 +44,8 @@ class ComTextField extends StatelessWidget {
     this.focusNode,
     this.autoFocus = false,
     this.expands = false,
+    this.boxDecoration,
+    this.inputDecoration,
   });
 
   @override
@@ -50,25 +53,27 @@ class ComTextField extends StatelessWidget {
     return Container(
       padding: padding ??
           EdgeInsets.only(
-            left: radius != null ? 18.w : 24.w,
+            left: 20,
           ),
-      decoration: BoxDecoration(
-        color: color ?? CommonColors.theme.shade100,
-        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
-      ),
+      decoration: boxDecoration ??
+          BoxDecoration(
+            color: color ?? CommonColors.theme.shade100,
+            borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+          ),
       child: TextField(
         controller: controller,
         readOnly: readOnly,
         focusNode: focusNode,
         autofocus: autoFocus!,
-        decoration: InputDecoration(
-            hintText: hintText ?? "请输入",
-            hintStyle: TextStyle(
-              color: CommonColors.theme.shade300,
-            ),
-            border: InputBorder.none,
-            prefixIcon: prefix,
-            suffixIcon: suffix),
+        decoration: inputDecoration ??
+            InputDecoration(
+                hintText: hintText ?? "请输入",
+                hintStyle: TextStyle(
+                  color: CommonColors.theme.shade300,
+                ),
+                border: InputBorder.none,
+                prefixIcon: prefix,
+                suffixIcon: suffix),
         keyboardType: keyboardType,
         obscureText: obscureText ?? false,
         maxLines: maxLines,
