@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 
 class DioErrorHandle {
-  static String? handleError(DioException error) {
-    String? message = "unknown";
+  static String handleError(DioException error) {
+    String message = "unknown";
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         message = "connectionTimeout";
@@ -14,7 +14,7 @@ class DioErrorHandle {
         message = "sendTimeout";
         break;
       case DioExceptionType.badResponse:
-        message = error.message!.length > 20 ? "badResponse" : error.message;
+        message = error.message ?? message;
         break;
       case DioExceptionType.cancel:
         message = "cancel";

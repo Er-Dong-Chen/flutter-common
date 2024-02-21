@@ -3,8 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_chen_common/common/helper/common_helper.dart';
 
-import 'request_handle.dart';
-
 enum HttpType { get, post, put, patch, delete }
 
 class RequestClient {
@@ -82,13 +80,7 @@ class RequestClient {
       if (showLoading) {
         CommonHelper.hideLoading();
       }
-      var message = DioErrorHandle.handleError(e);
-      CommonHelper.showToast(message);
-      if (e.type == DioExceptionType.badResponse) {
-        return Future.error(e.toString());
-      } else {
-        throw e.toString();
-      }
+      throw e.toString();
     }
   }
 }

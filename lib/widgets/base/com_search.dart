@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/common/utils/function_util.dart';
 
@@ -43,6 +44,8 @@ class ComSearch extends StatelessWidget {
       onChanged: (val) {
         onChanged?.call(val);
       }.debounce(),
+      style: TextStyle(
+          fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize), //
       backgroundColor: background,
       borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       padding: padding ?? EdgeInsets.symmetric(vertical: CommonStyle.spaceSm),

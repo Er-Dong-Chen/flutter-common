@@ -1,3 +1,7 @@
+## 1.0.5
+
+* TODO: Pref request and some style.
+
 ## 1.0.4
 
 * TODO: Pref widgets for custom config.

@@ -44,7 +44,7 @@ class CommonStyle {
 class CommonColors {
   // 主题色系
   static MaterialColor theme = const MaterialColor(
-    0xFFFF5721,
+    0xFF3783FD,
     <int, Color>{
       50: Color(0xfff8f6f9), // 背景色
       100: Color(0xFFEEEEEE), // 占位色

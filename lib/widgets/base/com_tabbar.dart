@@ -39,7 +39,7 @@ class ComTabBar extends StatelessWidget {
       initialIndex: initialIndex,
       length: length,
       child: TabBar(
-        tabAlignment: tabAlignment ?? TabAlignment.start,
+        tabAlignment: tabAlignment,
         labelPadding:
             labelPadding ?? EdgeInsets.only(right: CommonStyle.spaceMd),
         isScrollable: isScrollable ?? true,
