@@ -1,3 +1,7 @@
+## 1.0.7
+
+* TODO: Pref BaseView.
+
 ## 1.0.5
 
 * TODO: Pref request and some style.

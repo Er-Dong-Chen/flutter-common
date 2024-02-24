@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 enum LayoutStatus { loading, empty, noNetwork, complete, error }
 
 class BaseWidget extends StatelessWidget {
-  final String? title;
-  final AppBar? appbar;
+  final Widget? title;
+  final AppBar? appBar;
   final Color? backgroundColor;
   final Widget body;
   final Widget? empty;
@@ -16,12 +16,12 @@ class BaseWidget extends StatelessWidget {
   final Widget? error;
   final LayoutStatus? status;
   final VoidCallback? onReconnect;
-  final RxBool? isConnected;
+  final bool isConnected;
 
   const BaseWidget({
     super.key,
     this.title,
-    this.appbar,
+    this.appBar,
     this.backgroundColor,
     required this.body,
     this.status,
@@ -30,14 +30,14 @@ class BaseWidget extends StatelessWidget {
     this.noNetwork,
     this.error,
     this.onReconnect,
-    this.isConnected,
+    this.isConnected = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: appbar ??
+      appBar: appBar ??
           AppBar(
             leading: IconButton(
               icon: Icon(
@@ -47,18 +47,14 @@ class BaseWidget extends StatelessWidget {
               onPressed: () => Get.back(),
             ),
             centerTitle: true,
-            title: Text('$title'),
+            title: title,
           ),
-      body: Obx(() {
-        return buildContent();
-      }),
+      body: buildContent(),
     );
   }
 
   Widget buildContent() {
-    switch (isConnected != null && !isConnected!.value
-        ? LayoutStatus.noNetwork
-        : status) {
+    switch (!isConnected ? LayoutStatus.noNetwork : status) {
       case LayoutStatus.loading:
         return loading ?? const ComLoading();
       case LayoutStatus.empty:

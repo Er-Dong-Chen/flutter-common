@@ -52,7 +52,7 @@ class ComTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: padding ??
-          EdgeInsets.only(
+          const EdgeInsets.only(
             left: 20,
           ),
       decoration: boxDecoration ??
@@ -67,7 +67,7 @@ class ComTextField extends StatelessWidget {
         autofocus: autoFocus!,
         decoration: inputDecoration ??
             InputDecoration(
-                hintText: hintText ?? "请输入",
+                hintText: hintText,
                 hintStyle: TextStyle(
                   color: CommonColors.theme.shade300,
                 ),
