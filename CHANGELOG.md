@@ -1,3 +1,7 @@
+## 1.0.8
+
+* TODO: Pref App update.
+
 ## 1.0.7
 
 * TODO: Pref BaseView.

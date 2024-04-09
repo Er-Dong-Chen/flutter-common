@@ -56,7 +56,7 @@ class ComButton extends StatelessWidget {
             padding: padding,
             backgroundColor: Colors.transparent,
             disabledBackgroundColor: Colors.transparent,
-            disabledForegroundColor: Colors.white.withOpacity(0.5),
+            // disabledForegroundColor: Colors.white.withOpacity(0.5),
           ),
           onPressed: disable
               ? null
@@ -110,7 +110,7 @@ class ComButton extends StatelessWidget {
             disabledBackgroundColor:
                 (color ?? Theme.of(context).colorScheme.primary)
                     .withOpacity(0.5),
-            disabledForegroundColor: Colors.white.withOpacity(0.5),
+            disabledForegroundColor: Colors.white.withOpacity(0.8),
             shape: RoundedRectangleBorder(
               borderRadius:
                   BorderRadius.circular(radius ?? CommonStyle.rounded),

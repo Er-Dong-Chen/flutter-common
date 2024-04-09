@@ -53,7 +53,7 @@ class ComTextField extends StatelessWidget {
     return Container(
       padding: padding ??
           const EdgeInsets.only(
-            left: 20,
+            left: 30,
           ),
       decoration: boxDecoration ??
           BoxDecoration(

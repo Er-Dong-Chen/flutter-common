@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_chen_common/common/helper/common_helper.dart';
-import 'package:flutter_chen_common/common/helper/permission_helper.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:open_file/open_file.dart';
+import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class UpdateHelper {
   static Future<PackageInfo> getPackageInfo() async {
@@ -16,41 +13,39 @@ class UpdateHelper {
     return packageInfo;
   }
 
-  static Future download(String url) async {
-    // 初始化 FlutterDownloader
-    await FlutterDownloader.initialize();
-
-    final per = await PermissionHelper.checkPermission([Permission.storage]);
-    if (!per) {
-      CommonHelper.showToast("Please enable related permissions");
+  static Future download(String url,
+      {ValueChanged<OtaEvent>? downloadCallback}) async {
+    try {
+      OtaUpdate().execute(url).listen(
+        (OtaEvent event) {
+          switch (event.status) {
+            case OtaStatus.DOWNLOADING: // 下载中
+              if (downloadCallback != null) {
+                downloadCallback.call(event);
+                return;
+              }
+              // print('下载进度:${event.value}%');
+              break;
+            case OtaStatus.INSTALLING: //安装中
+              debugPrint('-----安装中----');
+              // 打开安装文件
+              // Apk文件名可以写，也可以不写
+              // 不写的话会出现让你选择用浏览器打开，点击取消就好了，写了后会直接打开当前目录下的Apk文件，名字随便定就可以
+              _installApk();
+              break;
+            case OtaStatus.PERMISSION_NOT_GRANTED_ERROR: // 权限错误
+              CommonHelper.showToast("更新失败，暂无相关权限");
+              break;
+            default: // 其他问题
+              CommonHelper.showToast("更新异常");
+              break;
+          }
+        },
+      );
+    } on Exception catch (e) {
+      CommonHelper.showToast("Download failed");
+      debugPrint(e.toString());
     }
-
-    final path = await _apkLocalPath;
-    PackageInfo packageInfo = await getPackageInfo();
-    File file = File(path + '/' + packageInfo.appName);
-    if (await file.exists()) await file.delete();
-
-    WidgetsFlutterBinding.ensureInitialized();
-    await FlutterDownloader.initialize();
-
-    CommonHelper.showToast("Start download");
-    final taskId = await FlutterDownloader.enqueue(
-        url: url,
-        savedDir: path,
-        fileName: packageInfo.appName,
-        showNotification: true,
-        openFileFromNotification: true);
-
-    FlutterDownloader.registerCallback((id, status, progress) {
-      DownloadTaskStatus downloadTaskStatus = DownloadTaskStatus.values[status];
-      if (downloadTaskStatus == DownloadTaskStatus.failed) {
-        CommonHelper.showToast("Download failed");
-      }
-      if (taskId == id && downloadTaskStatus == DownloadTaskStatus.complete) {
-        CommonHelper.showToast("Download complete");
-        _installApk();
-      }
-    });
   }
 
   static Future _installApk() async {

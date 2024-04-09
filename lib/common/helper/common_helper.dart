@@ -14,7 +14,7 @@ class CommonHelper {
       align: Alignment.center,
       contentColor: Get.isDarkMode ? Colors.white : Colors.black54,
       textStyle:
-          TextStyle(color: !Get.isDarkMode ? Colors.white : Colors.black54),
+      TextStyle(color: !Get.isDarkMode ? Colors.white : Colors.black54),
     );
   }
 
@@ -145,26 +145,29 @@ class CommonHelper {
             content: content,
             actions: actions ??
                 <Widget>[
-                  SizedBox(
-                    width: 100.w,
-                    child: ComButton(
-                      plain: true,
-                      child: Text(cancelText ?? 'Cancel'),
-                      onPressed: () {
-                        Get.back();
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 100.w,
-                    child: ComButton(
-                      gradient: CommonColors.primaryGradient,
-                      child: Text(cancelText ?? 'Confirm'),
-                      onPressed: () {
-                        onConfirm?.call();
-                      },
-                    ),
-                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ComButton(
+                          plain: true,
+                          child: Text(cancelText ?? 'Cancel'),
+                          onPressed: () {
+                            Get.back();
+                          },
+                        ),
+                      ),
+                      SizedBox(width: CommonStyle.spaceMd),
+                      Expanded(
+                        child: ComButton(
+                          gradient: CommonColors.primaryGradient,
+                          child: Text(confirmText ?? 'Confirm'),
+                          onPressed: () {
+                            onConfirm?.call();
+                          },
+                        ),
+                      ),
+                    ],
+                  )
                 ],
             actionsAlignment: actionsAlignment ?? MainAxisAlignment.spaceAround,
           ),
