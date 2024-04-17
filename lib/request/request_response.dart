@@ -23,7 +23,7 @@ class ApiResponse<T> {
     return ApiResponse(
       code: code,
       data: data,
-      message: json['message'],
+      message: json['msg'],
     );
   }
 

@@ -132,10 +132,11 @@ class CommonHelper {
     VoidCallback? onConfirm,
     MainAxisAlignment? actionsAlignment,
     bool close = false,
+    Widget? foot,
     bool barrierDismissible = true,
   }) {
     Get.dialog(
-      barrierDismissible: barrierDismissible,
+      barrierDismissible: close ? false : barrierDismissible,
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -173,17 +174,25 @@ class CommonHelper {
           ),
           Visibility(
             visible: close,
-            child: IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              icon: const Icon(
-                Icons.cancel_outlined,
-                size: 36,
-                color: Colors.white60,
+            child: foot ?? Container(
+              padding: EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.white60, // 边框颜色
+                  width: 1.0, // 边框宽度
+                ),
+                borderRadius: BorderRadius.circular(CommonStyle.rounded),
               ),
-              onPressed: () {
-                Navigator.pop(Get.context!);
-              },
+              child: GestureDetector(
+                child: const Icon(
+                  Icons.close,
+                  size: 20,
+                  color: Colors.white60,
+                ),
+                onTap: () {
+                  Get.back();
+                },
+              ),
             ),
           )
         ],

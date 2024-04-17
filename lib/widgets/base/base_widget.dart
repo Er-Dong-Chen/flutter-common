@@ -39,13 +39,15 @@ class BaseWidget extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: appBar ??
           AppBar(
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Get.isDarkMode ? Colors.white : Colors.black,
-              ),
-              onPressed: () => Get.back(),
-            ),
+            leading: !Navigator.of(context).canPop()
+                ? null
+                : IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Get.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                    onPressed: () => Get.back(),
+                  ),
             centerTitle: true,
             title: title,
           ),

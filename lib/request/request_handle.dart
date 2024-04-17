@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class DioErrorHandle {
   static String handleError(DioException error) {
-    String message = "unknown";
+    String message = "unknown error";
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         message = "connectionTimeout";
@@ -26,7 +26,7 @@ class DioErrorHandle {
         message = "badCertificate";
         break;
       case DioExceptionType.unknown:
-        message = "unknown";
+        message = "unknown error";
     }
     return message;
   }
