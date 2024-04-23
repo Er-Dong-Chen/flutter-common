@@ -47,7 +47,7 @@ class ComSearch extends StatelessWidget {
       style: TextStyle(
           fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize), //
       backgroundColor: background,
-      borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+      borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
       padding: padding ?? EdgeInsets.symmetric(vertical: CommonStyle.spaceSm),
       prefixInsets: EdgeInsets.symmetric(horizontal: CommonStyle.spaceMd),
       suffixInsets: EdgeInsets.symmetric(horizontal: CommonStyle.spaceMd),

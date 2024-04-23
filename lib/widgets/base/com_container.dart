@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
-import 'package:get/get.dart';
 
 class ComContainer extends StatelessWidget {
   final Widget? child;
@@ -44,10 +43,7 @@ class ComContainer extends StatelessWidget {
               horizontal: CommonStyle.spaceMd, vertical: CommonStyle.spaceMd),
       decoration: decoration ??
           BoxDecoration(
-            color: color ??
-                (Get.isDarkMode
-                    ? Colors.grey.shade900
-                    : Theme.of(context).colorScheme.inversePrimary),
+            color: color ?? CommonColors.theme.shade100,
             image: image,
             borderRadius:
                 BorderRadius.circular(radius ?? CommonStyle.roundedMd),

@@ -4,7 +4,7 @@ import 'package:flutter_chen_common/common/utils/function_util.dart';
 
 class ComTextField extends StatelessWidget {
   final TextEditingController? controller;
-  final String? hintText;
+  final String? placeholder;
   final TextInputType? keyboardType;
   final bool? obscureText;
   final int? maxLines;
@@ -27,7 +27,7 @@ class ComTextField extends StatelessWidget {
   const ComTextField({
     super.key,
     this.controller,
-    this.hintText,
+    this.placeholder,
     this.keyboardType,
     this.obscureText = false,
     this.maxLines = 1,
@@ -53,12 +53,14 @@ class ComTextField extends StatelessWidget {
     return Container(
       padding: padding ??
           const EdgeInsets.only(
-            left: 30,
+            left: 20,
           ),
       decoration: boxDecoration ??
           BoxDecoration(
             color: color ?? CommonColors.theme.shade100,
-            borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+            borderRadius: BorderRadius.circular(
+              radius ?? CommonStyle.roundedMd,
+            ),
           ),
       child: TextField(
         controller: controller,
@@ -67,7 +69,7 @@ class ComTextField extends StatelessWidget {
         autofocus: autoFocus!,
         decoration: inputDecoration ??
             InputDecoration(
-                hintText: hintText,
+                hintText: placeholder ?? "Please enter",
                 hintStyle: TextStyle(
                   color: CommonColors.theme.shade300,
                 ),

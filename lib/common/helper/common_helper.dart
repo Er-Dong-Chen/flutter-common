@@ -14,7 +14,7 @@ class CommonHelper {
       align: Alignment.center,
       contentColor: Get.isDarkMode ? Colors.white : Colors.black54,
       textStyle:
-      TextStyle(color: !Get.isDarkMode ? Colors.white : Colors.black54),
+          TextStyle(color: !Get.isDarkMode ? Colors.white : Colors.black54),
     );
   }
 
@@ -143,6 +143,10 @@ class CommonHelper {
           AlertDialog(
             title: Center(child: title),
             titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(CommonStyle.roundedMd)),
+            ),
             content: content,
             actions: actions ??
                 <Widget>[
@@ -174,26 +178,27 @@ class CommonHelper {
           ),
           Visibility(
             visible: close,
-            child: foot ?? Container(
-              padding: EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.white60, // 边框颜色
-                  width: 1.0, // 边框宽度
+            child: foot ??
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white60, // 边框颜色
+                      width: 1.0, // 边框宽度
+                    ),
+                    borderRadius: BorderRadius.circular(CommonStyle.rounded),
+                  ),
+                  child: GestureDetector(
+                    child: const Icon(
+                      Icons.close,
+                      size: 20,
+                      color: Colors.white60,
+                    ),
+                    onTap: () {
+                      Get.back();
+                    },
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(CommonStyle.rounded),
-              ),
-              child: GestureDetector(
-                child: const Icon(
-                  Icons.close,
-                  size: 20,
-                  color: Colors.white60,
-                ),
-                onTap: () {
-                  Get.back();
-                },
-              ),
-            ),
           )
         ],
       ),

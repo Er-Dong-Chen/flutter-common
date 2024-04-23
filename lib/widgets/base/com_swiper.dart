@@ -1,7 +1,8 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
-import 'package:flutter_chen_common/widgets/base/com_image.dart';
+
+import 'com_image.dart';
 
 enum SwipeStyle {
   dots,
@@ -10,47 +11,68 @@ enum SwipeStyle {
 }
 
 class ComSwiper extends StatelessWidget {
-  final List<dynamic> images;
+  final List<dynamic>? images;
+  final List<Widget>? children;
   final ValueChanged<int>? onTap;
-  final double height;
+  final double? height;
   final EdgeInsets? margin;
   final double? radius;
   final SwipeStyle style;
   final String? name;
+  final SwiperPlugin? swiperPlugin;
+  final SwiperController? swiperController;
+  final bool? autoplay;
 
   const ComSwiper({
     super.key,
-    required this.images,
-    this.height = 160.0,
+    this.images,
+    this.children,
+    this.height,
     this.radius,
     this.style = SwipeStyle.dots,
     this.onTap,
     this.name,
     this.margin,
+    this.swiperPlugin,
+    this.autoplay,
+    this.swiperController,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      margin: margin,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-              Radius.circular(radius ?? CommonStyle.roundedSm))),
-      child: Swiper(
+    if (children != null) {
+      return Swiper(
         onTap: onTap,
-        itemBuilder: (context, index) => name != null
-            ? ComImage(images[index][name])
-            : ComImage(images[index]),
-        autoplay: true,
-        itemCount: images.length,
-        controller: SwiperController(),
-        pagination: _buildPagination(),
-      ),
-    );
+        itemBuilder: (context, index) => children![index],
+        autoplay: autoplay ?? false,
+        itemCount: children!.length,
+        controller: swiperController ?? SwiperController(),
+        pagination: swiperPlugin ?? _buildPagination(children!.length),
+      );
+    } else if (images != null) {
+      return Container(
+        height: height,
+        margin: margin,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+                Radius.circular(radius ?? CommonStyle.roundedSm))),
+        child: Swiper(
+          onTap: onTap,
+          itemBuilder: (context, index) => name != null
+              ? ComImage(images![index][name])
+              : ComImage(images![index]),
+          autoplay: autoplay ?? true,
+          itemCount: images!.length,
+          controller: swiperController ?? SwiperController(),
+          pagination: swiperPlugin ?? _buildPagination(images!.length),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
-  SwiperPagination _buildPagination() {
+  SwiperPagination _buildPagination(int itemCount) {
     switch (style) {
       case SwipeStyle.dots:
         return const SwiperPagination();
@@ -58,7 +80,7 @@ class ComSwiper extends StatelessWidget {
         return SwiperPagination(
           builder: SwiperCustomPagination(builder: (context, config) {
             List<Widget> widgets = [];
-            for (var i = 0; i < images.length; ++i) {
+            for (var i = 0; i < itemCount; ++i) {
               widgets.add(Container(
                 decoration: BoxDecoration(
                   color: config.activeIndex == i

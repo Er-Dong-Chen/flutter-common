@@ -26,7 +26,7 @@ class ComConfig {
       CommonColors.primaryGradient = primaryGradient;
     }
     if (radius != null) {
-      CommonStyle.rounded = radius;
+      CommonStyle.roundedMd = radius;
     }
   }
 }

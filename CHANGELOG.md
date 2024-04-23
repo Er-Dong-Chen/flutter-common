@@ -1,3 +1,7 @@
+## 1.1.0
+
+* TODO: Pref widget and style.
+
 ## 1.0.9
 
 * TODO: Pref Network Request.
@@ -9,6 +13,10 @@
 ## 1.0.7
 
 * TODO: Pref BaseView.
+
+## 1.0.6
+
+* TODO: Pref ComTab and some style.
 
 ## 1.0.5
 

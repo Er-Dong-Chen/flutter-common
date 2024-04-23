@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
-import 'package:get/get.dart';
 
 enum LayoutStatus { loading, empty, noNetwork, complete, error }
 
 class BaseWidget extends StatelessWidget {
-  final Widget? title;
-  final AppBar? appBar;
-  final Color? backgroundColor;
-  final Widget body;
+  final Widget child;
   final Widget? empty;
   final Widget? loading;
   final Widget? noNetwork;
@@ -20,10 +16,7 @@ class BaseWidget extends StatelessWidget {
 
   const BaseWidget({
     super.key,
-    this.title,
-    this.appBar,
-    this.backgroundColor,
-    required this.body,
+    required this.child,
     this.status,
     this.empty,
     this.loading,
@@ -35,24 +28,7 @@ class BaseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: appBar ??
-          AppBar(
-            leading: !Navigator.of(context).canPop()
-                ? null
-                : IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Get.isDarkMode ? Colors.white : Colors.black,
-                    ),
-                    onPressed: () => Get.back(),
-                  ),
-            centerTitle: true,
-            title: title,
-          ),
-      body: buildContent(),
-    );
+    return buildContent();
   }
 
   Widget buildContent() {
@@ -92,7 +68,7 @@ class BaseWidget extends StatelessWidget {
               ),
             );
       default:
-        return body;
+        return child;
     }
   }
 }

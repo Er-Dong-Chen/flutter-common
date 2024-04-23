@@ -29,6 +29,9 @@ class ComImage extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: src,
         placeholder: (context, url) => Container(
+          width: width,
+          height: height,
+          alignment: Alignment.center,
           color: CommonColors.theme.shade100,
           child: Icon(
             Icons.terrain,
@@ -36,6 +39,9 @@ class ComImage extends StatelessWidget {
           ),
         ),
         errorWidget: (context, url, error) => Container(
+          width: width,
+          height: height,
+          alignment: Alignment.center,
           color: CommonColors.theme.shade100,
           child: Icon(
             Icons.terrain,
