@@ -31,7 +31,7 @@ class ComBack extends StatelessWidget {
         : GestureDetector(
             child: Icon(
               Icons.arrow_back_ios,
-              color: color ?? CommonColors.theme.shade400,
+              color: color,
             ),
             onTap: () => Get.back(),
           );

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chen_common/common/helper/common_helper.dart';
+import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -34,16 +35,16 @@ class UpdateHelper {
               _installApk();
               break;
             case OtaStatus.PERMISSION_NOT_GRANTED_ERROR: // 权限错误
-              CommonHelper.showToast("更新失败，暂无相关权限");
+              CommonHelper.showToast("更新失败，暂无相关权限".tr);
               break;
             default: // 其他问题
-              CommonHelper.showToast("更新异常");
+              CommonHelper.showToast("更新异常".tr);
               break;
           }
         },
       );
     } on Exception catch (e) {
-      CommonHelper.showToast("Download failed");
+      CommonHelper.showToast("下载失败".tr);
       debugPrint(e.toString());
     }
   }

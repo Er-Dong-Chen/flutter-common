@@ -1,3 +1,7 @@
+## 1.1.1
+
+* TODO: Pref oss and multilingual.
+
 ## 1.1.0
 
 * TODO: Pref widget and style.

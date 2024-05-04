@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class CommonHelper {
     );
   }
 
-  static void showLoading({String text = "Loading..."}) {
+  static void showLoading({String? text}) {
     hideLoading();
     BotToast.showCustomLoading(toastBuilder: (context) {
       return Container(
@@ -36,7 +38,7 @@ class CommonHelper {
             ),
             const SizedBox(height: 12),
             Text(
-              text,
+              text ?? "正在加载".tr,
               maxLines: 1,
               style: TextStyle(
                   fontSize: 15,
@@ -62,28 +64,110 @@ class CommonHelper {
     VoidCallback? onConfirm,
     List<CupertinoDialogAction>? actions,
     bool barrierDismissible = true,
+    bool? isIOSStyle,
   }) {
-    Widget baseAlertDialog = CupertinoAlertDialog(
-      title: title ??
-          const Center(
-            child: Text("Tips"),
-          ),
-      content: Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: content,
-      ),
-      actions: actions ??
-          <CupertinoDialogAction>[
-            CupertinoDialogAction(
-              onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
-              child: cancel ?? const Text('Cancel'),
+    Widget baseAlertDialog;
+    if ((isIOSStyle == null && Platform.isAndroid) ||
+        (isIOSStyle != null && !isIOSStyle)) {
+      baseAlertDialog = AlertDialog(
+        contentPadding: const EdgeInsets.all(0),
+        title: title ??
+            Center(
+              child: Text("温馨提示".tr),
             ),
-            CupertinoDialogAction(
-              onPressed: () => onConfirm?.call(),
-              child: confirm ?? const Text('Confirm'),
+        titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
+        titlePadding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.all(Radius.circular(CommonStyle.roundedMd)),
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+              child: content,
+            ),
+            Divider(
+              thickness: 0.5,
+              height: 0,
+              color: Get.isDarkMode ? Colors.white : Colors.black12,
+            ),
+            SizedBox(
+              height: 46.h,
+              width: double.infinity,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      child: Container(
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(16)),
+                        ),
+                        child: cancel ?? Text("取消".tr),
+                      ),
+                      onTap: () =>
+                          onCancel != null ? onCancel.call() : Get.back(),
+                    ),
+                  ),
+                  VerticalDivider(
+                    thickness: 0.5,
+                    width: 0,
+                    color: Get.isDarkMode ? Colors.white : Colors.black12,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      child: Container(
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(16)),
+                        ),
+                        child: confirm ?? Text("确定".tr),
+                      ),
+                      onTap: () => onConfirm?.call(),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-    );
+        ),
+      );
+    } else {
+      baseAlertDialog = CupertinoAlertDialog(
+        title: title ??
+            Center(
+              child: Text("温馨提示".tr),
+            ),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: content,
+        ),
+        actions: actions ??
+            <CupertinoDialogAction>[
+              CupertinoDialogAction(
+                onPressed: () =>
+                    onCancel != null ? onCancel.call() : Get.back(),
+                child: cancel ?? Text('取消'.tr),
+              ),
+              CupertinoDialogAction(
+                onPressed: () => onConfirm?.call(),
+                child: confirm ?? Text('确定'.tr),
+              ),
+            ],
+      );
+    }
 
     Get.dialog(
       baseAlertDialog,
@@ -117,7 +201,7 @@ class CommonHelper {
         actions: actionsList,
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
-          child: cancel ?? const Text('Cancel'),
+          child: cancel ?? Text('取消'.tr),
         ),
       ),
     );
@@ -130,6 +214,7 @@ class CommonHelper {
     String? cancelText,
     String? confirmText,
     VoidCallback? onConfirm,
+    VoidCallback? onCancel,
     MainAxisAlignment? actionsAlignment,
     bool close = false,
     Widget? foot,
@@ -155,20 +240,17 @@ class CommonHelper {
                       Expanded(
                         child: ComButton(
                           plain: true,
-                          child: Text(cancelText ?? 'Cancel'),
-                          onPressed: () {
-                            Get.back();
-                          },
+                          child: Text(cancelText ?? '取消'.tr),
+                          onPressed: () =>
+                              onCancel != null ? onCancel.call() : Get.back(),
                         ),
                       ),
                       SizedBox(width: CommonStyle.spaceMd),
                       Expanded(
                         child: ComButton(
                           gradient: CommonColors.primaryGradient,
-                          child: Text(confirmText ?? 'Confirm'),
-                          onPressed: () {
-                            onConfirm?.call();
-                          },
+                          child: Text(confirmText ?? '确定'.tr),
+                          onPressed: () => onConfirm?.call(),
                         ),
                       ),
                     ],
@@ -230,7 +312,7 @@ class CommonHelper {
                   GestureDetector(
                     onTap: () => Get.back(),
                     child: Text(
-                      cancelText ?? "Cancel",
+                      cancelText ?? "取消".tr,
                       style: CommonStyle.titleStyle,
                     ),
                   ),
@@ -240,7 +322,7 @@ class CommonHelper {
                       Get.back();
                     },
                     child: Text(
-                      confirmText ?? "Confirm",
+                      confirmText ?? "确定".tr,
                       style: CommonStyle.titleStyle
                           .copyWith(color: CommonColors.theme),
                     ),

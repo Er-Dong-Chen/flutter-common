@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_chen_common/config/com_config.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 class OssHelper {
   static String accessKeyId = 'ossAccessKeyId';
@@ -24,13 +24,8 @@ class OssHelper {
       Function? onSendProgress}) async {
     final res = await ComConfig.getOssConfig();
     // String policyText = '{"expiration": "$expiration","conditions": [{"bucket": "$bucket" },["content-length-range", 0, 1048576000]]}';
-    // /// 获取签名
+    /// 获取签名
     // String signature = getSignature(policyText);
-
-    BaseOptions options = BaseOptions();
-    options.responseType = ResponseType.plain;
-
-    Dio dio = Dio(options);
 
     /// 生成oss的路径和文件名目前设置的是images/20201229/test.mp4
     String pathName =
@@ -50,16 +45,20 @@ class OssHelper {
       'file': MultipartFile.fromFileSync(file.path),
     });
 
-    // Response response;
-    // CancelToken uploadCancelToken = CancelToken();
-    // cancelToken ?? cancelToken!(uploadCancelToken);
-
     try {
-      // 发送请求
-      await dio.post(res["url"], data: data);
+      /// 发送请求
+      var result = await RequestClient.instance.request(
+        res["url"],
+        method: HttpMethod.post.name,
+        data: data,
+      );
 
       /// 成功后返回文件访问路径
-      return '${res["url"]}/$pathName';
+      if (res["url"].contains("http")) {
+        return '${res["url"]}/$pathName';
+      } else {
+        return result;
+      }
     } catch (e) {
       throw (e.toString());
     }

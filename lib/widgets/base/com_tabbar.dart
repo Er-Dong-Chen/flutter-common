@@ -1,7 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 
-class ComTabBar extends StatelessWidget {
+const double _kTabHeight = 46.0;
+
+class ComTabBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> tabs;
   final int initialIndex;
   final ValueChanged<int>? onTap;
@@ -27,7 +31,7 @@ class ComTabBar extends StatelessWidget {
     this.isScrollable = false,
     this.onTap,
     this.initialIndex = 0,
-    this.indicatorBottom = 8,
+    this.indicatorBottom = 0,
     this.indicatorWidth = 12,
   });
 
@@ -61,6 +65,19 @@ class ComTabBar extends StatelessWidget {
         tabs: tabs,
       ),
     );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize {
+    double maxHeight = _kTabHeight;
+    for (final Widget item in tabs) {
+      if (item is PreferredSizeWidget) {
+        final double itemHeight = item.preferredSize.height;
+        maxHeight = math.max(itemHeight, maxHeight);
+      }
+    }
+    return Size.fromHeight(maxHeight + indicatorBottom);
   }
 }
 

@@ -17,13 +17,14 @@ class SpUtil {
   }
 
   /// get obj.
-  static T getObj<T>(String key, T Function(Map v) f, {required T defValue}) {
-    Map? map = getObject(key);
+  static T getObj<T>(String key, T Function(Map<String, dynamic> v) f,
+      {required T defValue}) {
+    Map<String, dynamic>? map = getObject(key);
     return map.isEmpty ? defValue : f(map);
   }
 
   /// get object.
-  static Map getObject(String key) {
+  static Map<String, dynamic> getObject(String key) {
     String? data = _prefs.getString(key);
     return (data == null || data.isEmpty) ? {} : json.decode(data);
   }
@@ -37,22 +38,23 @@ class SpUtil {
   }
 
   /// get obj list.
-  static List<T> getObjList<T>(String key, T Function(Map v) f) {
-    List<Map> dataList = getObjectList(key);
+  static List<T> getObjList<T>(
+      String key, T Function(Map<String, dynamic> v) f) {
+    List<Map<String, dynamic>> dataList = getObjectList(key);
     return dataList.map((value) {
       return f(value);
     }).toList();
   }
 
   /// get object list.
-  static List<Map> getObjectList(String key) {
+  static List<Map<String, dynamic>> getObjectList(String key) {
     List<String>? dataList = _prefs.getStringList(key);
     return (dataList == null || dataList.isEmpty)
         ? []
         : dataList.map((value) {
-            Map dataMap = json.decode(value);
-            return dataMap;
-          }).toList();
+      Map<String, dynamic> dataMap = json.decode(value);
+      return dataMap;
+    }).toList();
   }
 
   /// get string.

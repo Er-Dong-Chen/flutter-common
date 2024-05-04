@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CommonStyle {
   // 标题Style
-  static TextStyle titleStyle = TextStyle(
-    fontSize: fontLg,
-    fontWeight: FontWeight.bold,
-  );
+  static TextStyle titleStyle = Theme.of(Get.context!).textTheme.titleMedium!;
 
   // 次要内容Style
-  static TextStyle secondaryStyle = TextStyle(
-    fontSize: fontSm,
-    color: CommonColors.theme.shade300,
-  );
+  static TextStyle secondaryStyle = Theme.of(Get.context!).textTheme.bodySmall!;
 
   // 圆角
   static double rounded = 999.0;

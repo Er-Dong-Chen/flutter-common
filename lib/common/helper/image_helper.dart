@@ -70,15 +70,15 @@ class ImageHelper {
     final isPermission =
         await PermissionHelper.checkPermission([Permission.storage]);
     if (!isPermission) {
-      CommonHelper.showToast("Please enable related permissions");
+      CommonHelper.showToast('请开启相关权限'.tr);
       return false;
     }
     final result = await ImageGallerySaver.saveFile(filePath);
     if (!result) {
-      CommonHelper.showToast("Save fail");
+      CommonHelper.showToast("保存失败".tr);
       return false;
     }
-    CommonHelper.showToast("Save success");
+    CommonHelper.showToast("保存成功".tr);
     return true;
   }
 
@@ -86,7 +86,7 @@ class ImageHelper {
   static Future showActionSheet(ValueChanged<String> callBack,
       {bool crop = false, List<Widget>? actions, Widget? cancel}) async {
     CommonHelper.showActionSheet(
-        actions: actions ?? [const Text("相册选择"), const Text("拍摄照片")],
+        actions: actions ?? [Text("相册选择".tr), Text("拍摄照片".tr)],
         cancel: cancel,
         onConfirm: (val) async {
           List<Permission> permissionList = [
@@ -96,7 +96,7 @@ class ImageHelper {
           final permissions =
               await PermissionHelper.checkPermission([permissionList[val]]);
           if (!permissions) {
-            return CommonHelper.showToast('Please enable related permissions');
+            return CommonHelper.showToast('请开启相关权限'.tr);
           }
           dynamic img;
           if (val == 0) {
@@ -108,7 +108,7 @@ class ImageHelper {
           if (img != null) {
             callBack.call(img);
           } else {
-            CommonHelper.showToast("fail");
+            CommonHelper.showToast("上传失败".tr);
           }
         });
   }
