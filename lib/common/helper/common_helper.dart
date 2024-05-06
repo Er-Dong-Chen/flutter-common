@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/widgets/base/com_button.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class CommonHelper {
@@ -95,7 +94,7 @@ class CommonHelper {
               color: Get.isDarkMode ? Colors.white : Colors.black12,
             ),
             SizedBox(
-              height: 46.h,
+              height: 46,
               width: double.infinity,
               child: Row(
                 children: [
@@ -298,7 +297,7 @@ class CommonHelper {
       context: Get.context!,
       useSafeArea: useSafeArea,
       builder: (BuildContext context) => SizedBox(
-        height: 300.h,
+        height: 300,
         child: Column(
           children: [
             Padding(
@@ -331,7 +330,7 @@ class CommonHelper {
               ),
             ),
             SizedBox(
-              height: 250.h,
+              height: 250,
               child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (DateTime newDate) {

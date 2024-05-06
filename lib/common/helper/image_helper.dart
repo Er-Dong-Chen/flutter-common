@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/helper/oss_helper.dart';
-import 'package:flutter_chen_common/common/helper/permission_helper.dart';
 import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/common/utils/permission_util.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -68,7 +68,7 @@ class ImageHelper {
   // 保存图片
   static Future<bool> saveImage(filePath) async {
     final isPermission =
-        await PermissionHelper.checkPermission([Permission.storage]);
+        await PermissionUtil.checkPermission([Permission.storage]);
     if (!isPermission) {
       CommonHelper.showToast('请开启相关权限'.tr);
       return false;
@@ -94,7 +94,7 @@ class ImageHelper {
             Permission.camera
           ];
           final permissions =
-              await PermissionHelper.checkPermission([permissionList[val]]);
+              await PermissionUtil.checkPermission([permissionList[val]]);
           if (!permissions) {
             return CommonHelper.showToast('请开启相关权限'.tr);
           }

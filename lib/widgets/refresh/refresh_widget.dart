@@ -3,7 +3,6 @@ import 'package:flutter_chen_common/widgets/base/com_empty.dart';
 import 'package:flutter_chen_common/widgets/base/com_loading.dart';
 import 'package:flutter_chen_common/widgets/refresh/back_top_widget.dart';
 import 'package:flutter_chen_common/widgets/refresh/refresh_controller.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -72,15 +71,15 @@ class RefreshListWidget<T> extends StatelessWidget {
     } else if (controller.isLoading) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.only(
-              top: emptyTop != null ? (emptyTop! + 60.h) : 260.h),
+          padding:
+              EdgeInsets.only(top: emptyTop != null ? (emptyTop! + 60) : 260),
           child: const ComLoading(),
         ),
       );
     } else if (data.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.only(top: emptyTop != null ? emptyTop! : 200.h),
+          padding: EdgeInsets.only(top: emptyTop != null ? emptyTop! : 200),
           child: empty ?? const ComEmpty(),
         ),
       );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
@@ -48,13 +48,9 @@ class ComUpload extends StatelessWidget {
           controller.pickImages();
         },
         child: Container(
-          width: (ScreenUtil.defaultSize.width -
-                  (spacing ?? CommonStyle.spaceMd) * 2 -
-                  24) /
+          width: (Get.width - (spacing ?? CommonStyle.spaceMd) * 2 - 24) /
               crossAxisCount!,
-          height: (ScreenUtil.defaultSize.width -
-                  (spacing ?? CommonStyle.spaceMd) * 2 -
-                  24) /
+          height: (Get.width - (spacing ?? CommonStyle.spaceMd) * 2 - 24) /
               crossAxisCount!,
           decoration: BoxDecoration(
             borderRadius:

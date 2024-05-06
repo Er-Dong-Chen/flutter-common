@@ -4,6 +4,13 @@ import 'package:crypto/crypto.dart';
 
 /// Encrypt Util.
 class EncryptUtil {
+  /// sha1 加密
+  static String encodeSha1(String data) {
+    var bytes = utf8.encode(data);
+    var digest = sha1.convert(bytes);
+    return digest.toString();
+  }
+
   /// sha256 加密
   static String encodeSha256(String data) {
     var bytes = utf8.encode(data);

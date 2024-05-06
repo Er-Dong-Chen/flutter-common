@@ -1,3 +1,7 @@
+## 1.1.2
+
+* TODO: Feat utils.
+
 ## 1.1.1
 
 * TODO: Pref oss and multilingual.

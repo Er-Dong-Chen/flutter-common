@@ -1,6 +1,6 @@
 name: flutter_chen_common
 description: "A Flutter Common package For Helper and Widgets."
-version: 1.1.1
+version: 1.1.2
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 
 environment:
@@ -15,7 +15,6 @@ dependencies:
   dio_cookie_manager: ^3.0.0            # 请求缓存
   shared_preferences: ^2.0.0            # 本地缓存
   permission_handler: ^11.0.0           # 权限获取
-  flutter_screenutil: ^5.0.0            # 屏幕适应
   logger: ">=1.0.0 <5.0.0"              # 日志打印
   pull_to_refresh: ^2.0.0               # 刷新
   flutter_staggered_grid_view: ^0.7.0   # 瀑布流
@@ -35,7 +34,6 @@ dependencies:
   package_info_plus: ^5.0.0             # App信息
   path_provider: ^2.0.0                 # 文件路径
   ota_update: ^6.0.0                    # App下载
-#  flutter_downloader: ^1.0.0            # App下载
   open_file: ^3.0.0                     # 打开文件
 
 dev_dependencies:

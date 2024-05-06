@@ -1,6 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 
-class PermissionHelper {
+class PermissionUtil {
   /// 检测是否有权限
   /// [permissionList] 权限申请列表
   static Future<bool> checkPermission(List<Permission> permissionList) async {
