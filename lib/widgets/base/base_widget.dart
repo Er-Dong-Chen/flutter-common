@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:get/get.dart';
 
 enum LayoutStatus { loading, empty, noNetwork, complete, error }
 
@@ -26,6 +27,17 @@ class BaseWidget extends StatelessWidget {
     this.isConnected = true,
   });
 
+  static Widget loadingWidget = const ComLoading();
+  static Widget emptyWidget = const ComEmpty();
+  static Widget errorWidget = ComEmpty(
+    message: Text(
+      '加载错误'.tr,
+      style: CommonStyle.secondaryStyle,
+    ),
+  );
+  static Widget Function(VoidCallback? onReconnect) noNetworkWidget =
+      (onReconnect) => NoNetworkWidget(onReconnect: onReconnect);
+
   @override
   Widget build(BuildContext context) {
     return buildContent();
@@ -34,41 +46,43 @@ class BaseWidget extends StatelessWidget {
   Widget buildContent() {
     switch (!isConnected ? LayoutStatus.noNetwork : status) {
       case LayoutStatus.loading:
-        return loading ?? const ComLoading();
+        return loading ?? loadingWidget;
       case LayoutStatus.empty:
-        return empty ?? const ComEmpty();
+        return empty ?? emptyWidget;
       case LayoutStatus.noNetwork:
-        return Center(
-          child: noNetwork ??
-              ComEmpty(
-                image: Image.asset("assets/images/no_network.png"),
-                message: Column(
-                  children: [
-                    Text(
-                      '网络错误，请检查后重试',
-                      style: CommonStyle.secondaryStyle,
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    ComButton(
-                      onPressed: () => onReconnect?.call(),
-                      child: const Text('点击重试'),
-                    )
-                  ],
-                ),
-              ),
-        );
+        return noNetwork ?? noNetworkWidget(onReconnect);
       case LayoutStatus.error:
-        return error ??
-            ComEmpty(
-              message: Text(
-                '加载错误',
-                style: CommonStyle.secondaryStyle,
-              ),
-            );
+        return error ?? errorWidget;
       default:
         return child;
     }
+  }
+}
+
+class NoNetworkWidget extends StatelessWidget {
+  final VoidCallback? onReconnect;
+
+  const NoNetworkWidget({super.key, this.onReconnect});
+
+  @override
+  Widget build(BuildContext context) {
+    return ComEmpty(
+      image: Image.asset("assets/images/no_network.png"),
+      message: Column(
+        children: [
+          Text(
+            '网络错误，请检查后重试'.tr,
+            style: CommonStyle.secondaryStyle,
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          ComButton(
+            onPressed: () => onReconnect?.call(),
+            child: Text('点击重试'.tr),
+          )
+        ],
+      ),
+    );
   }
 }

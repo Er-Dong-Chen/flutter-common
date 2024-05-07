@@ -1,3 +1,7 @@
+## 1.1.3
+
+* TODO: Pref flexible configuration.
+
 ## 1.1.2
 
 * TODO: Feat utils.

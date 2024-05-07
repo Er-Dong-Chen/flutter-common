@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_chen_common/widgets/base/com_empty.dart';
-import 'package:flutter_chen_common/widgets/base/com_loading.dart';
+import 'package:flutter_chen_common/widgets/base/base_widget.dart';
 import 'package:flutter_chen_common/widgets/refresh/back_top_widget.dart';
 import 'package:flutter_chen_common/widgets/refresh/refresh_controller.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -73,24 +72,21 @@ class RefreshListWidget<T> extends StatelessWidget {
         child: Padding(
           padding:
               EdgeInsets.only(top: emptyTop != null ? (emptyTop! + 60) : 260),
-          child: const ComLoading(),
+          child: BaseWidget.loadingWidget,
         ),
       );
     } else if (data.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
           padding: EdgeInsets.only(top: emptyTop != null ? emptyTop! : 200),
-          child: empty ?? const ComEmpty(),
+          child: empty ?? BaseWidget.emptyWidget,
         ),
       );
     } else if (!showList) {
       return SliverMasonryGrid.count(
         crossAxisCount: crossAxisCount,
         childCount: data.length,
-        itemBuilder: (BuildContext context, int index) => GestureDetector(
-          child: itemBuilder.call(data[index], index),
-          onTap: () => onItemClick?.call(data[index], index),
-        ),
+        itemBuilder: (context, index) => _buildListItem(context, index, data),
         mainAxisSpacing: spacing,
         crossAxisSpacing: spacing,
       );
@@ -98,12 +94,17 @@ class RefreshListWidget<T> extends StatelessWidget {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
           childCount: data.length,
-          (context, index) => GestureDetector(
-            child: itemBuilder.call(data[index], index),
-            onTap: () => onItemClick?.call(data[index], index),
-          ),
+          (context, index) => _buildListItem(context, index, data),
         ),
       );
     }
+  }
+
+  Widget _buildListItem(BuildContext context, int index, List dataList) {
+    final item = dataList[index];
+    return GestureDetector(
+      onTap: () => onItemClick?.call(item, index),
+      child: itemBuilder(item, index),
+    );
   }
 }
