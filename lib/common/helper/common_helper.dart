@@ -4,7 +4,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
-import 'package:flutter_chen_common/widgets/base/com_button.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_chen_common/widgets/base/base_widget.dart';
 import 'package:get/get.dart';
 
 class CommonHelper {
@@ -22,31 +23,35 @@ class CommonHelper {
   static void showLoading({String? text}) {
     hideLoading();
     BotToast.showCustomLoading(toastBuilder: (context) {
-      return Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-            color: Get.isDarkMode ? Colors.white : Colors.black54,
-            borderRadius: const BorderRadius.all(Radius.circular(12))),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 4),
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(
-                  !Get.isDarkMode ? Colors.white : Colors.black54),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              text ?? "正在加载".tr,
-              maxLines: 1,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: !Get.isDarkMode ? Colors.white : Colors.black54),
-              overflow: TextOverflow.ellipsis,
-            )
-          ],
-        ),
-      );
+      if (BaseWidget.loadingWidget is ComLoading) {
+        return Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+              color: Get.isDarkMode ? Colors.white : Colors.black54,
+              borderRadius: const BorderRadius.all(Radius.circular(12))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 4),
+              const ComLoading(),
+              const SizedBox(height: 12),
+              Text(
+                text ?? "加载中...".tr,
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: !Get.isDarkMode ? Colors.white54 : Colors.black54),
+                overflow: TextOverflow.ellipsis,
+              )
+            ],
+          ),
+        );
+      } else {
+        return BaseWidget.loadingWidget;
+      }
     });
   }
 

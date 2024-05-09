@@ -1,6 +1,6 @@
 name: flutter_chen_common
-description: "A Flutter Common package For Helper and Widgets."
-version: 1.1.3
+description: "The flutter common package designed to help developers swiftly build aesthetically pleasing and feature-rich mobile application interfaces, this library integrates a variety of commonly used, highly customizable components along with essential functional methods, offering a comprehensive suite that markedly enhances development efficiency and enriches the user experience of the applications."
+version: 1.1.4
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 
 environment:
@@ -23,15 +23,15 @@ dependencies:
 
   # 图片
   image_picker: ^1.0.0                  # 图片选择
-  photo_view: ^0.14.0                   # 图片预览
+  photo_view: ">=0.14.0 <0.16.0"        # 图片预览
   cached_network_image: ^3.0.0          # 图片缓存
   image_gallery_saver: ^2.0.0           # 图片保存
-  image_cropper: ">=4.0.0 <6.0.0"       # 图片裁剪
+  image_cropper: ">=4.0.0 <7.0.0"       # 图片裁剪
   multi_image_picker_view: ^1.0.0       # 图片选择
   card_swiper : ^3.0.0                  # 图片轮播
 
   # 版本更新
-  package_info_plus: ^5.0.0             # App信息
+  package_info_plus: ">=5.0.0 <9.0.0"   # App信息
   path_provider: ^2.0.0                 # 文件路径
   ota_update: ^6.0.0                    # App下载
   open_file: ^3.0.0                     # 打开文件

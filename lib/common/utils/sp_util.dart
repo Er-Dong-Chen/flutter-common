@@ -52,9 +52,9 @@ class SpUtil {
     return (dataList == null || dataList.isEmpty)
         ? []
         : dataList.map((value) {
-      Map<String, dynamic> dataMap = json.decode(value);
-      return dataMap;
-    }).toList();
+            Map<String, dynamic> dataMap = json.decode(value);
+            return dataMap;
+          }).toList();
   }
 
   /// get string.

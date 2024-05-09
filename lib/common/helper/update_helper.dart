@@ -9,11 +9,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UpdateHelper {
-  static Future<PackageInfo> getPackageInfo() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    return packageInfo;
-  }
-
   static Future download(String url,
       {ValueChanged<OtaEvent>? downloadCallback}) async {
     try {
@@ -51,7 +46,7 @@ class UpdateHelper {
 
   static Future _installApk() async {
     String path = await _apkLocalPath;
-    PackageInfo packageInfo = await getPackageInfo();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
     await OpenFile.open('$path/${packageInfo.appName}');
   }
 

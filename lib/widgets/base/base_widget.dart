@@ -40,6 +40,14 @@ class BaseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      // 在这里处理异常
+      if (details.library == 'widgets library') {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.off(() => const ErrorPage());
+        });
+      }
+    };
     return buildContent();
   }
 
@@ -83,6 +91,21 @@ class NoNetworkWidget extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class ErrorPage extends StatelessWidget {
+  const ErrorPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: const ComBack(),
+        title: const Text(''),
+      ),
+      body: BaseWidget.errorWidget,
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ComLoading extends StatelessWidget {
   final double size;
@@ -10,7 +12,7 @@ class ComLoading extends StatelessWidget {
     return Center(
       child: CupertinoActivityIndicator(
         radius: size,
-        color: color,
+        color: color ?? (!Get.isDarkMode ? Colors.white : Colors.black54),
       ),
     );
   }

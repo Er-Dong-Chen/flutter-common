@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/common/utils/function_util.dart';
+import 'package:get/get.dart';
 
 class ComTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -69,7 +70,7 @@ class ComTextField extends StatelessWidget {
         autofocus: autoFocus!,
         decoration: inputDecoration ??
             InputDecoration(
-                hintText: placeholder ?? "Please enter",
+                hintText: placeholder ?? "请输入".tr,
                 hintStyle: TextStyle(
                   color: CommonColors.theme.shade300,
                 ),
