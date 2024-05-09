@@ -1,7 +1,8 @@
 name: flutter_chen_common
-description: "The flutter common package designed to help developers swiftly build aesthetically pleasing and feature-rich mobile application interfaces, this library integrates a variety of commonly used, highly customizable components along with essential functional methods, offering a comprehensive suite that markedly enhances development efficiency and enriches the user experience of the applications."
-version: 1.1.4
+description: "The flutter common package designed to help developers swiftly build aesthetically pleasing and feature-rich mobile application interfaces."
+version: 1.1.5
 homepage: https://github.com/Er-Dong-Chen/flutter-common
+repository: https://github.com/Er-Dong-Chen/flutter-common.git
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
