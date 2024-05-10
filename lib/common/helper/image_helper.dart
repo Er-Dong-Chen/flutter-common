@@ -89,15 +89,15 @@ class ImageHelper {
         actions: actions ?? [Text("相册选择".tr), Text("拍摄照片".tr)],
         cancel: cancel,
         onConfirm: (val) async {
-          List<Permission> permissionList = [
-            Permission.storage,
-            Permission.camera
-          ];
-          final permissions =
-              await PermissionUtil.checkPermission([permissionList[val]]);
-          if (!permissions) {
-            return CommonHelper.showToast('请开启相关权限'.tr);
-          }
+          // List<Permission> permissionList = [
+          //   Permission.storage,
+          //   Permission.camera
+          // ];
+          // final permissions =
+          //     await PermissionUtil.checkPermission([permissionList[val]]);
+          // if (!permissions) {
+          //   return CommonHelper.showToast('请开启相关权限'.tr);
+          // }
           dynamic img;
           if (val == 0) {
             img = await pickImage(source: ImageSource.gallery, crop: crop);

@@ -1,3 +1,7 @@
+## 1.1.6
+
+* TODO: Feat example.
+
 ## 1.1.5
 
 * TODO: Feat docs.

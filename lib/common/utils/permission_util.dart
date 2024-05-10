@@ -24,7 +24,7 @@ class PermissionUtil {
       bool result = false;
 
       switch (permissionStatus) {
-        ///拒绝状态
+        /// 拒绝状态
         case PermissionStatus.denied:
           break;
 
@@ -35,7 +35,7 @@ class PermissionUtil {
           openAppSettings();
           break;
 
-        ///允许状态
+        /// 允许状态
         case PermissionStatus.provisional:
         case PermissionStatus.granted:
           result = true;

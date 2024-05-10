@@ -48,7 +48,7 @@ class DemoLogic extends PagingController {
 class DemoPage extends StatelessWidget {
   DemoPage({Key? key}) : super(key: key);
 
-  final logic = Get.find<DemoLogic>();
+  final logic = Get.put(DemoLogic());
 
   @override
   Widget build(BuildContext context) {

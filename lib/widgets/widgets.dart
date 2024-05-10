@@ -12,6 +12,7 @@ export 'base/com_swiper.dart';
 export 'base/com_tabbar.dart';
 export 'base/com_textfield.dart';
 export 'base/com_upload.dart';
+export 'refresh/back_top_widget.dart';
 export 'refresh/refresh_controller.dart';
 export 'refresh/refresh_state.dart';
 export 'refresh/refresh_widget.dart';
