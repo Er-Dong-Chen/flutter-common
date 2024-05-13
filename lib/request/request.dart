@@ -57,7 +57,7 @@ class RequestClient {
     String? method,
     Options? options,
     data,
-    bool showLoading = false,
+    bool showLoading = true,
     CancelToken? cancelToken,
     void Function(int, int)? onSendProgress,
     void Function(int, int)? onReceiveProgress,

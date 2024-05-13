@@ -1,3 +1,11 @@
+## 1.1.9
+
+* TODO: Pref avatar and avatar group.
+
+## 1.1.8
+
+* TODO: Pref popup menu.
+
 ## 1.1.7
 
 * TODO: Feat popup menu.

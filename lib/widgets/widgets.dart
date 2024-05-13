@@ -1,5 +1,6 @@
 export 'base/com_album.dart';
 export 'base/com_arrow.dart';
+export 'base/com_avatar.dart';
 export 'base/com_button.dart';
 export 'base/com_container.dart';
 export 'base/com_empty.dart';
