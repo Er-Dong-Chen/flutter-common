@@ -61,7 +61,7 @@ class ComAvatar extends StatelessWidget {
 class ComAvatarGroup extends StatelessWidget {
   final List<String> data;
   final double size;
-  final double spacing;
+  final double? spacing;
   final num count;
   final Widget? builder;
 
@@ -69,7 +69,7 @@ class ComAvatarGroup extends StatelessWidget {
     this.data, {
     super.key,
     this.size = 30.0,
-    this.spacing = 12.0,
+    this.spacing,
     this.count = 10,
     this.builder,
   });
@@ -87,13 +87,13 @@ class ComAvatarGroup extends StatelessWidget {
       var o = data[i];
       widgets.add(Positioned(
         top: 0,
-        left: i * spacing,
+        left: i * (spacing ?? (size * 0.5)),
         child: ComAvatar(o, size: size),
       ));
       if (i == count) {
         widgets.add(Positioned(
           top: 0,
-          left: i * spacing,
+          left: i * (spacing ?? (size * 0.5)),
           child: ComAvatar(
             "",
             size: size,

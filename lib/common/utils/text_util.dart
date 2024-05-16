@@ -5,6 +5,23 @@ class TextUtil {
     return text == null || text.isEmpty;
   }
 
+  /// 姓名脱敏
+  static String maskName(String name) {
+    if (name.length == 2) {
+      // 对于两个字的姓名，显示姓氏的第一个字和名字的最后一个字
+      return '${name[0]}*';
+    } else if (name.length > 2) {
+      // 对于三个字或更多字的姓名，显示姓氏的第一个字和最后一个字，中间用*代替
+      String lastName = name.substring(0, 1);
+      String firstName = name.substring(name.length - 1);
+      String maskedMiddle = '*' * (name.length - 2);
+      return '$lastName$maskedMiddle$firstName';
+    } else {
+      // 对于单个字或其他情况，不进行脱敏处理
+      return name;
+    }
+  }
+
   /// 每隔 x位 加 pattern
   static String formatDigitPattern(String text,
       {int digit = 4, String pattern = ' '}) {

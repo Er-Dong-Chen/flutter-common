@@ -1,3 +1,7 @@
+## 1.2.0
+
+* TODO: Pref swiper.
+
 ## 1.1.9
 
 * TODO: Pref avatar and avatar group.
