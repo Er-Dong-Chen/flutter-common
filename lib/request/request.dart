@@ -73,7 +73,8 @@ class RequestClient {
       Response response = await _dio.request(
         baseUrl != null ? baseUrl + url : this.baseUrl + url,
         data: data,
-        queryParameters: data,
+        queryParameters:
+            options.method == HttpMethod.get.name.toUpperCase() ? data : null,
         options: options,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,

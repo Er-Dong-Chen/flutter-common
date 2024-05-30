@@ -6,8 +6,8 @@ class ComButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onPressed;
   final ButtonStyle? style;
-  final bool? plain;
-  final bool disable;
+  final bool plain;
+  final bool disabled;
   final Gradient? gradient;
   final double? radius;
   final double elevation;
@@ -23,7 +23,7 @@ class ComButton extends StatelessWidget {
     this.onPressed,
     this.style,
     this.plain = false,
-    this.disable = false,
+    this.disabled = false,
     this.radius,
     this.color,
     this.padding,
@@ -34,96 +34,111 @@ class ComButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (gradient != null || elevation > 0) {
-      return Container(
-        height: 40,
-        decoration: BoxDecoration(
-          gradient: gradient,
-          color: (color ?? Theme.of(context).colorScheme.primary)
-              .withOpacity(loading && elevation == 0 ? 0.5 : 1),
-          borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
-          boxShadow: [
-            if (elevation > 0) ...[
-              BoxShadow(
-                color: shadowColor ?? Theme.of(context).colorScheme.shadow,
-                blurRadius: elevation,
-              )
-            ],
-          ],
-        ),
-        child: FilledButton(
-          style: FilledButton.styleFrom(
-            padding: padding,
-            backgroundColor: Colors.transparent,
-            disabledBackgroundColor: Colors.transparent,
-            // disabledForegroundColor: Colors.white.withOpacity(0.5),
-          ),
-          onPressed: disable
-              ? null
-              : () {
-                  if (!loading) {
-                    onPressed?.call();
-                  }
-                }.throttle(),
-          child: child,
-        ),
-      );
-    }
-    return buildButton(context);
+    return _buildButton(context);
   }
 
-  Widget buildButton(BuildContext context) {
-    if (plain!) {
-      return OutlinedButton(
-        style: style ??
-            OutlinedButton.styleFrom(
-              padding: padding,
-              foregroundColor:
-                  (color ?? CommonColors.theme).withOpacity(loading ? 0.5 : 1),
-              disabledForegroundColor:
-                  (color ?? CommonColors.theme).withOpacity(0.5),
-              side: BorderSide(
-                color: (color ?? CommonColors.theme)
-                    .withOpacity(loading || disable ? 0.5 : 1),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(radius ?? CommonStyle.rounded),
-              ),
+  Widget _buildButton(BuildContext context) {
+    if (gradient != null) {
+      return _buildGradientButton(context);
+    } else {
+      return _buildColoredButton(context);
+    }
+  }
+
+  Widget _buildGradientButton(BuildContext context) {
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+        boxShadow: [
+          if (elevation > 0)
+            BoxShadow(
+              color: shadowColor ?? Theme.of(context).colorScheme.shadow,
+              blurRadius: elevation,
             ),
-        onPressed: disable
-            ? null
-            : () {
-                if (!loading) {
-                  onPressed?.call();
-                }
-              }.throttle(),
+        ],
+      ),
+      child: _buildButtonContent(context, _getGradientButtonStyle(context)),
+    );
+  }
+
+  Widget _buildColoredButton(BuildContext context) {
+    final buttonTheme = plain
+        ? _getOutlinedButtonStyle(context)
+        : _getFilledButtonStyle(context);
+    final effectiveStyle = style?.merge(buttonTheme) ?? buttonTheme;
+
+    return _buildButtonContent(context, effectiveStyle);
+  }
+
+  Widget _buildButtonContent(BuildContext context, ButtonStyle effectiveStyle) {
+    if (plain) {
+      return OutlinedButton(
+        style: effectiveStyle,
+        onPressed: _getOnPressed(),
+        child: child,
+      );
+    } else {
+      return FilledButton(
+        style: effectiveStyle,
+        onPressed: _getOnPressed(),
         child: child,
       );
     }
-    return FilledButton(
-      style: style ??
-          FilledButton.styleFrom(
-            padding: padding,
-            backgroundColor: (color ?? Theme.of(context).colorScheme.primary)
-                .withOpacity(loading ? 0.5 : 1),
-            disabledBackgroundColor:
-                (color ?? Theme.of(context).colorScheme.primary)
-                    .withOpacity(0.5),
-            disabledForegroundColor: Colors.white.withOpacity(0.8),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(radius ?? CommonStyle.rounded),
-            ),
-          ),
-      onPressed: disable
-          ? null
-          : () {
-              if (!loading) {
-                onPressed?.call();
-              }
-            }.throttle(),
-      child: child,
+  }
+
+  ButtonStyle _getGradientButtonStyle(BuildContext context) {
+    return ElevatedButton.styleFrom(
+      padding: padding,
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.white,
+      disabledBackgroundColor: Colors.transparent,
+      disabledForegroundColor: Colors.white.withOpacity(0.5),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+      ),
     );
+  }
+
+  ButtonStyle _getOutlinedButtonStyle(BuildContext context) {
+    return OutlinedButton.styleFrom(
+      padding: padding,
+      foregroundColor: _getButtonColor(context).withOpacity(loading ? 0.5 : 1),
+      disabledForegroundColor: _getButtonColor(context).withOpacity(0.5),
+      side: BorderSide(
+        color:
+            _getButtonColor(context).withOpacity(loading || disabled ? 0.5 : 1),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+      ),
+    );
+  }
+
+  ButtonStyle _getFilledButtonStyle(BuildContext context) {
+    return FilledButton.styleFrom(
+      padding: padding,
+      backgroundColor: _getButtonColor(context).withOpacity(loading ? 0.5 : 1),
+      disabledBackgroundColor: _getButtonColor(context).withOpacity(0.5),
+      disabledForegroundColor: Colors.white.withOpacity(0.8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+      ),
+    );
+  }
+
+  Color _getButtonColor(BuildContext context) {
+    return color ?? Theme.of(context).colorScheme.primary;
+  }
+
+  VoidCallback? _getOnPressed() {
+    return disabled
+        ? null
+        : () {
+            if (!loading) {
+              onPressed?.call();
+            }
+          }.throttle();
   }
 }

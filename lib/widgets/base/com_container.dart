@@ -40,25 +40,24 @@ class ComContainer extends StatelessWidget {
       margin: margin,
       padding: padding ??
           EdgeInsets.symmetric(
-              horizontal: CommonStyle.spaceMd, vertical: CommonStyle.spaceMd),
-      decoration: decoration ??
-          BoxDecoration(
-            color: color ?? CommonColors.theme.shade100,
-            image: image,
-            borderRadius:
-                BorderRadius.circular(radius ?? CommonStyle.roundedMd),
-            boxShadow: [
-              if (elevation > 0) ...[
-                BoxShadow(
-                  color: shadowColor ?? Theme.of(context).colorScheme.shadow,
-                  blurRadius: elevation,
-                  // spreadRadius: 1,
-                  // offset: Offset(0, 0),
-                )
-              ],
-            ],
-          ),
+              horizontal: CommonStyle.spaceSm, vertical: CommonStyle.spaceMd),
+      decoration: decoration ?? _getDefaultDecoration(context),
       child: child,
+    );
+  }
+
+  BoxDecoration _getDefaultDecoration(BuildContext context) {
+    return BoxDecoration(
+      color: color ?? CommonColors.theme.shade200,
+      image: image,
+      borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
+      boxShadow: [
+        if (elevation > 0)
+          BoxShadow(
+            color: shadowColor ?? Theme.of(context).colorScheme.shadow,
+            blurRadius: elevation,
+          ),
+      ],
     );
   }
 }

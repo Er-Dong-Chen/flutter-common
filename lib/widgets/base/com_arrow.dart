@@ -2,38 +2,65 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:get/get.dart';
 
+enum ArrowDirection { left, right, up, down }
+
 class ComArrow extends StatelessWidget {
   final double? size;
   final Color? color;
-  final bool isBack;
+  final ArrowDirection direction;
 
-  const ComArrow({super.key, this.size, this.isBack = false, this.color});
+  const ComArrow({
+    super.key,
+    this.size,
+    this.color,
+    this.direction = ArrowDirection.right,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Icon(
-      isBack ? Icons.arrow_back_ios : Icons.arrow_forward_ios,
+      _getIconData(direction),
       size: size ?? CommonStyle.fontMd,
-      color: color ?? CommonColors.theme.shade300,
+      color: color ?? CommonColors.theme.shade700,
     );
+  }
+
+  IconData _getIconData(ArrowDirection direction) {
+    switch (direction) {
+      case ArrowDirection.left:
+        return Icons.arrow_back_ios;
+      case ArrowDirection.right:
+        return Icons.arrow_forward_ios;
+      case ArrowDirection.up:
+        return Icons.keyboard_arrow_up;
+      case ArrowDirection.down:
+        return Icons.keyboard_arrow_down;
+    }
   }
 }
 
 class ComBack extends StatelessWidget {
   final Color? color;
+  final VoidCallback? onTap;
 
-  const ComBack({super.key, this.color});
+  const ComBack({
+    super.key,
+    this.color,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return !Navigator.of(context).canPop()
-        ? Container()
-        : GestureDetector(
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: color,
-            ),
-            onTap: () => Get.back(),
-          );
+    if (!Navigator.of(context).canPop() && onTap == null) {
+      return const SizedBox.shrink();
+    }
+
+    return GestureDetector(
+      onTap: onTap ?? () => Get.back(),
+      child: Icon(
+        Icons.arrow_back_ios,
+        color: color,
+      ),
+    );
   }
 }

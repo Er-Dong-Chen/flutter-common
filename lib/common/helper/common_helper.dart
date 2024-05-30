@@ -24,31 +24,7 @@ class CommonHelper {
     hideLoading();
     BotToast.showCustomLoading(toastBuilder: (context) {
       if (BaseWidget.loadingWidget is ComLoading) {
-        return Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-              color: Get.isDarkMode ? Colors.white : Colors.black54,
-              borderRadius: const BorderRadius.all(Radius.circular(12))),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 4),
-              const ComLoading(),
-              const SizedBox(height: 12),
-              Text(
-                text ?? "加载中...".tr,
-                maxLines: 1,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: !Get.isDarkMode ? Colors.white54 : Colors.black54),
-                overflow: TextOverflow.ellipsis,
-              )
-            ],
-          ),
-        );
+        return const ComLoading();
       } else {
         return BaseWidget.loadingWidget;
       }
@@ -68,11 +44,10 @@ class CommonHelper {
     VoidCallback? onConfirm,
     List<CupertinoDialogAction>? actions,
     bool barrierDismissible = true,
-    bool? isIOSStyle,
+    bool isIOSStyle = true,
   }) {
     Widget baseAlertDialog;
-    if ((isIOSStyle == null && Platform.isAndroid) ||
-        (isIOSStyle != null && !isIOSStyle)) {
+    if (Platform.isAndroid && !isIOSStyle) {
       baseAlertDialog = AlertDialog(
         contentPadding: const EdgeInsets.all(0),
         title: title ??
@@ -317,7 +292,7 @@ class CommonHelper {
                     onTap: () => Get.back(),
                     child: Text(
                       cancelText ?? "取消".tr,
-                      style: CommonStyle.titleStyle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   GestureDetector(
@@ -327,8 +302,10 @@ class CommonHelper {
                     },
                     child: Text(
                       confirmText ?? "确定".tr,
-                      style: CommonStyle.titleStyle
-                          .copyWith(color: CommonColors.theme),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: CommonColors.theme),
                     ),
                   ),
                 ],
@@ -351,7 +328,10 @@ class CommonHelper {
   static void showModal(Widget content) {
     BotToast.showWidget(
       toastBuilder: (_) {
-        return content;
+        return Material(
+          color: Colors.black.withOpacity(0.0),
+          child: content,
+        );
       },
       groupKey: "modal",
     );

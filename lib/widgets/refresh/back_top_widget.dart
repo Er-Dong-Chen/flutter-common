@@ -49,9 +49,11 @@ class BackTopState extends State<BackTopWidget> {
           widget.scrollController.animateTo(0.0,
               duration: const Duration(milliseconds: 300), curve: Curves.ease);
         },
-        child: Visibility(
-          visible:
-              _showBackTop, // Controls the visibility of the back to top button
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: _showBackTop
+              ? 1.0
+              : 0.0, // Controls the visibility of the back to top button
           child: Container(
             width: 40,
             height: 40,

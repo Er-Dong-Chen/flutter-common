@@ -7,52 +7,81 @@ import 'com_image.dart';
 class ComAlbum extends StatelessWidget {
   final List<String> urls;
   final EdgeInsetsGeometry? padding;
+  final double? itemSize;
+  final double? spacing;
 
   const ComAlbum({
     super.key,
     required this.urls,
     this.padding,
+    this.itemSize,
+    this.spacing = 12.0,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (urls.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     if (urls.length == 1) {
-      return GestureDetector(
-        onTap: () {
-          Get.to(ComGallery(
-            urls: urls,
-          ));
-        },
-        child: ComImage(
-          urls[0],
-          width: double.infinity,
-        ),
-      );
+      return _buildSingleImage(urls[0]);
+    } else {
+      return _buildGridView();
     }
-    int rowCount = 3;
-    if (urls.length == 2 || urls.length == 4) {
-      rowCount = 2;
-    }
+  }
+
+  Widget _buildSingleImage(String url) {
+    return GestureDetector(
+      onTap: () => _openGallery(urls),
+      child: ComImage(
+        url,
+        width: double.infinity,
+      ),
+    );
+  }
+
+  Widget _buildGridView() {
+    final crossAxisCount = _getCrossAxisCount();
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: rowCount,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
+        crossAxisCount: crossAxisCount,
+        mainAxisSpacing: spacing!,
+        crossAxisSpacing: spacing!,
+        childAspectRatio: 1,
       ),
+      padding: padding,
       itemCount: urls.length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         return GestureDetector(
-          child: ComImage(urls[index]),
-          onTap: () {
-            Get.to(ComGallery(
-              urls: urls,
-              index: index,
-            ));
-          },
+          onTap: () => _openGallery(urls, index: index),
+          child: ComImage(
+            urls[index],
+            width: itemSize,
+            height: itemSize,
+          ),
         );
       },
     );
+  }
+
+  int _getCrossAxisCount() {
+    switch (urls.length) {
+      case 2:
+      case 4:
+        return 2;
+      default:
+        return 3;
+    }
+  }
+
+  void _openGallery(List<String> images, {int index = 0}) {
+    Get.to(ComGallery(
+      urls: images,
+      initialIndex: index,
+    ));
   }
 }

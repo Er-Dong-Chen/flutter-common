@@ -1,3 +1,7 @@
+## 1.3.0
+
+* TODO: Improvement and optimization.
+
 ## 1.2.0
 
 * TODO: Pref swiper.

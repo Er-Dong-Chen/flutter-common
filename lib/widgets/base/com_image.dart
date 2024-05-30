@@ -10,6 +10,8 @@ class ComImage extends StatelessWidget {
   final double? minHeight;
   final double? radius;
   final BoxFit fit;
+  final Widget? placeholder;
+  final Widget? errorBuilder;
 
   const ComImage(
     this.src, {
@@ -20,6 +22,8 @@ class ComImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.minWidth,
     this.minHeight,
+    this.placeholder,
+    this.errorBuilder,
   });
 
   @override
@@ -28,31 +32,41 @@ class ComImage extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
       child: CachedNetworkImage(
         imageUrl: src,
-        placeholder: (context, url) => Container(
-          width: width,
-          height: height,
-          alignment: Alignment.center,
-          color: CommonColors.theme.shade100,
-          child: Icon(
-            Icons.terrain,
-            color: CommonColors.theme.shade200,
-          ),
-        ),
-        errorWidget: (context, url, error) => Container(
-          width: width,
-          height: height,
-          alignment: Alignment.center,
-          color: CommonColors.theme.shade100,
-          child: Icon(
-            Icons.terrain,
-            color: CommonColors.theme.shade200,
-          ),
-        ),
+        placeholder: (context, url) =>
+            placeholder ?? _buildDefaultPlaceholder(),
+        errorWidget: (context, url, error) =>
+            errorBuilder ?? _buildDefaultErrorWidget(),
         fadeOutDuration: const Duration(milliseconds: 300),
         fadeInDuration: const Duration(milliseconds: 500),
         fit: fit,
         width: src.isNotEmpty ? width : minWidth,
         height: src.isNotEmpty ? height : minHeight,
+      ),
+    );
+  }
+
+  Widget _buildDefaultPlaceholder() {
+    return Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      color: CommonColors.theme.shade200,
+      child: Icon(
+        Icons.terrain,
+        color: CommonColors.theme.shade400,
+      ),
+    );
+  }
+
+  Widget _buildDefaultErrorWidget() {
+    return Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      color: CommonColors.theme.shade200,
+      child: Icon(
+        Icons.error,
+        color: CommonColors.theme.shade400,
       ),
     );
   }
@@ -67,12 +81,11 @@ class ComImageOverlay extends StatelessWidget {
     this.padding,
     this.margin,
     required this.image,
-    this.child = const Text(''),
+    this.child = const SizedBox.shrink(),
     this.alignment,
     this.borderRadius,
-    this.colorFilter =
-        const ColorFilter.mode(Colors.black26, BlendMode.colorBurn),
-    this.boxFit = BoxFit.fill,
+    this.colorFilter = const ColorFilter.mode(Colors.black54, BlendMode.darken),
+    this.boxFit = BoxFit.cover,
     this.border,
     this.shape = BoxShape.rectangle,
   }) : super(key: key);
@@ -92,23 +105,25 @@ class ComImageOverlay extends StatelessWidget {
   final BoxShape shape;
 
   @override
-  Widget build(BuildContext context) => Container(
-        alignment: alignment,
-        height: height,
-        width: width ?? MediaQuery.of(context).size.width,
-        margin: margin,
-        padding: padding,
-        decoration: BoxDecoration(
-          shape: shape,
-          borderRadius: borderRadius,
-          border: border,
-          color: color,
-          image: DecorationImage(
-            fit: boxFit,
-            colorFilter: colorFilter,
-            image: image,
-          ),
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: alignment,
+      height: height,
+      width: width ?? double.infinity,
+      margin: margin,
+      padding: padding,
+      decoration: BoxDecoration(
+        shape: shape,
+        borderRadius: borderRadius,
+        border: border,
+        color: color,
+        image: DecorationImage(
+          fit: boxFit,
+          colorFilter: colorFilter,
+          image: image,
         ),
-        child: child,
-      );
+      ),
+      child: child,
+    );
+  }
 }

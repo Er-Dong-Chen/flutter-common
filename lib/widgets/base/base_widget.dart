@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 
@@ -32,7 +31,7 @@ class BaseWidget extends StatelessWidget {
   static Widget errorWidget = ComEmpty(
     message: Text(
       '加载错误'.tr,
-      style: CommonStyle.secondaryStyle,
+      style: Theme.of(Get.context!).textTheme.bodySmall,
     ),
   );
   static Widget Function(VoidCallback? onReconnect) noNetworkWidget =
@@ -53,6 +52,7 @@ class BaseWidget extends StatelessWidget {
         return noNetwork ?? noNetworkWidget(onReconnect);
       case LayoutStatus.error:
         return error ?? errorWidget;
+      case LayoutStatus.complete:
       default:
         return child;
     }
@@ -72,7 +72,7 @@ class NoNetworkWidget extends StatelessWidget {
         children: [
           Text(
             '网络错误，请检查后重试'.tr,
-            style: CommonStyle.secondaryStyle,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(
             height: 12,

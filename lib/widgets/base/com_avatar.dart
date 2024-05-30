@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
+import 'package:get/get.dart';
 
 class ComAvatar extends StatelessWidget {
   final String src;
   final double size;
   final double? radius;
   final BoxFit fit;
+  final Widget? placeholder;
   final Widget? builder;
 
   const ComAvatar(
@@ -15,6 +17,7 @@ class ComAvatar extends StatelessWidget {
     this.size = 50,
     this.radius,
     this.fit = BoxFit.cover,
+    this.placeholder,
     this.builder,
   });
 
@@ -24,30 +27,10 @@ class ComAvatar extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       child: CachedNetworkImage(
         imageUrl: src,
-        placeholder: (context, url) => Container(
-          width: size,
-          height: size,
-          alignment: Alignment.center,
-          color: CommonColors.theme.shade100,
-          child: builder ??
-              Icon(
-                Icons.person,
-                color: CommonColors.theme.shade200,
-                size: size * 0.8,
-              ),
-        ),
-        errorWidget: (context, url, error) => Container(
-          width: size,
-          height: size,
-          alignment: Alignment.center,
-          color: CommonColors.theme.shade100,
-          child: builder ??
-              Icon(
-                Icons.person,
-                color: CommonColors.theme.shade200,
-                size: size * 0.8,
-              ),
-        ),
+        placeholder: (context, url) =>
+            placeholder ?? _buildDefaultPlaceholder(),
+        errorWidget: (context, url, error) =>
+            placeholder ?? _buildDefaultPlaceholder(),
         fadeOutDuration: const Duration(milliseconds: 300),
         fadeInDuration: const Duration(milliseconds: 500),
         fit: fit,
@@ -56,13 +39,28 @@ class ComAvatar extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildDefaultPlaceholder() {
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      color: CommonColors.theme.shade200,
+      child: builder ??
+          Icon(
+            Icons.person,
+            color: CommonColors.theme.shade400,
+            size: size * 0.8,
+          ),
+    );
+  }
 }
 
 class ComAvatarGroup extends StatelessWidget {
   final List<String> data;
   final double size;
   final double? spacing;
-  final num count;
+  final int? maxCount;
   final Widget? builder;
 
   const ComAvatarGroup(
@@ -70,43 +68,67 @@ class ComAvatarGroup extends StatelessWidget {
     super.key,
     this.size = 30.0,
     this.spacing,
-    this.count = 10,
+    this.maxCount,
     this.builder,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: buildAvatarList(),
+      children: buildAvatarList(context),
     );
   }
 
-  List<Widget> buildAvatarList() {
-    List<Widget> widgets = [];
+  List<Widget> buildAvatarList(BuildContext context) {
+    final widgets = <Widget>[];
+    final displayCount = maxCount ?? data.length;
+
     for (var i = 0; i < data.length; ++i) {
-      var o = data[i];
-      widgets.add(Positioned(
-        top: 0,
-        left: i * (spacing ?? (size * 0.5)),
-        child: ComAvatar(o, size: size),
-      ));
-      if (i == count) {
+      if (i < displayCount) {
         widgets.add(Positioned(
           top: 0,
           left: i * (spacing ?? (size * 0.5)),
           child: ComAvatar(
-            "",
+            data[i],
             size: size,
-            builder: builder ??
-                Text(
-                  '${data.length >= 100 ? "99+" : data.length}',
-                  style: CommonStyle.secondaryStyle,
-                ),
           ),
         ));
+      } else {
         break;
       }
     }
+
+    if (data.length > displayCount) {
+      widgets.add(Positioned(
+        top: 0,
+        left: (displayCount - 1) * (spacing ?? (size * 0.5)),
+        child: ComAvatar(
+          '',
+          size: size,
+          placeholder: _buildDefaultOverflowWidget(data.length - displayCount),
+        ),
+      ));
+    }
+
     return widgets;
+  }
+
+  Widget _buildDefaultOverflowWidget(int count) {
+    return Container(
+      alignment: Alignment.center,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: CommonColors.theme.shade200,
+        borderRadius: BorderRadius.circular(CommonStyle.rounded),
+      ),
+      child: builder ??
+          Text(
+            '+$count',
+            style: Theme.of(Get.context!).textTheme.bodySmall?.copyWith(
+                  fontSize: size * 0.5,
+                ),
+          ),
+    );
   }
 }
