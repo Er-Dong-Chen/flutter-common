@@ -35,7 +35,7 @@ class ComImage extends StatelessWidget {
         placeholder: (context, url) =>
             placeholder ?? _buildDefaultPlaceholder(),
         errorWidget: (context, url, error) =>
-            errorBuilder ?? _buildDefaultErrorWidget(),
+            errorBuilder ?? _buildDefaultPlaceholder(),
         fadeOutDuration: const Duration(milliseconds: 300),
         fadeInDuration: const Duration(milliseconds: 500),
         fit: fit,
@@ -53,19 +53,6 @@ class ComImage extends StatelessWidget {
       color: CommonColors.theme.shade200,
       child: Icon(
         Icons.terrain,
-        color: CommonColors.theme.shade400,
-      ),
-    );
-  }
-
-  Widget _buildDefaultErrorWidget() {
-    return Container(
-      width: width,
-      height: height,
-      alignment: Alignment.center,
-      color: CommonColors.theme.shade200,
-      child: Icon(
-        Icons.error,
         color: CommonColors.theme.shade400,
       ),
     );
