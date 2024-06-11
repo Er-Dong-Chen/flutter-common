@@ -1,6 +1,4 @@
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_chen_common/common/helper/common_helper.dart';
 
 enum HttpMethod { get, post, put, patch, delete }
@@ -33,9 +31,6 @@ class RequestClient {
         // baseUrl: baseUrl,
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30)));
-
-    // 添加默认拦截器
-    _dio.interceptors.add(CookieManager(CookieJar()));
 
     // 添加自定义拦截器（如果提供了）
     if (interceptors != null) {

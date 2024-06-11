@@ -79,9 +79,9 @@ class ComAlbum extends StatelessWidget {
   }
 
   void _openGallery(List<String> images, {int index = 0}) {
-    Get.to(ComGallery(
-      urls: images,
-      initialIndex: index,
-    ));
+    Get.to(() => ComGallery(
+          urls: images,
+          initialIndex: index,
+        ));
   }
 }

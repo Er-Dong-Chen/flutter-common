@@ -1,3 +1,4 @@
+export 'base/base_widget.dart';
 export 'base/com_album.dart';
 export 'base/com_arrow.dart';
 export 'base/com_avatar.dart';

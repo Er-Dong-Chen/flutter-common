@@ -16,6 +16,7 @@ description: "A new Flutter project."
 # a `flutter run` or a `flutter make-host-app-editable`. It has no impact
 # on any other native host app that you embed your Flutter project into.
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: '>=3.3.0 <4.0.0'

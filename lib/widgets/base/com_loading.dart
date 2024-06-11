@@ -39,13 +39,13 @@ class ComLoading extends StatelessWidget {
 
 class SpinKitPouringHourGlassRefined extends StatefulWidget {
   const SpinKitPouringHourGlassRefined({
-    Key? key,
+    super.key,
     required this.color,
     this.size = 50.0,
     this.duration = const Duration(milliseconds: 2400),
     this.strokeWidth = 2.0,
     this.controller,
-  }) : super(key: key);
+  });
 
   final double size;
   final Color color;

@@ -61,7 +61,7 @@ class ComImage extends StatelessWidget {
 
 class ComImageOverlay extends StatelessWidget {
   const ComImageOverlay({
-    Key? key,
+    super.key,
     this.height,
     this.width,
     this.color,
@@ -75,7 +75,7 @@ class ComImageOverlay extends StatelessWidget {
     this.boxFit = BoxFit.cover,
     this.border,
     this.shape = BoxShape.rectangle,
-  }) : super(key: key);
+  });
 
   final double? height;
   final double? width;

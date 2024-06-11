@@ -10,7 +10,7 @@ class BackTopWidget extends StatefulWidget {
   ///
   /// [scrollController]: The scroll controller to listen to scroll events.
   /// [key]: Optional key to use for this widget.
-  const BackTopWidget(this.scrollController, {Key? key}) : super(key: key);
+  const BackTopWidget(this.scrollController, {super.key});
 
   @override
   State<StatefulWidget> createState() => BackTopState(); // 创建状态类的实例

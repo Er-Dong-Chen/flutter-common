@@ -6,6 +6,8 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 
+import '../../request/request.dart';
+
 class OssHelper {
   static String accessKeyId = 'ossAccessKeyId';
   static String accessKeySecret = 'ossAccessKeySecret';

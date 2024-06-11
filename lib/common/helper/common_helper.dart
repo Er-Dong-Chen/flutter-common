@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
-import 'package:flutter_chen_common/widgets/base/base_widget.dart';
 import 'package:get/get.dart';
 
 class CommonHelper {
@@ -47,7 +44,7 @@ class CommonHelper {
     bool isIOSStyle = true,
   }) {
     Widget baseAlertDialog;
-    if (Platform.isAndroid && !isIOSStyle) {
+    if (!isIOSStyle) {
       baseAlertDialog = AlertDialog(
         contentPadding: const EdgeInsets.all(0),
         title: title ??
