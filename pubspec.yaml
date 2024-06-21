@@ -1,6 +1,6 @@
 name: flutter_chen_common
 description: "The flutter common package designed to help developers swiftly build aesthetically pleasing and feature-rich mobile application interfaces."
-version: 1.3.4
+version: 1.3.5
 homepage: https://github.com/Er-Dong-Chen/flutter-common
 repository: https://github.com/Er-Dong-Chen/flutter-common.git
 
@@ -19,6 +19,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.7.0   # 瀑布流
   bot_toast: ^4.1.3                     # 消息提示
   crypto: ^3.0.0                        # 加密
+  path_provider: ^2.1.3                 # 文件路径
 
   # 图片
   image_picker: ^1.1.0                  # 图片选择

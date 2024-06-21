@@ -1,3 +1,7 @@
+## 1.3.5
+
+* TODO: Chore upgrade dart pub.
+
 ## 1.3.4
 
 * TODO: Chore upgrade dart pub.
