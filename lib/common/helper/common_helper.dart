@@ -21,7 +21,7 @@ class CommonHelper {
     hideLoading();
     BotToast.showCustomLoading(toastBuilder: (context) {
       if (BaseWidget.loadingWidget is ComLoading) {
-        return const ComLoading();
+        return ComLoading(message: text);
       } else {
         return BaseWidget.loadingWidget;
       }
@@ -187,8 +187,8 @@ class CommonHelper {
     required Widget content,
     Widget? title,
     List<Widget>? actions,
-    String? cancelText,
-    String? confirmText,
+    Widget? cancel,
+    Widget? confirm,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
     MainAxisAlignment? actionsAlignment,
@@ -216,7 +216,7 @@ class CommonHelper {
                       Expanded(
                         child: ComButton(
                           plain: true,
-                          child: Text(cancelText ?? '取消'.tr),
+                          child: cancel ?? Text('取消'.tr),
                           onPressed: () =>
                               onCancel != null ? onCancel.call() : Get.back(),
                         ),
@@ -225,7 +225,7 @@ class CommonHelper {
                       Expanded(
                         child: ComButton(
                           gradient: CommonColors.primaryGradient,
-                          child: Text(confirmText ?? '确定'.tr),
+                          child: confirm ?? Text('确定'.tr),
                           onPressed: () => onConfirm?.call(),
                         ),
                       ),

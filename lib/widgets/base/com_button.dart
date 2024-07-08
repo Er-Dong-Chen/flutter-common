@@ -41,7 +41,10 @@ class ComButton extends StatelessWidget {
     if (gradient != null) {
       return _buildGradientButton(context);
     } else {
-      return _buildColoredButton(context);
+      return Container(
+        constraints: const BoxConstraints(minHeight: 40),
+        child: _buildColoredButton(context),
+      );
     }
   }
 

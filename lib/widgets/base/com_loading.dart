@@ -8,7 +8,7 @@ import '../../common/style.dart';
 class ComLoading extends StatelessWidget {
   final double size;
   final Color? color;
-  final Widget? message;
+  final String? message;
   const ComLoading({super.key, this.size = 50.0, this.color, this.message});
 
   @override
@@ -23,14 +23,13 @@ class ComLoading extends StatelessWidget {
             size: size,
           ),
           SizedBox(height: CommonStyle.spaceMd),
-          message ??
-              Text(
-                "加载中...".tr,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: color ?? CommonColors.theme.shade400),
-              ),
+          Text(
+            message ?? "加载中...".tr,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: color ?? CommonColors.theme.shade400),
+          ),
         ],
       ),
     );

@@ -12,14 +12,14 @@ class ComAvatar extends StatelessWidget {
   final Widget? builder;
 
   const ComAvatar(
-    this.src, {
-    super.key,
-    this.size = 50,
-    this.radius,
-    this.fit = BoxFit.cover,
-    this.placeholder,
-    this.builder,
-  });
+      this.src, {
+        super.key,
+        this.size = 50,
+        this.radius,
+        this.fit = BoxFit.cover,
+        this.placeholder,
+        this.builder,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,9 @@ class ComAvatar extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: src,
         placeholder: (context, url) =>
-            placeholder ?? _buildDefaultPlaceholder(),
+        placeholder ?? _buildDefaultPlaceholder(),
         errorWidget: (context, url, error) =>
-            placeholder ?? _buildDefaultPlaceholder(),
+        placeholder ?? _buildDefaultPlaceholder(),
         fadeOutDuration: const Duration(milliseconds: 300),
         fadeInDuration: const Duration(milliseconds: 500),
         fit: fit,
@@ -64,13 +64,13 @@ class ComAvatarGroup extends StatelessWidget {
   final Widget? builder;
 
   const ComAvatarGroup(
-    this.data, {
-    super.key,
-    this.size = 30.0,
-    this.spacing,
-    this.maxCount,
-    this.builder,
-  });
+      this.data, {
+        super.key,
+        this.size = 30.0,
+        this.spacing,
+        this.maxCount,
+        this.builder,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class ComAvatarGroup extends StatelessWidget {
         child: ComAvatar(
           '',
           size: size,
-          placeholder: _buildDefaultOverflowWidget(data.length - displayCount),
+          placeholder: _buildDefaultOverflowWidget(data.length),
         ),
       ));
     }
@@ -124,10 +124,10 @@ class ComAvatarGroup extends StatelessWidget {
       ),
       child: builder ??
           Text(
-            '+$count',
+            '$count+',
             style: Theme.of(Get.context!).textTheme.bodySmall?.copyWith(
-                  fontSize: size * 0.5,
-                ),
+              fontSize: size * 0.3,
+            ),
           ),
     );
   }

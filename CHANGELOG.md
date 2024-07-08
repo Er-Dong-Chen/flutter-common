@@ -1,3 +1,7 @@
+## 1.3.6
+
+* TODO: Fix some bug.
+
 ## 1.3.5
 
 * TODO: Chore upgrade dart pub.
