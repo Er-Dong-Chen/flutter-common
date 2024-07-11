@@ -43,7 +43,9 @@ class BaseWidget extends StatelessWidget {
   }
 
   Widget buildContent() {
-    switch (!isConnected ? LayoutStatus.noNetwork : status) {
+    switch (!isConnected && status == LayoutStatus.loading
+        ? LayoutStatus.noNetwork
+        : status) {
       case LayoutStatus.loading:
         return loading ?? loadingWidget;
       case LayoutStatus.empty:

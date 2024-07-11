@@ -265,8 +265,9 @@ class CommonHelper {
 
   static showDatePicker({
     Function(DateTime date)? onConfirm,
-    String? cancelText,
-    String? confirmText,
+    Function()? onCancel,
+    Widget? cancel,
+    Widget? confirm,
     bool useSafeArea = false,
   }) {
     DateTime date = DateTime.now();
@@ -286,24 +287,26 @@ class CommonHelper {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Text(
-                      cancelText ?? "取消".tr,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    onTap: onCancel ?? () => Get.back(),
+                    child: cancel ??
+                        Text(
+                          "取消".tr,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                   ),
                   GestureDetector(
                     onTap: () {
                       onConfirm?.call(date);
                       Get.back();
                     },
-                    child: Text(
-                      confirmText ?? "确定".tr,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: CommonColors.theme),
-                    ),
+                    child: confirm ??
+                        Text(
+                          "确定".tr,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: CommonColors.theme),
+                        ),
                   ),
                 ],
               ),
@@ -316,6 +319,78 @@ class CommonHelper {
                     date = newDate;
                   }),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  static showPicker(
+      {required List<Widget> children,
+      Function(int selectIndex)? onConfirm,
+      Function()? onCancel,
+      Widget? cancel,
+      Widget? confirm,
+      bool useSafeArea = false,
+      double itemExtent = 30,
+      int initialItem = 0,
+      Widget selectionOverlay =
+          const CupertinoPickerDefaultSelectionOverlay()}) {
+    int selectIndex = initialItem;
+    showModalBottomSheet(
+      context: Get.context!,
+      useSafeArea: useSafeArea,
+      builder: (BuildContext context) => SizedBox(
+        height: 300,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  top: CommonStyle.spaceMd,
+                  left: CommonStyle.spaceLg,
+                  right: CommonStyle.spaceLg),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: onCancel ?? () => Get.back(),
+                    child: cancel ??
+                        Text(
+                          "取消".tr,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      onConfirm?.call(selectIndex);
+                      Get.back();
+                    },
+                    child: confirm ??
+                        Text(
+                          "确定".tr,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: CommonColors.theme),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 250,
+              child: CupertinoPicker(
+                backgroundColor: Colors.transparent,
+                itemExtent: itemExtent,
+                onSelectedItemChanged: (int index) {
+                  selectIndex = index;
+                },
+                selectionOverlay: selectionOverlay,
+                scrollController:
+                    FixedExtentScrollController(initialItem: initialItem),
+                children: children,
+              ),
+            ),
           ],
         ),
       ),
