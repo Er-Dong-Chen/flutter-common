@@ -90,4 +90,10 @@ class TextUtil {
     }
     return sb.toString();
   }
+
+  /// toFixed
+  static String toFixed(value, {int digits = 2, String def = "0"}) {
+    if (value == null || value.toString().isEmpty) return def;
+    return double.parse(value).toStringAsFixed(digits);
+  }
 }

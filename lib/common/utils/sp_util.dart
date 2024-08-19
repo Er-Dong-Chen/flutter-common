@@ -30,7 +30,7 @@ class SpUtil {
   }
 
   /// put object list.
-  static Future<bool> putObjectList(String key, List<Object> list) {
+  static Future<bool> putObjectList(String key, List list) {
     List<String>? dataList = list.map((value) {
       return json.encode(value);
     }).toList();
@@ -52,9 +52,9 @@ class SpUtil {
     return (dataList == null || dataList.isEmpty)
         ? []
         : dataList.map((value) {
-            Map<String, dynamic> dataMap = json.decode(value);
-            return dataMap;
-          }).toList();
+      Map<String, dynamic> dataMap = json.decode(value);
+      return dataMap;
+    }).toList();
   }
 
   /// get string.

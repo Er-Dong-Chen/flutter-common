@@ -169,7 +169,6 @@ class CommonHelper {
         ),
       );
     }
-
     Get.bottomSheet(
       CupertinoActionSheet(
         title: title,
@@ -201,38 +200,43 @@ class CommonHelper {
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AlertDialog(
-            title: Center(child: title),
+          AlertDialog.adaptive(
+            title: title,
             titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
             shape: RoundedRectangleBorder(
               borderRadius:
                   BorderRadius.all(Radius.circular(CommonStyle.roundedMd)),
             ),
-            content: content,
-            actions: actions ??
-                <Widget>[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ComButton(
-                          plain: true,
-                          child: cancel ?? Text('取消'.tr),
-                          onPressed: () =>
-                              onCancel != null ? onCancel.call() : Get.back(),
-                        ),
+            content: Column(
+              children: [
+                content,
+                const SizedBox(height: 20),
+                ...actions ??
+                    <Widget>[
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ComButton(
+                              plain: true,
+                              child: cancel ?? Text('取消'.tr),
+                              onPressed: () => onCancel != null
+                                  ? onCancel.call()
+                                  : Get.back(),
+                            ),
+                          ),
+                          SizedBox(width: CommonStyle.spaceMd),
+                          Expanded(
+                            child: ComButton(
+                              gradient: CommonColors.primaryGradient,
+                              child: confirm ?? Text('确定'.tr),
+                              onPressed: () => onConfirm?.call(),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: CommonStyle.spaceMd),
-                      Expanded(
-                        child: ComButton(
-                          gradient: CommonColors.primaryGradient,
-                          child: confirm ?? Text('确定'.tr),
-                          onPressed: () => onConfirm?.call(),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-            actionsAlignment: actionsAlignment ?? MainAxisAlignment.spaceAround,
+                    ]
+              ],
+            ),
           ),
           Visibility(
             visible: close,
