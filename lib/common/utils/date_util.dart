@@ -26,6 +26,17 @@ Map<int, int> monthDay = {
 
 /// Date Util.
 class DateUtil {
+  static Duration difference(time) {
+    if (time == null) {
+      return const Duration();
+    }
+    var dateTime = DateUtil.getDateTimeByMs(time);
+    DateTime today = DateTime.now();
+    Duration difference = dateTime.difference(today);
+
+    return difference;
+  }
+
   static String getTimeAgoForChatByMs(int milliSecond,
       {String languageCode = 'en', bool short = false}) {
     var nowTime = DateTime.now();

@@ -99,7 +99,8 @@ class ImageHelper {
       sourcePath: imageFile.path,
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'Cropper',
+            toolbarTitle: '',
+            // toolbarTitle: 'Cropper',
             toolbarColor: CommonColors.theme,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
@@ -109,7 +110,8 @@ class ImageHelper {
             ],
             lockAspectRatio: false),
         IOSUiSettings(
-          title: 'Cropper',
+          title: '',
+          // title: 'Cropper',
           aspectRatioPresets: [
             CropAspectRatioPreset.original,
             CropAspectRatioPreset.square,

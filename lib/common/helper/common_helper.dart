@@ -201,7 +201,7 @@ class CommonHelper {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AlertDialog.adaptive(
-            title: title,
+            title: Center(child: title),
             titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
             shape: RoundedRectangleBorder(
               borderRadius:
@@ -209,7 +209,17 @@ class CommonHelper {
             ),
             content: Column(
               children: [
-                content,
+                Padding(
+                  padding: EdgeInsets.only(
+                    top:
+                        Theme.of(Get.context!).platform == TargetPlatform.iOS ||
+                                Theme.of(Get.context!).platform ==
+                                    TargetPlatform.macOS
+                            ? 12
+                            : 0,
+                  ),
+                  child: content,
+                ),
                 const SizedBox(height: 20),
                 ...actions ??
                     <Widget>[
