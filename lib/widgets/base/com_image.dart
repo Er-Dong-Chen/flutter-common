@@ -6,8 +6,8 @@ class ComImage extends StatelessWidget {
   final String src;
   final double? width;
   final double? height;
-  final double? minWidth;
-  final double? minHeight;
+  final double minWidth;
+  final double minHeight;
   final double? radius;
   final BoxFit fit;
   final Widget? placeholder;
@@ -20,8 +20,8 @@ class ComImage extends StatelessWidget {
     this.height,
     this.radius,
     this.fit = BoxFit.cover,
-    this.minWidth,
-    this.minHeight,
+    this.minWidth = 50,
+    this.minHeight = 50,
     this.placeholder,
     this.errorBuilder,
   });
@@ -30,19 +30,41 @@ class ComImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
-      child: CachedNetworkImage(
-        imageUrl: src,
-        placeholder: (context, url) =>
-            placeholder ?? _buildDefaultPlaceholder(),
-        errorWidget: (context, url, error) =>
-            errorBuilder ?? _buildDefaultPlaceholder(),
-        fadeOutDuration: const Duration(milliseconds: 300),
-        fadeInDuration: const Duration(milliseconds: 500),
-        fit: fit,
-        width: src.isNotEmpty ? width : minWidth,
-        height: src.isNotEmpty ? height : minHeight,
+      child: Container(
+        constraints: BoxConstraints(
+          minWidth: width ?? minWidth,
+          minHeight: height ?? minHeight,
+        ),
+        child: src.isEmpty
+            ? _buildDefaultPlaceholder()
+            : isNetworkImage(src)
+                ? CachedNetworkImage(
+                    imageUrl: src,
+                    placeholder: (context, url) =>
+                        placeholder ?? _buildDefaultPlaceholder(),
+                    errorWidget: (context, url, error) =>
+                        errorBuilder ?? _buildDefaultPlaceholder(),
+                    fadeOutDuration: const Duration(milliseconds: 300),
+                    fadeInDuration: const Duration(milliseconds: 500),
+                    fit: fit,
+                    width: width,
+                    height: height,
+                  )
+                : Image.asset(
+                    src,
+                    fit: fit,
+                    width: width,
+                    height: height,
+                    errorBuilder: (context, url, error) =>
+                        errorBuilder ?? _buildDefaultPlaceholder(),
+                  ),
       ),
     );
+  }
+
+  bool isNetworkImage(String src) {
+    final uri = Uri.tryParse(src);
+    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
   }
 
   Widget _buildDefaultPlaceholder() {

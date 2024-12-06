@@ -6,6 +6,7 @@ import 'package:flutter_chen_common/common/style.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'common_helper.dart';
 
@@ -69,22 +70,34 @@ class ImageHelper {
         actions: actions ?? [Text("相册选择".tr), Text("拍摄照片".tr)],
         cancel: cancel,
         onConfirm: (val) async {
-          // List<Permission> permissionList = [
-          //   Permission.storage,
-          //   Permission.camera
-          // ];
-          // final permissions =
-          //     await PermissionUtil.checkPermission([permissionList[val]]);
-          // if (!permissions) {
-          //   return CommonHelper.showToast('请开启相关权限'.tr);
-          // }
-          dynamic img;
-          if (val == 0) {
-            img = await pickImage(source: ImageSource.gallery, crop: crop);
-          } else {
-            img = await pickImage(source: ImageSource.camera, crop: crop);
-          }
           Get.back();
+          List<Permission> permissionList = [
+            Permission.photos,
+            Permission.camera
+          ];
+
+          dynamic img;
+          try {
+            if (val == 0) {
+              img = await pickImage(source: ImageSource.gallery, crop: crop);
+            } else {
+              img = await pickImage(source: ImageSource.camera, crop: crop);
+            }
+          } catch (e) {
+            await (permissionList[val]).status;
+            CommonHelper.showAlertDialog(
+                content: Text(
+                  '请在App权限管理中开启${val == 0 ? '相册' : '相机'}权限\n以便上传头像'.tr,
+                  textAlign: TextAlign.center,
+                ),
+                confirm: const Text('去开启'),
+                cancel: const Text('暂不开启'),
+                onConfirm: () {
+                  openAppSettings();
+                  Get.back();
+                });
+            return;
+          }
           if (img != null) {
             callBack.call(img);
           } else {
@@ -97,6 +110,13 @@ class ImageHelper {
   static Future cropImage(imageFile) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
       uiSettings: [
         AndroidUiSettings(
             toolbarTitle: '',
@@ -104,18 +124,18 @@ class ImageHelper {
             toolbarColor: CommonColors.theme,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-            ],
+            // aspectRatioPresets: [
+            //   CropAspectRatioPreset.original,
+            //   CropAspectRatioPreset.square,
+            // ],
             lockAspectRatio: false),
         IOSUiSettings(
-          title: '',
+          title: '', doneButtonTitle: "确定", cancelButtonTitle: "取消",
           // title: 'Cropper',
-          aspectRatioPresets: [
-            CropAspectRatioPreset.original,
-            CropAspectRatioPreset.square,
-          ],
+          // aspectRatioPresets: [
+          //   CropAspectRatioPreset.original,
+          //   CropAspectRatioPreset.square,
+          // ],
         ),
         WebUiSettings(
           context: Get.context!,
@@ -126,20 +146,20 @@ class ImageHelper {
     return res;
   }
 
-  // // 保存图片
-  // static Future<bool> saveImage(filePath) async {
-  //   final isPermission =
-  //       await PermissionUtil.checkPermission([Permission.storage]);
-  //   if (!isPermission) {
-  //     CommonHelper.showToast('请开启相关权限'.tr);
-  //     return false;
-  //   }
-  //   final result = await ImageGallerySaver.saveFile(filePath);
-  //   if (!result) {
-  //     CommonHelper.showToast("保存失败".tr);
-  //     return false;
-  //   }
-  //   CommonHelper.showToast("保存成功".tr);
-  //   return true;
-  // }
+// // 保存图片
+// static Future<bool> saveImage(filePath) async {
+//   final isPermission =
+//       await PermissionUtil.checkPermission([Permission.storage]);
+//   if (!isPermission) {
+//     CommonHelper.showToast('请开启相关权限'.tr);
+//     return false;
+//   }
+//   final result = await ImageGallerySaver.saveFile(filePath);
+//   if (!result) {
+//     CommonHelper.showToast("保存失败".tr);
+//     return false;
+//   }
+//   CommonHelper.showToast("保存成功".tr);
+//   return true;
+// }
 }

@@ -15,6 +15,8 @@ class ComButton extends StatelessWidget {
   final Color? color;
   final EdgeInsets? padding;
   final bool loading;
+  final double? width;
+  final double? height;
 
   const ComButton({
     super.key,
@@ -30,37 +32,33 @@ class ComButton extends StatelessWidget {
     this.loading = false,
     this.shadowColor,
     this.elevation = 0,
-  });
+    this.width,
+    this.height,
+  }) : _minHeight = padding == null ? height ?? 40 : 0;
+
+  final double _minHeight;
 
   @override
   Widget build(BuildContext context) {
-    return _buildButton(context);
-  }
-
-  Widget _buildButton(BuildContext context) {
-    if (gradient != null) {
-      return _buildGradientButton(context);
-    } else {
-      return Container(
-        constraints: const BoxConstraints(minHeight: 40),
-        child: _buildColoredButton(context),
-      );
-    }
+    return gradient != null || elevation > 0
+        ? _buildGradientButton(context)
+        : Container(
+            height: height,
+            width: width,
+            constraints: BoxConstraints(minHeight: _minHeight),
+            child: _buildColoredButton(context),
+          );
   }
 
   Widget _buildGradientButton(BuildContext context) {
     return Container(
-      height: 40,
+      height: height ?? 40,
+      width: width,
+      padding: padding,
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
-        boxShadow: [
-          if (elevation > 0)
-            BoxShadow(
-              color: shadowColor ?? Theme.of(context).colorScheme.shadow,
-              blurRadius: elevation,
-            ),
-        ],
+        boxShadow: _buildButtonShadow(context),
       ),
       child: _buildButtonContent(context, _getGradientButtonStyle(context)),
     );
@@ -76,19 +74,17 @@ class ComButton extends StatelessWidget {
   }
 
   Widget _buildButtonContent(BuildContext context, ButtonStyle effectiveStyle) {
-    if (plain) {
-      return OutlinedButton(
-        style: effectiveStyle,
-        onPressed: _getOnPressed(),
-        child: child,
-      );
-    } else {
-      return FilledButton(
-        style: effectiveStyle,
-        onPressed: _getOnPressed(),
-        child: child,
-      );
-    }
+    return (plain
+        ? OutlinedButton(
+            style: effectiveStyle,
+            onPressed: _getOnPressed(),
+            child: child,
+          )
+        : FilledButton(
+            style: effectiveStyle,
+            onPressed: _getOnPressed(),
+            child: child,
+          ));
   }
 
   ButtonStyle _getGradientButtonStyle(BuildContext context) {
@@ -101,6 +97,7 @@ class ComButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       ),
+      minimumSize: Size(_minHeight, 0),
     );
   }
 
@@ -116,23 +113,38 @@ class ComButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       ),
+      minimumSize: Size(_minHeight, 0),
     );
   }
 
   ButtonStyle _getFilledButtonStyle(BuildContext context) {
     return FilledButton.styleFrom(
       padding: padding,
+      foregroundColor: Colors.black,
       backgroundColor: _getButtonColor(context).withOpacity(loading ? 0.5 : 1),
       disabledBackgroundColor: _getButtonColor(context).withOpacity(0.5),
       disabledForegroundColor: Colors.white.withOpacity(0.8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       ),
+      minimumSize: Size(_minHeight, 0),
     );
   }
 
   Color _getButtonColor(BuildContext context) {
     return color ?? Theme.of(context).colorScheme.primary;
+  }
+
+  List<BoxShadow> _buildButtonShadow(BuildContext context) {
+    if (elevation > 0) {
+      return [
+        BoxShadow(
+          color: shadowColor ?? Theme.of(context).colorScheme.shadow,
+          blurRadius: elevation,
+        ),
+      ];
+    }
+    return [];
   }
 
   VoidCallback? _getOnPressed() {

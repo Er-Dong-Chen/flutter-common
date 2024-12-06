@@ -26,25 +26,29 @@ Map<int, int> monthDay = {
 
 /// Date Util.
 class DateUtil {
-  static Duration difference(time) {
-    if (time == null) {
+  static Duration difference(int? milliSecond) {
+    if (milliSecond == null || milliSecond <= 0) {
       return const Duration();
     }
-    var dateTime = DateUtil.getDateTimeByMs(time);
+    var dateTime = DateUtil.getDateTimeByMs(milliSecond);
     DateTime today = DateTime.now();
     Duration difference = dateTime.difference(today);
 
     return difference;
   }
 
-  static String getTimeAgoForChatByMs(int milliSecond,
+  static String getTimeAgoForChatByMs(int? milliSecond,
       {String languageCode = 'en', bool short = false}) {
+    if (milliSecond == null || milliSecond <= 0) {
+      return "";
+    }
+
     var nowTime = DateTime.now();
     var dateTime = DateTime.fromMillisecondsSinceEpoch(milliSecond);
     if (nowTime.year != dateTime.year) {
       return DateUtil.formatDate(dateTime,
           format:
-              languageCode == "zh" ? "yyyy年MM月dd HH:mm" : "yyyy-MM-dd HH:mm");
+          languageCode == "zh" ? "yyyy年MM月dd HH:mm" : "yyyy-MM-dd HH:mm");
     } else if (nowTime.month != dateTime.month) {
       return DateUtil.formatDate(dateTime,
           format: languageCode == "zh" ? "M月dd HH:mm" : "M-dd HH:mm");
@@ -69,7 +73,11 @@ class DateUtil {
     }
   }
 
-  static String getTimeAgoByMs(int milliSecond, {String languageCode = 'en'}) {
+  static String getTimeAgoByMs(int? milliSecond, {String languageCode = 'en'}) {
+    if (milliSecond == null || milliSecond <= 0) {
+      return "";
+    }
+
     var dateTime = DateTime.fromMillisecondsSinceEpoch(milliSecond);
     final difference = DateTime.now().difference(dateTime);
     if (difference.inMinutes < 3) {
@@ -121,7 +129,9 @@ class DateUtil {
 
   /// format date by milliseconds.
   /// milliseconds 日期毫秒
-  static String formatDateMs(int ms, {bool isUtc = false, String? format}) {
+  static String formatDateMs(int? ms, {bool isUtc = false, String? format}) {
+    if (ms == null || ms <= 0) return "";
+
     return formatDate(getDateTimeByMs(ms, isUtc: isUtc), format: format);
   }
 
@@ -213,8 +223,10 @@ class DateUtil {
   }
 
   /// get WeekDay By Milliseconds.
-  static String getWeekdayByMs(int milliseconds,
+  static String getWeekdayByMs(int? milliseconds,
       {bool isUtc = false, String languageCode = 'en', bool short = false}) {
+    if (milliseconds == null || milliseconds <= 0) return "";
+
     DateTime dateTime = getDateTimeByMs(milliseconds, isUtc: isUtc);
     return getWeekday(dateTime, languageCode: languageCode, short: short);
   }
@@ -245,7 +257,7 @@ class DateUtil {
   static bool isToday(int? milliseconds, {bool isUtc = false, int? locMs}) {
     if (milliseconds == null || milliseconds == 0) return false;
     DateTime old =
-        DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
+    DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
     DateTime now;
     if (locMs != null) {
       now = DateUtil.getDateTimeByMs(locMs);
@@ -292,9 +304,9 @@ class DateUtil {
     }
 
     DateTime old =
-        now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? old0 : now0;
+    now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? old0 : now0;
     DateTime now =
-        now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? now0 : old0;
+    now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? now0 : old0;
     return (now.weekday >= old.weekday) &&
         (now.millisecondsSinceEpoch - old.millisecondsSinceEpoch <=
             7 * 24 * 60 * 60 * 1000);

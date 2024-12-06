@@ -34,25 +34,31 @@ class CommonHelper {
 
   static void showAlertDialog({
     Widget? title,
-    required Widget content,
+    Widget? content,
+    String contentText = "",
+    String cancelText = "取消",
+    String confirmText = "确定",
     Widget? cancel,
     Widget? confirm,
     VoidCallback? onCancel,
     VoidCallback? onConfirm,
     List<CupertinoDialogAction>? actions,
-    bool barrierDismissible = true,
-    bool isIOSStyle = true,
+    bool showCancel = true,
+    bool barrierDismissible = false,
   }) {
     Widget baseAlertDialog;
-    if (!isIOSStyle) {
+    // 判断当前平台
+    bool isIOS = Theme.of(Get.context!).platform == TargetPlatform.iOS ||
+        Theme.of(Get.context!).platform == TargetPlatform.macOS;
+
+    if (!isIOS) {
       baseAlertDialog = AlertDialog(
         contentPadding: const EdgeInsets.all(0),
-        title: title ??
-            Center(
-              child: Text("温馨提示".tr),
-            ),
+        title: Center(
+          child: title ?? Text("温馨提示".tr),
+        ),
         titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
-        titlePadding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        // titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.all(Radius.circular(CommonStyle.roundedMd)),
@@ -62,8 +68,12 @@ class CommonHelper {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-              child: content,
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+              child: content ??
+                  Text(
+                    contentText,
+                    textAlign: TextAlign.center,
+                  ),
             ),
             Divider(
               thickness: 0.5,
@@ -75,43 +85,60 @@ class CommonHelper {
               width: double.infinity,
               child: Row(
                 children: [
-                  Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        height: double.infinity,
-                        alignment: Alignment.center,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16)),
+                  Visibility(
+                    visible: showCancel,
+                    child: Expanded(
+                      child: Material(
+                        color: Colors.transparent,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(16),
                         ),
-                        child: cancel ?? Text("取消".tr),
+                        clipBehavior: Clip.hardEdge,
+                        child: InkWell(
+                          child: Container(
+                            height: double.infinity,
+                            alignment: Alignment.center,
+                            clipBehavior: Clip.hardEdge,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(16)),
+                            ),
+                            child: cancel ?? Text(cancelText.tr),
+                          ),
+                          onTap: () =>
+                              onCancel != null ? onCancel.call() : Get.back(),
+                        ),
                       ),
-                      onTap: () =>
-                          onCancel != null ? onCancel.call() : Get.back(),
                     ),
                   ),
-                  VerticalDivider(
-                    thickness: 0.5,
-                    width: 0,
-                    color: Get.isDarkMode ? Colors.white : Colors.black12,
+                  Visibility(
+                    visible: showCancel,
+                    child: VerticalDivider(
+                      thickness: 0.5,
+                      width: 0,
+                      color: Get.isDarkMode ? Colors.white : Colors.black12,
+                    ),
                   ),
                   Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Container(
-                        height: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(16)),
-                        ),
-                        child: confirm ?? Text("确定".tr),
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(16),
                       ),
-                      onTap: () => onConfirm?.call(),
+                      clipBehavior: Clip.hardEdge,
+                      child: InkWell(
+                        child: Container(
+                          height: double.infinity,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(16)),
+                          ),
+                          child: confirm ?? Text(confirmText.tr),
+                        ),
+                        onTap: () =>
+                            onConfirm != null ? onConfirm.call() : Get.back(),
+                      ),
                     ),
                   ),
                 ],
@@ -132,11 +159,13 @@ class CommonHelper {
         ),
         actions: actions ??
             <CupertinoDialogAction>[
-              CupertinoDialogAction(
-                onPressed: () =>
-                    onCancel != null ? onCancel.call() : Get.back(),
-                child: cancel ?? Text('取消'.tr),
-              ),
+              if (showCancel) ...[
+                CupertinoDialogAction(
+                  onPressed: () =>
+                      onCancel != null ? onCancel.call() : Get.back(),
+                  child: cancel ?? Text('取消'.tr),
+                ),
+              ],
               CupertinoDialogAction(
                 onPressed: () => onConfirm?.call(),
                 child: confirm ?? Text('确定'.tr),
@@ -183,96 +212,169 @@ class CommonHelper {
   }
 
   static void showDialog({
-    required Widget content,
     Widget? title,
-    List<Widget>? actions,
+    Widget? content,
     Widget? cancel,
     Widget? confirm,
+    String titleText = "温馨提示",
+    String cancelText = "取消",
+    String confirmText = "确定",
+    EdgeInsets? titlePadding,
+    EdgeInsets? contentPadding,
+    EdgeInsets? actionPadding,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
-    MainAxisAlignment? actionsAlignment,
-    bool close = false,
+    bool showTitle = true,
+    bool showCancel = true,
+    List<Widget>? actions,
     Widget? foot,
-    bool barrierDismissible = true,
+    bool showClose = false,
+    bool barrierDismissible = false,
+    TextDirection? actionTextDirection,
+    double actionSpacing = 12.0,
   }) {
+    ThemeData themeData = Theme.of(Get.context!);
+    DialogTheme dialogTheme = themeData.dialogTheme;
+
     Get.dialog(
-      barrierDismissible: close ? false : barrierDismissible,
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AlertDialog.adaptive(
-            title: Center(child: title),
-            titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(CommonStyle.roundedMd)),
-            ),
-            content: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top:
-                        Theme.of(Get.context!).platform == TargetPlatform.iOS ||
-                                Theme.of(Get.context!).platform ==
-                                    TargetPlatform.macOS
-                            ? 12
-                            : 0,
-                  ),
-                  child: content,
+      barrierDismissible: barrierDismissible,
+      PopScope(
+        canPop: barrierDismissible,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(CommonStyle.roundedMd),
                 ),
-                const SizedBox(height: 20),
-                ...actions ??
-                    <Widget>[
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ComButton(
-                              plain: true,
-                              child: cancel ?? Text('取消'.tr),
-                              onPressed: () => onCancel != null
-                                  ? onCancel.call()
-                                  : Get.back(),
-                            ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (showTitle) ...[
+                    Padding(
+                      padding: titlePadding ??
+                          EdgeInsets.only(
+                            left: 24.0,
+                            top: 24.0,
+                            right: 24.0,
+                            bottom: content == null ? 20.0 : 0.0,
                           ),
-                          SizedBox(width: CommonStyle.spaceMd),
-                          Expanded(
-                            child: ComButton(
-                              gradient: CommonColors.primaryGradient,
-                              child: confirm ?? Text('确定'.tr),
-                              onPressed: () => onConfirm?.call(),
-                            ),
-                          ),
-                        ],
+                      child: DefaultTextStyle(
+                        style: dialogTheme.titleTextStyle ??
+                            themeData.textTheme.titleLarge!,
+                        textAlign: TextAlign.center,
+                        child: title ?? Text(titleText),
                       ),
-                    ]
-              ],
+                    ),
+                  ],
+                  if (content != null) ...[
+                    Padding(
+                      padding: contentPadding ??
+                          const EdgeInsets.only(
+                            left: 24.0,
+                            top: 16.0,
+                            right: 24.0,
+                            bottom: 24.0,
+                          ),
+                      child: DefaultTextStyle(
+                        style: dialogTheme.contentTextStyle ??
+                            themeData.textTheme.bodyMedium!,
+                        textAlign: TextAlign.center,
+                        child: content,
+                      ),
+                    ),
+                  ],
+                  Padding(
+                    padding: actionPadding ??
+                        const EdgeInsets.only(
+                          left: 24.0,
+                          top: 0.0,
+                          right: 24.0,
+                          bottom: 24.0,
+                        ),
+                    child: OverflowBar(
+                      spacing: actionSpacing,
+                      overflowSpacing: actionSpacing / 2,
+                      textDirection: actionTextDirection,
+                      children: actions ??
+                          [
+                            LayoutBuilder(
+                              builder: (BuildContext context,
+                                  BoxConstraints constraints) {
+                                return ComButton(
+                                  width:
+                                      actionTextDirection == TextDirection.rtl
+                                          ? constraints.maxWidth / 2 -
+                                              actionSpacing / 2
+                                          : constraints.maxWidth,
+                                  gradient: CommonColors.primaryGradient,
+                                  child: confirm ??
+                                      Text(
+                                        confirmText.tr,
+                                        style: TextStyle(
+                                            color: CommonColors.theme.shade900),
+                                      ),
+                                  onPressed: () => onConfirm != null
+                                      ? onConfirm.call()
+                                      : Get.back(),
+                                );
+                              },
+                            ),
+                            if (showCancel) ...[
+                              LayoutBuilder(
+                                builder: (BuildContext context,
+                                    BoxConstraints constraints) {
+                                  return ComButton(
+                                    width:
+                                        actionTextDirection == TextDirection.rtl
+                                            ? constraints.maxWidth / 2 -
+                                                actionSpacing / 2
+                                            : constraints.maxWidth,
+                                    plain: true,
+                                    color: CommonColors.theme.shade700,
+                                    child: cancel ?? Text(cancelText.tr),
+                                    onPressed: () => onCancel != null
+                                        ? onCancel.call()
+                                        : Get.back(),
+                                  );
+                                },
+                              ),
+                            ]
+                          ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Visibility(
-            visible: close,
-            child: foot ??
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white60, // 边框颜色
-                      width: 1.0, // 边框宽度
+            Visibility(
+              visible: showClose,
+              child: foot ??
+                  Container(
+                    margin: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white60, // 边框颜色
+                        width: 1.0, // 边框宽度
+                      ),
+                      borderRadius: BorderRadius.circular(CommonStyle.rounded),
                     ),
-                    borderRadius: BorderRadius.circular(CommonStyle.rounded),
-                  ),
-                  child: GestureDetector(
-                    child: const Icon(
-                      Icons.close,
-                      size: 20,
-                      color: Colors.white60,
+                    child: GestureDetector(
+                      child: const Icon(
+                        Icons.close,
+                        size: 20,
+                        color: Colors.white60,
+                      ),
+                      onTap: () {
+                        Get.back();
+                      },
                     ),
-                    onTap: () {
-                      Get.back();
-                    },
                   ),
-                ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -283,6 +385,13 @@ class CommonHelper {
     Widget? cancel,
     Widget? confirm,
     bool useSafeArea = false,
+    CupertinoDatePickerMode? mode,
+    DateTime? initialDateTime,
+    DateTime? minimumDate,
+    DateTime? maximumDate,
+    bool showDayOfWeek = false,
+    bool use24hFormat = false,
+    double itemExtent = 32.0,
   }) {
     DateTime date = DateTime.now();
     showModalBottomSheet(
@@ -328,7 +437,13 @@ class CommonHelper {
             SizedBox(
               height: 250,
               child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.date,
+                  mode: mode ?? CupertinoDatePickerMode.date,
+                  initialDateTime: initialDateTime,
+                  minimumDate: minimumDate,
+                  maximumDate: maximumDate,
+                  showDayOfWeek: showDayOfWeek,
+                  use24hFormat: use24hFormat,
+                  itemExtent: itemExtent,
                   onDateTimeChanged: (DateTime newDate) {
                     date = newDate;
                   }),

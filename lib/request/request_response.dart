@@ -11,7 +11,7 @@ class ApiResponse<T> {
 
   bool get isSuccess => code == 0 || code == 200;
 
-  factory ApiResponse.fromMapJson(Map<String, dynamic> json,
+  factory ApiResponse.fromJson(Map<String, dynamic> json,
       {ApiResponseDataConvert<T>? convert}) {
     var data = json['data'];
     var code = json['code'];

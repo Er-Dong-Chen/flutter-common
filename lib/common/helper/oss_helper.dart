@@ -48,19 +48,19 @@ class OssHelper {
     });
 
     try {
-      /// 发送请求
-      var result = await RequestClient.instance.request(
+      await RequestClient.instance.request(
         res["url"],
+        baseUrl: "",
         method: HttpMethod.post.name,
         data: data,
+        options: Options(
+          extra: {
+            "custom": true,
+          },
+        ),
       );
 
-      /// 成功后返回文件访问路径
-      if (res["url"].contains("http")) {
-        return '${res["url"]}/$pathName';
-      } else {
-        return result;
-      }
+      return '${res["url"]}/$pathName';
     } catch (e) {
       throw (e.toString());
     }
