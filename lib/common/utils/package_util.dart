@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// 应用包信息工具类，提供获取应用包相关信息。
@@ -59,25 +56,6 @@ class PackageUtil {
       return packageInfo.buildNumber;
     } catch (e) {
       return '未知构建号';
-    }
-  }
-
-  /// 获取应用平台。
-  static String getPlatform() {
-    if (kIsWeb) {
-      return 'web';
-    } else if (Platform.isAndroid) {
-      return 'android';
-    } else if (Platform.isIOS) {
-      return 'ios';
-    } else if (Platform.isLinux) {
-      return 'linux';
-    } else if (Platform.isMacOS) {
-      return 'macos';
-    } else if (Platform.isWindows) {
-      return 'windows';
-    } else {
-      return '未知平台';
     }
   }
 }

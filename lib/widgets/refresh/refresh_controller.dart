@@ -28,8 +28,8 @@ abstract class PagingController<M> extends GetxController {
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void onClose() {
+    super.onClose();
     scrollController.dispose();
     refreshController.dispose();
   }

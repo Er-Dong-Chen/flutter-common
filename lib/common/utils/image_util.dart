@@ -7,7 +7,6 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ImageUtil {
   /// 判断图片地址是否为有效的图片
@@ -57,50 +56,6 @@ class ImageUtil {
     return false;
   }
 
-  /// 保存网络图片到本地
-  static Future<String> saveNetworkImage(String imageUrl) async {
-    try {
-      // 创建 Dio 实例
-      final dio = Dio();
-
-      // 下载网络图片
-      final response = await dio.get(imageUrl,
-          options: Options(responseType: ResponseType.bytes));
-      final bytes = response.data as Uint8List;
-
-      // 获取临时目录路径
-      final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/downloaded_image.jpg');
-
-      // 将图片数据写入文件
-      await file.writeAsBytes(bytes);
-
-      return file.path;
-    } catch (e) {
-      // 处理异常情况
-      debugPrint('Error saving network image: $e');
-      return '';
-    }
-  }
-
-  /// 压缩图片文件
-  static Future<File> compressImageFile(File imageFile,
-      {int quality = 80}) async {
-    // 1. 读取图片文件的原始数据
-    final bytes = await imageFile.readAsBytes();
-
-    // 2. 压缩图片数据
-    final compressedBytes = await compressImageBytes(bytes, quality: quality);
-
-    // 3. 创建压缩后的临时文件
-    final tempDir = await getTemporaryDirectory();
-    final compressedFile = File('${tempDir.path}/compressed_image.jpg');
-
-    // 4. 将压缩后的数据写入临时文件并返回
-    await compressedFile.writeAsBytes(compressedBytes);
-    return compressedFile;
-  }
-
   /// 压缩图片数据
   static Future<Uint8List> compressImageBytes(Uint8List bytes,
       {int quality = 80}) async {
@@ -146,24 +101,6 @@ class ImageUtil {
     return completer.future;
   }
 
-  /// 保存截屏图片到本地
-  static Future<String> saveScreenshot(Uint8List bytes) async {
-    try {
-      // 获取临时目录路径
-      final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/screenshot.png');
-
-      // 将图片数据写入文件
-      await file.writeAsBytes(bytes);
-
-      return file.path;
-    } catch (e) {
-      // 处理异常情况
-      debugPrint('Error saving screenshot: $e');
-      return '';
-    }
-  }
-
   /// 截取小部件的图片
   static Future<Uint8List> captureWidget(GlobalKey key) async {
     try {
@@ -179,31 +116,6 @@ class ImageUtil {
       // 处理异常情况
       debugPrint('Error capturing widget: $e');
       return Uint8List(0);
-    }
-  }
-
-  /// 给图片添加文字水印
-  static Future<File> addTextWatermark(File file, String text,
-      {Color color = Colors.white,
-      double fontSize = 18,
-      Offset offset = const Offset(10, 10)}) async {
-    try {
-      // 读取图片数据
-      final bytes = await file.readAsBytes();
-
-      // 添加水印
-      final updatedBytes = await addTextWatermarkToBytes(bytes, text,
-          color: color, fontSize: fontSize, offset: offset);
-
-      // 创建新的临时文件
-      final tempDir = await getTemporaryDirectory();
-      final tempFile = File('${tempDir.path}/watermarked_image.jpg');
-      await tempFile.writeAsBytes(updatedBytes);
-
-      return tempFile;
-    } catch (e) {
-      debugPrint('Error adding watermark: $e');
-      rethrow;
     }
   }
 

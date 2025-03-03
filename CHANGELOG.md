@@ -1,6 +1,6 @@
 ## 1.5.0
 
-* TODO: Pref some.
+* TODO: Pref some and add some widget.
 
 ## 1.4.0
 

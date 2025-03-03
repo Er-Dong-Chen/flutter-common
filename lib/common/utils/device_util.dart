@@ -27,7 +27,7 @@ class DeviceUtils {
   }
 
   /// 获取当前设备的操作系统名称。
-  static Future<String?> getOperatingSystem() async {
+  static Future<String?> getPlatform() async {
     try {
       if (Platform.isAndroid) {
         return "Android";
