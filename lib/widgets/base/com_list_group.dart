@@ -9,14 +9,14 @@ class ComListGroup extends StatelessWidget {
   final double? separatorEndIndent;
 
   const ComListGroup({
-    Key? key,
+    super.key,
     required this.children,
     this.separatorBuilder,
     this.separatorThickness,
     this.separatorColor,
     this.separatorIndent,
     this.separatorEndIndent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

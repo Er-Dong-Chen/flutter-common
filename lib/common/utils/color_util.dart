@@ -22,7 +22,7 @@ class ColorUtils {
   /// 如果Color对象为null，则返回空字符串
   static String colorToHex(Color? color) {
     return color != null
-        ? '#${color.value.toRadixString(16).substring(2)}'
+        ? '#${color.toARGB32().toRadixString(16).substring(2)}'
         : '';
   }
 

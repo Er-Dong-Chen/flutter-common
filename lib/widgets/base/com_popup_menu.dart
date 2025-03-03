@@ -236,7 +236,7 @@ class ComPopupMenuState extends State<ComPopupMenu> {
     } else {
       return PopScope(
         canPop: true,
-        onPopInvoked: (bool canPop) {
+        onPopInvokedWithResult: (bool canPop, _) {
           _hideMenu();
         },
         child: child,
