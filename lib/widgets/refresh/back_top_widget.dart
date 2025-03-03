@@ -58,7 +58,7 @@ class BackTopState extends State<BackTopWidget> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(.3),
+              color: Colors.black.withValues(alpha: .3),
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             ),
             child: const Icon(Icons.vertical_align_top,

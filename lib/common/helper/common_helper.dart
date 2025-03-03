@@ -234,7 +234,7 @@ class CommonHelper {
     double actionSpacing = 12.0,
   }) {
     ThemeData themeData = Theme.of(Get.context!);
-    DialogTheme dialogTheme = themeData.dialogTheme;
+    DialogThemeData dialogTheme = themeData.dialogTheme;
 
     Get.dialog(
       barrierDismissible: barrierDismissible,
@@ -530,7 +530,7 @@ class CommonHelper {
     BotToast.showWidget(
       toastBuilder: (_) {
         return Material(
-          color: Colors.black.withOpacity(0.0),
+          color: Colors.black.withValues(alpha: 0.0),
           child: content,
         );
       },

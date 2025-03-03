@@ -28,7 +28,7 @@ class ComTag extends StatelessWidget {
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
-          color: background ?? color?.withOpacity(0.2),
+          color: background ?? color?.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(radius),
         ),
         child: DefaultTextStyle(

@@ -93,7 +93,7 @@ class ComButton extends StatelessWidget {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
       disabledBackgroundColor: Colors.transparent,
-      disabledForegroundColor: Colors.white.withOpacity(0.5),
+      disabledForegroundColor: Colors.white.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       ),
@@ -104,11 +104,12 @@ class ComButton extends StatelessWidget {
   ButtonStyle _getOutlinedButtonStyle(BuildContext context) {
     return OutlinedButton.styleFrom(
       padding: padding,
-      foregroundColor: _getButtonColor(context).withOpacity(loading ? 0.5 : 1),
-      disabledForegroundColor: _getButtonColor(context).withOpacity(0.5),
+      foregroundColor:
+          _getButtonColor(context).withValues(alpha: loading ? 0.5 : 1),
+      disabledForegroundColor: _getButtonColor(context).withValues(alpha: 0.5),
       side: BorderSide(
-        color:
-            _getButtonColor(context).withOpacity(loading || disabled ? 0.5 : 1),
+        color: _getButtonColor(context)
+            .withValues(alpha: loading || disabled ? 0.5 : 1),
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
@@ -121,9 +122,10 @@ class ComButton extends StatelessWidget {
     return FilledButton.styleFrom(
       padding: padding,
       foregroundColor: Colors.black,
-      backgroundColor: _getButtonColor(context).withOpacity(loading ? 0.5 : 1),
-      disabledBackgroundColor: _getButtonColor(context).withOpacity(0.5),
-      disabledForegroundColor: Colors.white.withOpacity(0.8),
+      backgroundColor:
+          _getButtonColor(context).withValues(alpha: loading ? 0.5 : 1),
+      disabledBackgroundColor: _getButtonColor(context).withValues(alpha: 0.5),
+      disabledForegroundColor: Colors.white.withValues(alpha: 0.8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
       ),
