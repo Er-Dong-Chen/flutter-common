@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 
 class ComContainer extends StatelessWidget {
   final Widget? child;
@@ -38,9 +38,7 @@ class ComContainer extends StatelessWidget {
       width: width,
       height: height,
       margin: margin,
-      padding: padding ??
-          EdgeInsets.symmetric(
-              horizontal: CommonStyle.spaceSm, vertical: CommonStyle.spaceMd),
+      padding: padding ?? context.comSpacing.cardPadding,
       decoration: decoration ?? _getDefaultDecoration(context),
       child: child,
     );
@@ -48,9 +46,10 @@ class ComContainer extends StatelessWidget {
 
   BoxDecoration _getDefaultDecoration(BuildContext context) {
     return BoxDecoration(
-      color: color ?? CommonColors.theme.shade200,
+      color: color ?? context.colorTheme.shade200,
       image: image,
-      borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
+      borderRadius:
+          BorderRadius.circular(radius ?? context.comShapes.baseRadius),
       boxShadow: [
         if (elevation > 0)
           BoxShadow(

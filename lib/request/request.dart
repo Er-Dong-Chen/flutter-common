@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_chen_common/common/helper/common_helper.dart';
+import 'package:flutter_chen_common/helper/dialog_helper.dart';
 
 enum HttpMethod { get, post, put, patch, delete }
 
@@ -63,7 +63,7 @@ class RequestClient {
           method?.toUpperCase() ?? HttpMethod.get.name.toUpperCase();
 
       if (showLoading) {
-        CommonHelper.showLoading();
+        DialogHelper.showLoading();
       }
       Response response = await _dio.request(
         baseUrl != null ? baseUrl + url : this.baseUrl + url,
@@ -76,12 +76,12 @@ class RequestClient {
         onReceiveProgress: onReceiveProgress,
       );
       if (showLoading) {
-        CommonHelper.hideLoading();
+        DialogHelper.hideLoading();
       }
       return response.data;
     } catch (e) {
       if (showLoading) {
-        CommonHelper.hideLoading();
+        DialogHelper.hideLoading();
       }
       throw e.toString();
     }

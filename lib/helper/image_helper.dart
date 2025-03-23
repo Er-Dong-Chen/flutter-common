@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/helper/oss_helper.dart';
-import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
+import 'package:flutter_chen_common/helper/oss_helper.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'common_helper.dart';
+import 'dialog_helper.dart';
 
 class ImageHelper {
   // 选取多图
@@ -66,7 +66,7 @@ class ImageHelper {
   // 选择图片Action
   static Future showActionSheet(ValueChanged<String> callBack,
       {bool crop = false, List<Widget>? actions, Widget? cancel}) async {
-    CommonHelper.showActionSheet(
+    DialogHelper.showActionSheet(
         actions: actions ?? [Text("相册选择".tr), Text("拍摄照片".tr)],
         cancel: cancel,
         onConfirm: (val) async {
@@ -85,7 +85,7 @@ class ImageHelper {
             }
           } catch (e) {
             await (permissionList[val]).status;
-            CommonHelper.showAlertDialog(
+            DialogHelper.showAlertDialog(
                 content: Text(
                   '请在App权限管理中开启${val == 0 ? '相册' : '相机'}权限\n以便上传头像'.tr,
                   textAlign: TextAlign.center,
@@ -101,7 +101,7 @@ class ImageHelper {
           if (img != null) {
             callBack.call(img);
           } else {
-            CommonHelper.showToast("上传失败".tr);
+            DialogHelper.showToast("上传失败".tr);
           }
         });
   }
@@ -110,18 +110,11 @@ class ImageHelper {
   static Future cropImage(imageFile) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
       uiSettings: [
         AndroidUiSettings(
             toolbarTitle: '',
             // toolbarTitle: 'Cropper',
-            toolbarColor: CommonColors.theme,
+            toolbarColor: Get.context!.colorTheme,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             // aspectRatioPresets: [
@@ -151,15 +144,15 @@ class ImageHelper {
 //   final isPermission =
 //       await PermissionUtil.checkPermission([Permission.storage]);
 //   if (!isPermission) {
-//     CommonHelper.showToast('请开启相关权限'.tr);
+//     DialogHelper.showToast('请开启相关权限'.tr);
 //     return false;
 //   }
 //   final result = await ImageGallerySaver.saveFile(filePath);
 //   if (!result) {
-//     CommonHelper.showToast("保存失败".tr);
+//     DialogHelper.showToast("保存失败".tr);
 //     return false;
 //   }
-//   CommonHelper.showToast("保存成功".tr);
+//   DialogHelper.showToast("保存成功".tr);
 //   return true;
 // }
 }

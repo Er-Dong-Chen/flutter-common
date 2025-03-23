@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
 import 'package:flutter_chen_common/widgets/base/base_widget.dart';
 
 class ComConfig {
@@ -18,24 +17,11 @@ class ComConfig {
   }
 
   static config({
-    MaterialColor? theme,
-    Gradient? primaryGradient,
-    double? radius,
     Widget? loadingWidget,
     Widget? emptyWidget,
     Widget? errorWidget,
     Widget Function(VoidCallback? onReconnect)? noNetworkWidget,
   }) {
-    /// 配置主题
-    if (theme != null) {
-      CommonColors.theme = theme;
-    }
-    if (primaryGradient != null) {
-      CommonColors.primaryGradient = primaryGradient;
-    }
-    if (radius != null) {
-      CommonStyle.roundedMd = radius;
-    }
     if (loadingWidget != null) {
       BaseWidget.loadingWidget = loadingWidget;
     }

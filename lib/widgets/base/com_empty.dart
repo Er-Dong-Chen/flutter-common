@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 import 'package:get/get.dart';
-
-import '../../common/style.dart';
 
 class ComEmpty extends StatelessWidget {
   final Widget? image;
@@ -23,7 +22,7 @@ class ComEmpty extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           image ?? _getDefaultImage(),
-          SizedBox(height: CommonStyle.spaceSm),
+          SizedBox(height: context.comSpacing.small),
           message ?? _getDefaultMessage(),
         ],
       ),

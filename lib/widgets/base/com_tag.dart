@@ -1,9 +1,8 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class ComTag extends StatelessWidget {
   final Widget child;
   final Color? color;
-  final Color? background;
   final double radius;
   final EdgeInsets padding;
   final EdgeInsets? margin;
@@ -13,7 +12,6 @@ class ComTag extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
-    this.background,
     this.radius = 6.0,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
@@ -28,11 +26,11 @@ class ComTag extends StatelessWidget {
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
-          color: background ?? color?.withValues(alpha: 0.2),
+          color: color ?? Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: DefaultTextStyle(
-          style: TextStyle(color: color),
+          style: const TextStyle(color: Colors.white),
           child: child,
         ),
       ),

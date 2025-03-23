@@ -1,11 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_chen_common/widgets/base/com_title_bar.dart';
 import 'package:get/get.dart';
 
-class CommonHelper {
+class DialogHelper {
   static showToast(text) {
     if (text == null || text.toString().isEmpty) return;
     BotToast.showText(
@@ -46,10 +47,12 @@ class CommonHelper {
     bool showCancel = true,
     bool barrierDismissible = false,
   }) {
+    final context = Get.context!;
+
     Widget baseAlertDialog;
     // 判断当前平台
-    bool isIOS = Theme.of(Get.context!).platform == TargetPlatform.iOS ||
-        Theme.of(Get.context!).platform == TargetPlatform.macOS;
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS ||
+        Theme.of(context).platform == TargetPlatform.macOS;
 
     if (!isIOS) {
       baseAlertDialog = AlertDialog(
@@ -61,7 +64,7 @@ class CommonHelper {
         // titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.all(Radius.circular(CommonStyle.roundedMd)),
+              BorderRadius.all(Radius.circular(context.comShapes.baseRadius)),
         ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -233,7 +236,8 @@ class CommonHelper {
     TextDirection? actionTextDirection,
     double actionSpacing = 12.0,
   }) {
-    ThemeData themeData = Theme.of(Get.context!);
+    final context = Get.context!;
+    ThemeData themeData = Theme.of(context);
     DialogThemeData dialogTheme = themeData.dialogTheme;
 
     Get.dialog(
@@ -246,7 +250,7 @@ class CommonHelper {
             Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(CommonStyle.roundedMd),
+                  Radius.circular(context.comShapes.baseRadius),
                 ),
               ),
               child: Column(
@@ -309,12 +313,12 @@ class CommonHelper {
                                           ? constraints.maxWidth / 2 -
                                               actionSpacing / 2
                                           : constraints.maxWidth,
-                                  gradient: CommonColors.primaryGradient,
+                                  gradient: context.comTheme.primaryGradient,
                                   child: confirm ??
                                       Text(
                                         confirmText.tr,
                                         style: TextStyle(
-                                            color: CommonColors.theme.shade900),
+                                            color: context.colorTheme.shade900),
                                       ),
                                   onPressed: () => onConfirm != null
                                       ? onConfirm.call()
@@ -333,7 +337,7 @@ class CommonHelper {
                                                 actionSpacing / 2
                                             : constraints.maxWidth,
                                     plain: true,
-                                    color: CommonColors.theme.shade700,
+                                    color: context.colorTheme.shade700,
                                     child: cancel ?? Text(cancelText.tr),
                                     onPressed: () => onCancel != null
                                         ? onCancel.call()
@@ -359,7 +363,8 @@ class CommonHelper {
                         color: Colors.white60, // 边框颜色
                         width: 1.0, // 边框宽度
                       ),
-                      borderRadius: BorderRadius.circular(CommonStyle.rounded),
+                      borderRadius: BorderRadius.circular(
+                          context.comShapes.circularRadius),
                     ),
                     child: GestureDetector(
                       child: const Icon(
@@ -379,6 +384,57 @@ class CommonHelper {
     );
   }
 
+  static void showModalBottom({
+    required Widget child,
+    Widget? title,
+    Widget? leading,
+    List<Widget>? actions,
+    Widget? bottom,
+    EdgeInsetsGeometry? padding,
+    double? minHeight,
+    bool showTitle = true,
+    bool isScrollControlled = true,
+    bool useSafeArea = true,
+  }) {
+    BoxConstraints? boxConstraints;
+    if (minHeight != null) {
+      boxConstraints = BoxConstraints(
+        minHeight: minHeight,
+      );
+    }
+
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: isScrollControlled,
+      useSafeArea: useSafeArea,
+      constraints: boxConstraints,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (showTitle)
+              ComTitleBar(
+                title: title,
+                leading: leading,
+                actions: actions,
+              ),
+            if (bottom != null) bottom,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.8,
+              ),
+              child: SingleChildScrollView(
+                padding: padding,
+                child: child.paddingOnly(
+                    bottom: MediaQuery.of(context).padding.bottom),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static showDatePicker({
     Function(DateTime date)? onConfirm,
     Function()? onCancel,
@@ -393,9 +449,10 @@ class CommonHelper {
     bool use24hFormat = false,
     double itemExtent = 32.0,
   }) {
+    final context = Get.context!;
     DateTime date = DateTime.now();
     showModalBottomSheet(
-      context: Get.context!,
+      context: context,
       useSafeArea: useSafeArea,
       builder: (BuildContext context) => SizedBox(
         height: 300,
@@ -403,9 +460,9 @@ class CommonHelper {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: CommonStyle.spaceMd,
-                  left: CommonStyle.spaceLg,
-                  right: CommonStyle.spaceLg),
+                  top: context.comSpacing.medium,
+                  left: context.comSpacing.large,
+                  right: context.comSpacing.large),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -428,7 +485,7 @@ class CommonHelper {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: CommonColors.theme),
+                              ?.copyWith(color: context.colorTheme),
                         ),
                   ),
                 ],
@@ -475,9 +532,9 @@ class CommonHelper {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: CommonStyle.spaceMd,
-                  left: CommonStyle.spaceLg,
-                  right: CommonStyle.spaceLg),
+                  top: context.comSpacing.medium,
+                  left: context.comSpacing.large,
+                  right: context.comSpacing.large),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -500,7 +557,7 @@ class CommonHelper {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: CommonColors.theme),
+                              ?.copyWith(color: context.colorTheme),
                         ),
                   ),
                 ],

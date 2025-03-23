@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 
 class ComImage extends StatelessWidget {
   final String src;
@@ -29,21 +29,22 @@ class ComImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? CommonStyle.roundedMd),
+      borderRadius:
+          BorderRadius.circular(radius ?? context.comShapes.baseRadius),
       child: Container(
         constraints: BoxConstraints(
           minWidth: width ?? minWidth,
           minHeight: height ?? minHeight,
         ),
         child: src.isEmpty
-            ? _buildDefaultPlaceholder()
+            ? _buildDefaultPlaceholder(context)
             : isNetworkImage(src)
                 ? CachedNetworkImage(
                     imageUrl: src,
                     placeholder: (context, url) =>
-                        placeholder ?? _buildDefaultPlaceholder(),
+                        placeholder ?? _buildDefaultPlaceholder(context),
                     errorWidget: (context, url, error) =>
-                        errorBuilder ?? _buildDefaultPlaceholder(),
+                        errorBuilder ?? _buildDefaultPlaceholder(context),
                     fadeOutDuration: const Duration(milliseconds: 300),
                     fadeInDuration: const Duration(milliseconds: 500),
                     fit: fit,
@@ -56,7 +57,7 @@ class ComImage extends StatelessWidget {
                     width: width,
                     height: height,
                     errorBuilder: (context, url, error) =>
-                        errorBuilder ?? _buildDefaultPlaceholder(),
+                        errorBuilder ?? _buildDefaultPlaceholder(context),
                   ),
       ),
     );
@@ -67,15 +68,15 @@ class ComImage extends StatelessWidget {
     return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
   }
 
-  Widget _buildDefaultPlaceholder() {
+  Widget _buildDefaultPlaceholder(BuildContext context) {
     return Container(
       width: width,
       height: height,
       alignment: Alignment.center,
-      color: CommonColors.theme.shade200,
+      color: context.colorTheme.shade200,
       child: Icon(
         Icons.terrain,
-        color: CommonColors.theme.shade400,
+        color: context.colorTheme.shade400,
       ),
     );
   }

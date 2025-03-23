@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
-import 'package:flutter_chen_common/common/utils/function_util.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
+import 'package:flutter_chen_common/utils/function_util.dart';
 
 class ComButton extends StatelessWidget {
   final Widget child;
@@ -57,7 +57,8 @@ class ComButton extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+        borderRadius:
+            BorderRadius.circular(radius ?? context.comShapes.circularRadius),
         boxShadow: _buildButtonShadow(context),
       ),
       child: _buildButtonContent(context, _getGradientButtonStyle(context)),
@@ -95,7 +96,8 @@ class ComButton extends StatelessWidget {
       disabledBackgroundColor: Colors.transparent,
       disabledForegroundColor: Colors.white.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+        borderRadius:
+            BorderRadius.circular(radius ?? context.comShapes.circularRadius),
       ),
       minimumSize: Size(_minHeight, 0),
     );
@@ -112,7 +114,8 @@ class ComButton extends StatelessWidget {
             .withValues(alpha: loading || disabled ? 0.5 : 1),
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+        borderRadius:
+            BorderRadius.circular(radius ?? context.comShapes.circularRadius),
       ),
       minimumSize: Size(_minHeight, 0),
     );
@@ -127,7 +130,8 @@ class ComButton extends StatelessWidget {
       disabledBackgroundColor: _getButtonColor(context).withValues(alpha: 0.5),
       disabledForegroundColor: Colors.white.withValues(alpha: 0.8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+        borderRadius:
+            BorderRadius.circular(radius ?? context.comShapes.circularRadius),
       ),
       minimumSize: Size(_minHeight, 0),
     );

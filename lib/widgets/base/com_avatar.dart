@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/common/style.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 import 'package:get/get.dart';
 
 class ComAvatar extends StatelessWidget {
@@ -12,25 +12,26 @@ class ComAvatar extends StatelessWidget {
   final Widget? builder;
 
   const ComAvatar(
-      this.src, {
-        super.key,
-        this.size = 50,
-        this.radius,
-        this.fit = BoxFit.cover,
-        this.placeholder,
-        this.builder,
-      });
+    this.src, {
+    super.key,
+    this.size = 50,
+    this.radius,
+    this.fit = BoxFit.cover,
+    this.placeholder,
+    this.builder,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? CommonStyle.rounded),
+      borderRadius:
+          BorderRadius.circular(radius ?? context.comShapes.circularRadius),
       child: CachedNetworkImage(
         imageUrl: src,
         placeholder: (context, url) =>
-        placeholder ?? _buildDefaultPlaceholder(),
+            placeholder ?? _buildDefaultPlaceholder(context),
         errorWidget: (context, url, error) =>
-        placeholder ?? _buildDefaultPlaceholder(),
+            placeholder ?? _buildDefaultPlaceholder(context),
         fadeOutDuration: const Duration(milliseconds: 300),
         fadeInDuration: const Duration(milliseconds: 500),
         fit: fit,
@@ -40,16 +41,16 @@ class ComAvatar extends StatelessWidget {
     );
   }
 
-  Widget _buildDefaultPlaceholder() {
+  Widget _buildDefaultPlaceholder(BuildContext context) {
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
-      color: CommonColors.theme.shade200,
+      color: context.colorTheme.shade200,
       child: builder ??
           Icon(
             Icons.person,
-            color: CommonColors.theme.shade400,
+            color: context.colorTheme.shade400,
             size: size * 0.8,
           ),
     );
@@ -64,13 +65,13 @@ class ComAvatarGroup extends StatelessWidget {
   final Widget? builder;
 
   const ComAvatarGroup(
-      this.data, {
-        super.key,
-        this.size = 30.0,
-        this.spacing,
-        this.maxCount,
-        this.builder,
-      });
+    this.data, {
+    super.key,
+    this.size = 30.0,
+    this.spacing,
+    this.maxCount,
+    this.builder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,7 @@ class ComAvatarGroup extends StatelessWidget {
         child: ComAvatar(
           '',
           size: size,
-          placeholder: _buildDefaultOverflowWidget(data.length),
+          placeholder: _buildDefaultOverflowWidget(data.length, context),
         ),
       ));
     }
@@ -113,21 +114,21 @@ class ComAvatarGroup extends StatelessWidget {
     return widgets;
   }
 
-  Widget _buildDefaultOverflowWidget(int count) {
+  Widget _buildDefaultOverflowWidget(int count, BuildContext context) {
     return Container(
       alignment: Alignment.center,
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: CommonColors.theme.shade200,
-        borderRadius: BorderRadius.circular(CommonStyle.rounded),
+        color: context.colorTheme.shade200,
+        borderRadius: BorderRadius.circular(context.comShapes.circularRadius),
       ),
       child: builder ??
           Text(
             '$count+',
             style: Theme.of(Get.context!).textTheme.bodySmall?.copyWith(
-              fontSize: size * 0.3,
-            ),
+                  fontSize: size * 0.3,
+                ),
           ),
     );
   }

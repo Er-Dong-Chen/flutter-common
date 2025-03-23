@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 import 'package:get/get.dart';
 
-import '../../common/style.dart';
 
 class ComLoading extends StatelessWidget {
   final double size;
@@ -19,16 +19,16 @@ class ComLoading extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SpinKitPouringHourGlassRefined(
-            color: color ?? CommonColors.theme.shade400,
+            color: color ?? context.colorTheme.shade400,
             size: size,
           ),
-          SizedBox(height: CommonStyle.spaceMd),
+          SizedBox(height: context.comSpacing.medium),
           Text(
             message ?? "加载中...".tr,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
-                ?.copyWith(color: color ?? CommonColors.theme.shade400),
+                ?.copyWith(color: color ?? context.colorTheme.shade400),
           ),
         ],
       ),
@@ -119,8 +119,8 @@ class _SpinKitPouringHourGlassRefinedState
 class _HourGlassPaint extends CustomPainter {
   _HourGlassPaint({this.strokeWidth, this.poured, required Color color})
       : _paint = Paint()
-    ..style = PaintingStyle.stroke
-    ..color = color,
+          ..style = PaintingStyle.stroke
+          ..color = color,
         _powderPaint = Paint()
           ..style = PaintingStyle.fill
           ..color = color;
@@ -236,11 +236,11 @@ class SpinKitThreeBounce extends StatefulWidget {
     this.itemBuilder,
     this.duration = const Duration(milliseconds: 1400),
     this.controller,
-  })  : assert(
-  !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
-      !(itemBuilder == null && color == null),
-  'You should specify either a itemBuilder or a color',
-  );
+  }) : assert(
+          !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
+              !(itemBuilder == null && color == null),
+          'You should specify either a itemBuilder or a color',
+        );
 
   final Color? color;
   final double size;
@@ -301,11 +301,11 @@ class _SpinKitThreeBounceState extends State<SpinKitThreeBounce>
   Widget _itemBuilder(int index) => widget.itemBuilder != null
       ? widget.itemBuilder!(context, index)
       : DecoratedBox(
-    decoration: BoxDecoration(
-      color: widget.color,
-      shape: BoxShape.circle,
-    ),
-  );
+          decoration: BoxDecoration(
+            color: widget.color,
+            shape: BoxShape.circle,
+          ),
+        );
 }
 
 class DelayTween extends Tween<double> {
