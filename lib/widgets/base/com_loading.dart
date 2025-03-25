@@ -1,9 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/extension/theme_context_extension.dart';
+import 'package:flutter_chen_common/extension/extension.dart';
 import 'package:get/get.dart';
-
 
 class ComLoading extends StatelessWidget {
   final double size;
@@ -19,16 +18,16 @@ class ComLoading extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SpinKitPouringHourGlassRefined(
-            color: color ?? context.colorTheme.shade400,
+            color: color ?? context.comTheme.theme.shade400,
             size: size,
           ),
-          SizedBox(height: context.comSpacing.medium),
+          SizedBox(height: context.comTheme.spacing.medium),
           Text(
             message ?? "加载中...".tr,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
-                ?.copyWith(color: color ?? context.colorTheme.shade400),
+                ?.copyWith(color: color ?? context.comTheme.theme.shade400),
           ),
         ],
       ),

@@ -114,7 +114,7 @@ class ImageHelper {
         AndroidUiSettings(
             toolbarTitle: '',
             // toolbarTitle: 'Cropper',
-            toolbarColor: Get.context!.colorTheme,
+            toolbarColor: Get.context!.comTheme.theme,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             // aspectRatioPresets: [

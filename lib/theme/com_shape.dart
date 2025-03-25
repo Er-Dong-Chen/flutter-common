@@ -80,8 +80,8 @@ class ComShapes {
   /// 解析卡片圆角（优先使用组件级配置）
   double get resolvedCardRadius => cardRadius ?? baseRadius;
 
-  /// 解析对话框圆角（默认使用基础圆角）
-  double get resolvedDialogRadius => dialogRadius ?? baseRadius;
+  /// 解析对话框圆角（默认使用大圆角）
+  double get resolvedDialogRadius => dialogRadius ?? largeRadius;
 
   //-------------------
   // 工具方法

@@ -1,7 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/extension/theme_context_extension.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:flutter_chen_common/widgets/base/com_title_bar.dart';
 import 'package:get/get.dart';
@@ -63,8 +62,8 @@ class DialogHelper {
         titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
         // titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.all(Radius.circular(context.comShapes.baseRadius)),
+          borderRadius: BorderRadius.all(
+              Radius.circular(context.comTheme.shapes.baseRadius)),
         ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -250,7 +249,7 @@ class DialogHelper {
             Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(context.comShapes.baseRadius),
+                  Radius.circular(context.comTheme.shapes.baseRadius),
                 ),
               ),
               child: Column(
@@ -318,7 +317,8 @@ class DialogHelper {
                                       Text(
                                         confirmText.tr,
                                         style: TextStyle(
-                                            color: context.colorTheme.shade900),
+                                            color: context
+                                                .comTheme.theme.shade900),
                                       ),
                                   onPressed: () => onConfirm != null
                                       ? onConfirm.call()
@@ -337,7 +337,7 @@ class DialogHelper {
                                                 actionSpacing / 2
                                             : constraints.maxWidth,
                                     plain: true,
-                                    color: context.colorTheme.shade700,
+                                    color: context.comTheme.theme.shade700,
                                     child: cancel ?? Text(cancelText.tr),
                                     onPressed: () => onCancel != null
                                         ? onCancel.call()
@@ -364,7 +364,7 @@ class DialogHelper {
                         width: 1.0, // 边框宽度
                       ),
                       borderRadius: BorderRadius.circular(
-                          context.comShapes.circularRadius),
+                          context.comTheme.shapes.circularRadius),
                     ),
                     child: GestureDetector(
                       child: const Icon(
@@ -424,9 +424,11 @@ class DialogHelper {
                 maxHeight: MediaQuery.of(context).size.height * 0.8,
               ),
               child: SingleChildScrollView(
-                padding: padding,
-                child: child.paddingOnly(
-                    bottom: MediaQuery.of(context).padding.bottom),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: child,
               ),
             ),
           ],
@@ -460,9 +462,9 @@ class DialogHelper {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: context.comSpacing.medium,
-                  left: context.comSpacing.large,
-                  right: context.comSpacing.large),
+                  top: context.comTheme.spacing.medium,
+                  left: context.comTheme.spacing.large,
+                  right: context.comTheme.spacing.large),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -485,7 +487,7 @@ class DialogHelper {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: context.colorTheme),
+                              ?.copyWith(color: context.comTheme.theme),
                         ),
                   ),
                 ],
@@ -532,9 +534,9 @@ class DialogHelper {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: context.comSpacing.medium,
-                  left: context.comSpacing.large,
-                  right: context.comSpacing.large),
+                  top: context.comTheme.spacing.medium,
+                  left: context.comTheme.spacing.large,
+                  right: context.comTheme.spacing.large),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -557,7 +559,7 @@ class DialogHelper {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: context.colorTheme),
+                              ?.copyWith(color: context.comTheme.theme),
                         ),
                   ),
                 ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/extension/theme_context_extension.dart';
+import 'package:flutter_chen_common/extension/extension.dart';
 import 'package:get/get.dart';
 
 enum ArrowDirection { left, right, up, down }
@@ -21,7 +21,7 @@ class ComArrow extends StatelessWidget {
     return Icon(
       _getIconData(direction),
       size: size ?? Theme.of(context).textTheme.bodyMedium?.fontSize,
-      color: color ?? context.colorTheme.shade700,
+      color: color ?? context.comTheme.theme.shade700,
     );
   }
 

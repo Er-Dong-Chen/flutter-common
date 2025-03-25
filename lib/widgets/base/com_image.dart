@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/extension/theme_context_extension.dart';
+import 'package:flutter_chen_common/extension/extension.dart';
 
 class ComImage extends StatelessWidget {
   final String src;
@@ -30,7 +30,7 @@ class ComImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius:
-          BorderRadius.circular(radius ?? context.comShapes.baseRadius),
+          BorderRadius.circular(radius ?? context.comTheme.shapes.baseRadius),
       child: Container(
         constraints: BoxConstraints(
           minWidth: width ?? minWidth,
@@ -73,10 +73,10 @@ class ComImage extends StatelessWidget {
       width: width,
       height: height,
       alignment: Alignment.center,
-      color: context.colorTheme.shade200,
+      color: context.comTheme.theme.shade200,
       child: Icon(
         Icons.terrain,
-        color: context.colorTheme.shade400,
+        color: context.comTheme.theme.shade400,
       ),
     );
   }

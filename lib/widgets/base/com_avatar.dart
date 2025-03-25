@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/extension/theme_context_extension.dart';
+import 'package:flutter_chen_common/extension/extension.dart';
 import 'package:get/get.dart';
 
 class ComAvatar extends StatelessWidget {
@@ -24,8 +24,8 @@ class ComAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius:
-          BorderRadius.circular(radius ?? context.comShapes.circularRadius),
+      borderRadius: BorderRadius.circular(
+          radius ?? context.comTheme.shapes.circularRadius),
       child: CachedNetworkImage(
         imageUrl: src,
         placeholder: (context, url) =>
@@ -46,11 +46,11 @@ class ComAvatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      color: context.colorTheme.shade200,
+      color: context.comTheme.theme.shade200,
       child: builder ??
           Icon(
             Icons.person,
-            color: context.colorTheme.shade400,
+            color: context.comTheme.theme.shade400,
             size: size * 0.8,
           ),
     );
@@ -120,8 +120,9 @@ class ComAvatarGroup extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: context.colorTheme.shade200,
-        borderRadius: BorderRadius.circular(context.comShapes.circularRadius),
+        color: context.comTheme.theme.shade200,
+        borderRadius:
+            BorderRadius.circular(context.comTheme.shapes.circularRadius),
       ),
       child: builder ??
           Text(
