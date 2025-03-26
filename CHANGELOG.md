@@ -1,3 +1,7 @@
+## 1.7.1
+
+* TODO: Updated README.
+
 ## 1.7.0
 
 * TODO: Global theme configuration.

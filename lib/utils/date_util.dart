@@ -48,7 +48,7 @@ class DateUtil {
     if (nowTime.year != dateTime.year) {
       return DateUtil.formatDate(dateTime,
           format:
-          languageCode == "zh" ? "yyyy年MM月dd HH:mm" : "yyyy-MM-dd HH:mm");
+              languageCode == "zh" ? "yyyy年MM月dd HH:mm" : "yyyy-MM-dd HH:mm");
     } else if (nowTime.month != dateTime.month) {
       return DateUtil.formatDate(dateTime,
           format: languageCode == "zh" ? "M月dd HH:mm" : "M-dd HH:mm");
@@ -257,7 +257,7 @@ class DateUtil {
   static bool isToday(int? milliseconds, {bool isUtc = false, int? locMs}) {
     if (milliseconds == null || milliseconds == 0) return false;
     DateTime old =
-    DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
+        DateTime.fromMillisecondsSinceEpoch(milliseconds, isUtc: isUtc);
     DateTime now;
     if (locMs != null) {
       now = DateUtil.getDateTimeByMs(locMs);
@@ -304,9 +304,9 @@ class DateUtil {
     }
 
     DateTime old =
-    now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? old0 : now0;
+        now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? old0 : now0;
     DateTime now =
-    now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? now0 : old0;
+        now0.millisecondsSinceEpoch > old0.millisecondsSinceEpoch ? now0 : old0;
     return (now.weekday >= old.weekday) &&
         (now.millisecondsSinceEpoch - old.millisecondsSinceEpoch <=
             7 * 24 * 60 * 60 * 1000);

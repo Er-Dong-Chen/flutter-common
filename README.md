@@ -102,8 +102,8 @@ MaterialApp(
 
 ```dart
 ComTheme(
-	theme: ComColors.lightTheme,			// 颜色体系
-  shapes: ComShapes.standard,				// 圆角体系
+  theme: ComColors.lightTheme,			// 颜色体系
+  shapes: ComShapes.standard,			// 圆角体系
   spacing: ComSpacing.standard,			// 间距体系
   primaryGradient: LinearGradient(
     colors: [
