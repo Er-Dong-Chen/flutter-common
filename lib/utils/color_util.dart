@@ -16,16 +16,6 @@ class ColorUtils {
     }
   }
 
-  /// 将Color对象转换为十六进制颜色字符串
-  ///
-  /// 参数 [color] 表示要转换的Color对象
-  /// 如果Color对象为null，则返回空字符串
-  static String colorToHex(Color? color) {
-    return color != null
-        ? '#${color.toARGB32().toRadixString(16).substring(2)}'
-        : '';
-  }
-
   /// 生成随机颜色
   ///
   /// 返回一个随机生成的Color对象

@@ -1,49 +1,49 @@
-<a name="HJUr4"></a>
-## 简介
-Flutter common package内涵一些开发常用的组件跟工具类以及功能模块等等，代码简洁优雅且可高度定制
-[文档链接🔗](#%20%E3%80%8AFlutter_Chen_Common%E3%80%8B)
-```dart
+# Flutter Chen Common
+
+[![pub package](https://img.shields.io/pub/v/awesome_library.svg)](https://pub.dev/packages/flutter_chen_common)![license](https://img.shields.io/badge/license-MIT-blue.svg)
+
+## 🌟 简介
+
+本库为Flutter应用开发提供一站式解决方案，包含：
+
+- 可定制的主题系统
+- 完整的国际化支持
+- 企业级网络请求封装
+- N+高质量常用组件
+- 常用开发工具及扩展集合
+- 刷新列表全方面解决方案
+- 开箱即用的通用各类弹窗
+- 图片处理全流程解决方案
+- 阿里云OSS集成
+
+
+## 特性
+
+- 🎨 **主题系统**：通过 `ThemeExtension` 全局配置颜色/圆角/间距等样式
+- 🌍 **国际化支持**：内置中英文，支持自定义文本和动态语言切换
+- ⚡ **优先级覆盖**：支持全局主题配置 + 组件级参数覆盖
+- 📱 **自适应设计**：完美适配 iOS/Material 设计规范
+
+## 安装
+
+在 `pubspec.yaml` 中添加依赖：
+
+```yaml
 dependencies:
   flutter_chen_common: 最新版本
 ```
-<a name="rwY8X"></a>
-## Utils
 
-1. SpUtil：SharedPreferences工具类，温馨提示需要init.
-2. FunctionUtil：为所以方法扩展实现节流防抖.
-3. LogUtil : 优雅日志打印.
-4. DateUtil : 日期转换格式化输出.
-5. TextUtil : 银行卡号每隔4位加空格，每隔3三位加逗号，隐藏手机号等等.
-6. EncryptUtil : 异或对称加/解密，md5加密，Base64加/解密.
-7. JsonUtil : json转换工具类.
-<a name="Mbu4V"></a>
-## Helper
+运行命令：
+```bash
+flutter pub get
+```
 
-1. CommonHelper：通用的各类弹窗、提示.
-2. ImageHelper：图片选择、裁剪、上传.
-3. OssHelper : oss上传，需传一个请求oss配置方法.
-4. UpdateHelper : 自定义版本更新.
-5. PermissionHelper : 权限判断申请.
-6. CacheHelper : 应用缓存.
-<a name="H7AaX"></a>
-## Widgets
+## 快速开始
 
-1. RefreshWidget：包含上拉加载、下拉刷新、回至顶部、页面数据状态视图（加载、空数据、列表、瀑布流）等功能的列表刷新组件.
-2. ComUpload：图片上传选择器.
-3. ComAlbum：仿微信朋友圈图片展示.
-4. ComGallery：滑动切换放缩旋转的图片预览.
-5. ComSwiper：支持多形式轮播图.
-6. ComImage：网络缓存预加载淡入淡出图片
-7. ComTab：可实现所有场景Tab.
-8. ComButton：通用可渐变按钮、统一节流.
-9. ComSearch：通用搜索框.
-10. ComTextField：通用文本框.
-11. ComRadio：勾选样式Radio.
-12. BaseWidget：多状态布局，无网络自动切换该状态布局.
-<a name="fik56"></a>
-## 网络请求
+### 网络请求配置
+
 ```dart
-/// 初始化RequestClient，传请求url以及请求拦截器
+/// 初始化RequestClient，传入baseUrl以及请求拦截器
 await RequestClient.init(
   baseUrl: Env.getEnvConfig().baseUrl,
   interceptors: [RequestInterceptor()]);
@@ -54,12 +54,13 @@ RequestClient.instance.request(
   method: HttpType.post.name,
 )
 ```
-<a name="rL6Tq"></a>
-## 配置主题以及OSS
+
+### 其他配置以及OSS
+
 ```dart
 /// 初始化SharedPreferences
 await SpUtil.init();
-ComConfig.config(theme: AppColors.theme);
+
 ComConfig.setOssConfig(Global.ossConfig);
 
 static Future<Map<String, dynamic>> ossConfig() async {
@@ -74,7 +75,127 @@ static Future<Map<String, dynamic>> ossConfig() async {
   return params;
 }
 ```
-<a name="Iwfny"></a>
+
+### 全局主题配置
+
+```dart
+MaterialApp(
+  theme: ThemeData.light().copyWith(
+    extensions: [
+      ComTheme.light()
+    ]
+  ),
+  home: HomePage(),
+)
+```
+
+## 主题系统
+
+### 内置主题
+
+| 主题名称    | 示例代码         |
+| ----------- | ---------------- |
+| Light Theme | `ComTheme.light` |
+| Dark Theme  | `ComTheme.dark`  |
+
+### 可配置属性
+
+```dart
+ComTheme(
+	theme: ComColors.lightTheme,			// 颜色体系
+  shapes: ComShapes.standard,				// 圆角体系
+  spacing: ComSpacing.standard,			// 间距体系
+  primaryGradient: LinearGradient(
+    colors: [
+      ComColors.lightTheme.shade500,
+      ComColors.lightTheme.shade500,
+    ],
+  ),
+  success: Colors.green.shade600,
+  error: Colors.red.shade600,
+  warning: Colors.orange.shade600,
+  link: Colors.blue.shade600,
+)
+
+// 色系
+static MaterialColor lightTheme = const MaterialColor(
+  0xFF3783FD,
+  <int, Color>{
+    50: Color(0xfff8f6f9), // surface 背景色
+    100: Color(0xfff8f2fa), // surfaceContainerLow 浅色背景色
+    200: Color(0xfff2ecf4), // surfaceContainer 标准背景色
+    300: Color(0xffece6ee), // surfaceContainerHigh 较深背景色
+    400: Color(0xffe6e0e9), // surfaceContainerHighest 深色背景色
+    500: Color(0xFF3783FD), // primary 主题色
+    600: Color(0xff1d1b20), // onSurface 主要内容色
+    700: Color(0xFF909399), // onSurfaceVariant 次要内容色
+    800: Color(0xffffffff), // surfaceContainerLowest 相同色
+    900: Color(0xff322f35), // inverseSurface 相反色
+  },
+);
+```
+
+---
+
+## 📦 工具类（Utils）
+
+| 文件名                 | 功能描述                                                                 |
+|------------------------|--------------------------------------------------------------------------|
+| `clipboard_util.dart`  | 剪贴板操作工具（复制/粘贴文本、监听剪贴板内容）                          |
+| `clone_util.dart`      | 对象深拷贝/浅拷贝工具（支持复杂对象克隆）                                |
+| `color_util.dart`      | 颜色处理工具（HEX与RGB互转、颜色混合、随机颜色生成）                     |
+| `date_util.dart`       | 日期时间工具（格式化、解析、计算时间差）                                     |
+| `device_util.dart`     | 设备信息工具（获取设备信息）                                               |
+| `encrypt_util.dart`    | 加密解密工具（算法封装）                                                     |
+| `file_util.dart`       | 文件操作工具（读写文件、目录管理、文件压缩/解压）                        |
+| `function_util.dart`   | 通用函数工具（防抖/节流、空安全处理、类型转换）                          |
+| `image_util.dart`      | 图片处理工具（压缩、缓存管理、网络图片加载、格式转换）                   |
+| `json_util.dart`       | JSON工具（序列化/反序列化、动态解析、数据校验）                          |
+| `keyboard_util.dart`   | 键盘工具（控制键盘显隐、监听高度变化）                                   |
+| `log_util.dart`        | 日志工具（分级输出、日志存储、调试模式开关）                             |
+| `package_util.dart`    | 应用包管理工具（获取应用包信息）                                     |
+| `permission_util.dart` | 权限管理工具（全局权限处理、多权限判断及请求）                       |
+| `sp_util.dart`         | 本地存储工具（基于SharedPreferences，支持复杂数据存取）                  |
+| `text_util.dart`       | 文本处理工具（字符串校验、截断、正则匹配）                                |
+
+---
+
+## 🎨 通用帮助类（Helpers）
+
+| 文件名                          | 功能描述                                                                 |
+|---------------------------------|--------------------------------------------------------------------------|
+| `dialog_helper.dart`             | 弹窗帮助类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等）                                              |
+| `image_helper.dart`              | 图片帮助类（图片选择、裁剪、上传）                               |
+| `oss_helper.dart`                | oss帮助类（签名上传oss）                                     |
+
+---
+
+## 🎨 通用组件（Widgets）
+
+| 文件名                          | 功能描述                                                                 |
+|---------------------------------|--------------------------------------------------------------------------|
+| `refresh_widget.dart`           | 刷新列表组件（包含上拉加载、下拉刷新、回至顶部、页面数据状态视图（加载、空数据、列表、瀑布流）等功能）                               |
+| `base_widget.dart`              | 基础组件基类（统一多状态管理，无网络自动切换该状态布局）                               |
+| `com_album.dart`                | 相册组件（图片九宫格仿微信朋友圈显示）                                     |
+| `com_arrow.dart`                | 方向箭头组件（支持上下左右箭头，常用于列表项导航）                          |
+| `com_avatar.dart`               | 头像组件（圆形/方形、网络/本地/文字头像）                                |
+| `com_button.dart`               | 按钮组件（主按钮、线性按钮、禁用状态、渐变色、自定义样式）                         |
+| `com_checkbox.dart`             | 复选框组件（支持单选/多选、自定义图标）                                  |
+| `com_checkbox_list_title.dart`  | 列表复选框组件（ListTitle形式下的复现框）                             |
+| `com_container.dart`            | 通用容器（圆角、阴影、渐变背景、内边距配置）                             |
+| `com_empty.dart`                | 空状态组件（数据为空时展示占位图或提示文字）                             |
+| `com_gallery.dart`              | 图片画廊组件（图片查看预览等操作）                             |
+| `com_image.dart`                | 增强图片组件（占位图、加载失败兜底、缓存策略）                           |
+| `com_list_group.dart`           | 分组列表组件（下划线分隔的列表项布局，自定义下划线）                          |
+| `com_loading.dart`              | 加载组件（全局Loading，可自定义）                                 |
+| `com_popup_menu.dart`           | 弹出菜单组件（自定义菜单项、位置调整）                         |
+| `com_rating.dart`               | 评分组件（星级评分、支持半星、自定义图标）                               |
+| `com_tag.dart`                  | 标签组件（多颜色/尺寸、圆角样式）                                |
+| `com_title_bar.dart`            | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）                           |
+
+---
+
+
 ## RefreshWidget
 ```dart
 class DemoLogic extends PagingController {
@@ -132,3 +253,26 @@ class DemoPage extends StatelessWidget {
   }
 }
 ```
+
+## 示例项目
+
+查看完整示例：
+
+```bash
+git clone https://github.com/Er-Dong-Chen/flutter-common.git
+cd flutter-common/example
+flutter run
+```
+
+## 贡献指南
+
+欢迎提交 PR 或 Issue！贡献前请阅读：
+
+- [代码规范](docs/CODESTYLE.md)
+- [全局主题指南](docs/I18N_GUIDE.md)
+- [国际化指南](docs/THEME_GUIDE.md)
+- [测试要求](docs/TESTING.md)
+
+## 许可证
+
+MIT License - 详情见 [LICENSE](LICENSE) 文件

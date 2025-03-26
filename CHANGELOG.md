@@ -1,3 +1,7 @@
+## 1.7.0
+
+* TODO: Global theme configuration.
+
 ## 1.6.0
 
 * TODO: dart fix.
