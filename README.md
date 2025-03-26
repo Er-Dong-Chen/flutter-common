@@ -192,6 +192,7 @@ static MaterialColor lightTheme = const MaterialColor(
 | `com_rating.dart`               | 评分组件（星级评分、支持半星、自定义图标）                               |
 | `com_tag.dart`                  | 标签组件（多颜色/尺寸、圆角样式）                                |
 | `com_title_bar.dart`            | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）                           |
+| `com_divider.dart`              | 下划线组件（CustomPainter实现的Divider,支持负数）                           |
 
 ---
 
