@@ -8,7 +8,6 @@ class HttpConfig {
   final Map<String, dynamic> commonHeaders;
   final List<Interceptor> interceptors;
   final bool enableLog;
-  final bool enableCache;
   final int maxRetries;
 
   HttpConfig({
@@ -19,7 +18,6 @@ class HttpConfig {
     this.commonHeaders = const {},
     this.interceptors = const [],
     this.enableLog = true,
-    this.enableCache = false,
     this.maxRetries = 3,
   });
 }

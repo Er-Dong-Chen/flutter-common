@@ -11,17 +11,16 @@
 - 企业级网络请求封装
 - N+高质量常用组件
 - 常用开发工具及扩展集合
-- 刷新列表全方面解决方案
+- 刷新列表一整套解决方案
 - 开箱即用的通用各类弹窗
-- 图片处理全流程解决方案
-- 阿里云OSS集成
+- 全局统一各状态布局
 
 
 ## 特性
 
 - 🎨 **主题系统**：通过 `ThemeExtension` 全局配置颜色/圆角/间距等样式
 - 🌍 **国际化支持**：内置中英文，支持自定义文本和动态语言切换
-- ⚡ **优先级覆盖**：支持全局主题配置 + 组件级参数覆盖
+- ⚡ **优先级覆盖**：支持全局配置 + 组件级参数覆盖
 - 📱 **自适应设计**：完美适配 iOS/Material 设计规范
 
 ## 安装
@@ -29,6 +28,7 @@
 在 `pubspec.yaml` 中添加依赖：
 
 ```yaml
+/// 1.8.0版本已移除图片选择裁剪上传oss一站式方案
 dependencies:
   flutter_chen_common: 最新版本
 ```
@@ -40,58 +40,83 @@ flutter pub get
 
 ## 快速开始
 
+### 初始化配置
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化必备服务
+  await SpUtil.init(); // 本地存储
+  await HttpClient.init(  // 网络模块
+      config: HttpConfig(
+        baseUrl: 'https://api.example.com',
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        enableLog: true,
+        maxRetries: 3,
+        interceptors: [CustomInterceptor()]
+      ),
+    );
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ComConfiguration(
+      config: ComConfig.defaults().copyWith(
+        emptyWidget: CustomEmptyWidget(), // 自定义全局空视图
+        loadingWidget: CustomLoading(),  // 自定义全局加载视图
+      ),
+      child: MaterialApp(
+        theme: ThemeData.light().copyWith(
+          extensions: [ComTheme.light()], // 启用亮色主题
+        ),
+        darkTheme: ThemeData.dark().copyWith(
+          extensions: [ComTheme.dark()], // 启用暗色主题
+        ),
+        home: MainPage(),
+        localizationsDelegates: [
+          ComLocalizations.delegate, // 国际化
+          GlobalMaterialLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('zh', 'CN'),
+          const Locale('en', 'US'),
+        ],
+      ),
+    );
+  }
+}
+```
+
 ### 网络请求配置
 
 ```dart
-/// 初始化RequestClient，传入baseUrl以及请求拦截器
-await RequestClient.init(
-  baseUrl: Env.getEnvConfig().baseUrl,
-  interceptors: [RequestInterceptor()]);
-
-/// 使用
-RequestClient.instance.request(
+// 网络请求使用
+HttpClient.instance.request(
   "/xxxx",
   method: HttpType.post.name,
   fromJson: (json) => User.fromJson(json),
   showLoading: true,
 )
+
+// HttpConfig，内置日志打印、网络重试拦截器，日志拦截器正在重新实现优化更新，记录日志方面查看支持导出
+HttpConfig({
+    required this.baseUrl,
+    this.connectTimeout = const Duration(seconds: 15),
+    this.receiveTimeout = const Duration(seconds: 15),
+    this.sendTimeout = const Duration(seconds: 15),
+    this.commonHeaders = const {},
+    this.interceptors = const [],
+    this.enableLog = true,
+    this.maxRetries = 3,
+  });
 ```
 
-### 其他配置以及OSS
-
-```dart
-/// 初始化SharedPreferences
-await SpUtil.init();
-
-ComConfig.setOssConfig(Global.ossConfig);
-
-static Future<Map<String, dynamic>> ossConfig() async {
-  var res = await AppApi.ossToken();
-  var params = {
-    "accessKeyId": res["accessKeyId"],
-    "policy": res["policy"],
-    "signature": res["signature"],
-    "url": "https://${res["bucket"]}.oss-ap-southeast-1.aliyuncs.com",
-    "dir": "appName"
-    };
-  return params;
-}
-```
-
-### 全局主题配置
-
-```dart
-MaterialApp(
-  theme: ThemeData.light().copyWith(
-    extensions: [
-      ComTheme.light()
-    ]
-  ),
-  home: HomePage(),
-)
-```
-
-## 主题系统
+## 🎨 主题系统
 
 ### 内置主题
 
@@ -104,9 +129,9 @@ MaterialApp(
 
 ```dart
 ComTheme(
-  theme: ComColors.lightTheme,			// 颜色体系
-  shapes: ComShapes.standard,			// 圆角体系
-  spacing: ComSpacing.standard,			// 间距体系
+  theme: ComColors.lightTheme,  // 颜色体系
+  shapes: ComShapes.standard,	// 圆角体系
+  spacing: ComSpacing.standard,	// 间距体系
   primaryGradient: LinearGradient(
     colors: [
       ComColors.lightTheme.shade500,
@@ -137,50 +162,27 @@ static MaterialColor lightTheme = const MaterialColor(
 );
 ```
 
-### 国际化配置
+## 🌍 国际化配置
 
 ```dart
-/// 库中包含中英文默认中文，添加新语言可以继承ComIntl实现
+// 语言新增或覆盖
+// 1. 创建法语本地化类
 class FrIntl extends ComIntl {
-  @override String get confirm => "...";
-  @override String get cancel => "...";
+  @override String get confirm => "xxx";
+  @override String get cancel => "xxx";
+  @override String get loading => "...";
 }
-/// 添加或覆盖
+
+// 2. 注册语言
 ComLocalizations.addLocalization('fr', FrIntl());
 
-/// 全局代理以及语言配置
-localizationsDelegates: [
-  ComLocalizations.delegate,
-  GlobalMaterialLocalizations.delegate,
-  GlobalWidgetsLocalizations.delegate,
-],
-supportedLocales: [
-  Locale('zh', 'CN'),
-  Locale('en', 'US'),
-  Locale('fr'),
-],
+// 3. 配置MaterialApp
+MaterialApp(
+  supportedLocales: [
+    Locale('fr'), // 新增法语支持
+  ],
+)
 ```
-
-### 全局状态组件配置
-
-```dart
-/// 不配置使用库中默认一套状态组件
-ComConfiguration(
-  config: ComConfig.defaults(),
-  child: GetMaterialApp()
-);
-
-/// ComConfig
-factory ComConfig.defaults() => ComConfig(
-        loadingWidget: const ComLoading(),
-        emptyWidget: const ComEmpty(),
-        errorWidget: const ComErrorWidget(),
-        noNetworkWidget: (VoidCallback? onReconnect) =>
-            ComNoNetworkWidget(onReconnect: onReconnect),
-      );
-```
-
----
 
 ## 📦 工具类（Utils）
 
@@ -202,16 +204,7 @@ factory ComConfig.defaults() => ComConfig(
 | `permission_util.dart` | 权限管理工具（全局权限处理、多权限判断及请求）                       |
 | `sp_util.dart`         | 本地存储工具（基于SharedPreferences，支持复杂数据存取）                  |
 | `text_util.dart`       | 文本处理工具（字符串校验、截断、正则匹配）                                |
-
----
-
-## 🎨 通用帮助类（Helpers）
-
-| 文件名                          | 功能描述                                                                 |
-|---------------------------------|--------------------------------------------------------------------------|
-| `dialog_helper.dart`             | 弹窗帮助类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等）                                              |
-| `image_helper.dart`              | 图片帮助类（图片选择、裁剪、上传）                               |
-| `oss_helper.dart`                | oss帮助类（签名上传oss）                                     |
+| `dialog_util.dart`     | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等）                                |
 
 ---
 
@@ -227,7 +220,6 @@ factory ComConfig.defaults() => ComConfig(
 | `com_button.dart`               | 按钮组件（主按钮、线性按钮、禁用状态、渐变色、自定义样式）                         |
 | `com_checkbox.dart`             | 复选框组件（支持单选/多选、自定义图标）                                  |
 | `com_checkbox_list_title.dart`  | 列表复选框组件（ListTitle形式下的复现框）                             |
-| `com_container.dart`            | 通用容器（圆角、阴影、渐变背景、内边距配置）                             |
 | `com_empty.dart`                | 空状态组件（数据为空时展示占位图或提示文字）                             |
 | `com_gallery.dart`              | 图片画廊组件（图片查看预览等操作）                             |
 | `com_image.dart`                | 增强图片组件（占位图、加载失败兜底、缓存策略）                           |
@@ -242,7 +234,7 @@ factory ComConfig.defaults() => ComConfig(
 ---
 
 
-## RefreshWidget
+## 智能列表解决方案（RefreshWidget）
 ```dart
 class DemoLogic extends PagingController {
   @override
@@ -310,7 +302,17 @@ cd flutter-common/example
 flutter run
 ```
 
-## 贡献指南
+## 🤝贡献指南
+我们欢迎以下类型的贡献：
+🐛 Bug 报告
+
+💡 功能建议
+
+📚 文档改进
+
+🎨 设计资源
+
+💻 代码提交
 
 欢迎提交 PR 或 Issue！贡献前请阅读：
 

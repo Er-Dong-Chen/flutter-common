@@ -6,39 +6,25 @@ enum HttpMethod { get, post, put, delete, patch }
 class HttpClient {
   static HttpClient? _instance;
 
-  late final Dio dio;
+  late final Dio _dio;
   final HttpConfig config;
-  final TokenGetter? _tokenGetter;
-  final OnTokenExpired? _onTokenExpired;
-  final ErrorHandler? _errorHandler;
 
   // 私有构造函数
   HttpClient._internal({
     required this.config,
-    TokenGetter? tokenGetter,
-    OnTokenExpired? onTokenExpired,
-    ErrorHandler? errorHandler,
-  })  : _tokenGetter = tokenGetter,
-        _onTokenExpired = onTokenExpired,
-        _errorHandler = errorHandler {
+  }) {
     _initDio();
   }
 
   /// 初始化单例，必须在应用启动时调用
   static void init({
     required HttpConfig config,
-    TokenGetter? tokenGetter,
-    OnTokenExpired? onTokenExpired,
-    ErrorHandler? errorHandler,
   }) {
     if (_instance != null) {
       throw Exception('HttpClient already initialized. Only call init once!');
     }
     _instance = HttpClient._internal(
       config: config,
-      tokenGetter: tokenGetter,
-      onTokenExpired: onTokenExpired,
-      errorHandler: errorHandler,
     );
   }
 
@@ -52,7 +38,7 @@ class HttpClient {
   }
 
   void _initDio() {
-    dio = Dio(BaseOptions(
+    _dio = Dio(BaseOptions(
       baseUrl: config.baseUrl,
       connectTimeout: config.connectTimeout,
       receiveTimeout: config.receiveTimeout,
@@ -64,7 +50,7 @@ class HttpClient {
     _addCoreInterceptors();
 
     // 添加自定义拦截器
-    dio.interceptors.addAll(config.interceptors);
+    _dio.interceptors.addAll(config.interceptors);
   }
 
   void _addCoreInterceptors() {
@@ -84,7 +70,7 @@ class HttpClient {
 
     // 重试拦截器
     interceptors.add(RetryInterceptor(
-      dio: dio,
+      dio: _dio,
       maxRetries: config.maxRetries,
     ));
 
@@ -100,7 +86,7 @@ class HttpClient {
     //   ));
     // }
 
-    dio.interceptors.addAll(interceptors);
+    _dio.interceptors.addAll(interceptors);
   }
 
   Future request<T>(
@@ -123,7 +109,7 @@ class HttpClient {
       if (showLoading) {
         DialogUtil.showLoading();
       }
-      Response response = await dio.request(
+      Response response = await _dio.request(
         baseUrl != null ? baseUrl + path : config.baseUrl + path,
         data: data,
         queryParameters:

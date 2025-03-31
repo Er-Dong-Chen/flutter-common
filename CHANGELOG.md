@@ -1,6 +1,11 @@
 ## 1.8.0
 
-* TODO: Support internationalization and ComConfiguration.
+* TODO:
+1.Support internationalization and ComConfiguration and pref http.
+2. Remove the image select crop upload oss one-stop solution.
+3. Remove the helper.
+4. Replace the RequestClient with the HttpClient.
+5. Replace DialogHelper by DialogUtil.
 
 ## 1.7.1
 

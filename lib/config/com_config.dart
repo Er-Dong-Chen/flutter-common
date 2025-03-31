@@ -14,6 +14,20 @@ class ComConfig {
     required this.noNetworkWidget,
   });
 
+  ComConfig copyWith({
+    Widget? loadingWidget,
+    Widget? emptyWidget,
+    Widget? errorWidget,
+    Widget Function(VoidCallback? onReconnect)? noNetworkWidget,
+  }) {
+    return ComConfig(
+      loadingWidget: loadingWidget ?? this.loadingWidget,
+      emptyWidget: emptyWidget ?? this.emptyWidget,
+      errorWidget: errorWidget ?? this.errorWidget,
+      noNetworkWidget: noNetworkWidget ?? this.noNetworkWidget,
+    );
+  }
+
   factory ComConfig.defaults() => ComConfig(
         loadingWidget: const ComLoading(),
         emptyWidget: const ComEmpty(),

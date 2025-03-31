@@ -2,32 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'locale_controller.dart';
 
 void main() {
-  HttpClient.init(
-    config: HttpConfig(
-      baseUrl: '',
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      enableLog: true,
-      maxRetries: 3,
-    ),
-  );
-  final adapter = DioAdapter(dio: HttpClient.instance.dio);
-  adapter.onPost(
-    '/login',
-    (request) => request.reply(200, {
-      "id": "1",
-      "name": "张三",
-      "email": "zhangsan@example.com",
-      "profilePictureUrl": "https://example.com/images/zhangsan.jpg"
-    }),
-    data: {},
-  );
+  // HttpClient.init(
+  //   config: HttpConfig(
+  //     baseUrl: '',
+  //     connectTimeout: const Duration(seconds: 30),
+  //     receiveTimeout: const Duration(seconds: 30),
+  //     enableLog: true,
+  //     maxRetries: 3,
+  //   ),
+  // );
+  // final adapter = DioAdapter(dio: HttpClient.instance.dio);
+  // adapter.onPost(
+  //   '/login',
+  //   (request) => request.reply(200, {
+  //     "id": "1",
+  //     "name": "张三",
+  //     "email": "zhangsan@example.com",
+  //     "profilePictureUrl": "https://example.com/images/zhangsan.jpg"
+  //   }),
+  //   data: {},
+  // );
   Get.put(LocaleController());
   runApp(const MyApp());
 }
@@ -43,24 +42,16 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
-          // counter didn't reset back to zero; the application is not restarted.
           primarySwatch: Colors.blue,
         ),
         locale: Get.find<LocaleController>().currentLocale,
-        localizationsDelegates: [
+        localizationsDelegates: const [
           ComLocalizations.delegate,
           RefreshLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: [
+        supportedLocales: const [
           Locale('zh', 'CN'),
           Locale('en', 'US'),
         ],
@@ -82,8 +73,8 @@ class DemoLogic extends PagingController {
   Future<PagingResponse> loadData() async {
     // 切换中英文
     final newLocale = localeController.currentLocale.languageCode == 'zh'
-        ? Locale('en', 'US')
-        : Locale('zh', 'CN');
+        ? const Locale('en', 'US')
+        : const Locale('zh', 'CN');
     localeController.switchLocale(newLocale);
 
     // DialogUtil.showAlertDialog();

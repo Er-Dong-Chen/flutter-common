@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/config/com_configuration.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 

@@ -63,7 +63,7 @@ class DialogUtil {
         // titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-              Radius.circular(context.comTheme.shapes.baseRadius)),
+              Radius.circular(context.comTheme.shapes.resolvedDialogRadius)),
         ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -251,7 +251,7 @@ class DialogUtil {
             Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(context.comTheme.shapes.baseRadius),
+                  Radius.circular(context.comTheme.shapes.resolvedDialogRadius),
                 ),
               ),
               child: Column(

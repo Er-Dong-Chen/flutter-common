@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 
 class LocaleController extends GetxController {
-  final Rx<Locale> _currentLocale = Locale('en', 'US').obs;
+  final Rx<Locale> _currentLocale = const Locale('en', 'US').obs;
 
   Locale get currentLocale => _currentLocale.value;
 
