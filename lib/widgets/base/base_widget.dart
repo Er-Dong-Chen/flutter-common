@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chen_common/config/com_configuration.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 
@@ -26,34 +27,38 @@ class BaseWidget extends StatelessWidget {
     this.isConnected = true,
   });
 
-  static Widget loadingWidget = const ComLoading();
-  static Widget emptyWidget = const ComEmpty();
-  static Widget errorWidget = ComEmpty(
-    message: Text(
-      '加载错误'.tr,
-      style: Theme.of(Get.context!).textTheme.bodySmall,
-    ),
-  );
-  static Widget Function(VoidCallback? onReconnect) noNetworkWidget =
-      (onReconnect) => NoNetworkWidget(onReconnect: onReconnect);
+  static Widget loadingWidget(BuildContext context) =>
+      ComConfiguration.of(context).loadingWidget;
+
+  static Widget emptyWidget(BuildContext context) =>
+      ComConfiguration.of(context).emptyWidget;
+
+  static Widget errorWidget(BuildContext context) =>
+      ComConfiguration.of(context).errorWidget;
+
+  static Widget noNetworkWidget(
+    BuildContext context, {
+    VoidCallback? onReconnect,
+  }) =>
+      ComConfiguration.of(context).noNetworkWidget(onReconnect);
 
   @override
   Widget build(BuildContext context) {
-    return buildContent();
+    return buildContent(context);
   }
 
-  Widget buildContent() {
+  Widget buildContent(BuildContext context) {
     switch (!isConnected && status == LayoutStatus.loading
         ? LayoutStatus.noNetwork
         : status) {
       case LayoutStatus.loading:
-        return loading ?? loadingWidget;
+        return loading ?? loadingWidget(context);
       case LayoutStatus.empty:
-        return empty ?? emptyWidget;
+        return empty ?? emptyWidget(context);
       case LayoutStatus.noNetwork:
-        return noNetwork ?? noNetworkWidget(onReconnect);
+        return noNetwork ?? noNetworkWidget(context, onReconnect: onReconnect);
       case LayoutStatus.error:
-        return error ?? errorWidget;
+        return error ?? errorWidget(context);
       case LayoutStatus.complete:
       default:
         return child;
@@ -61,10 +66,10 @@ class BaseWidget extends StatelessWidget {
   }
 }
 
-class NoNetworkWidget extends StatelessWidget {
+class ComNoNetworkWidget extends StatelessWidget {
   final VoidCallback? onReconnect;
 
-  const NoNetworkWidget({super.key, this.onReconnect});
+  const ComNoNetworkWidget({super.key, this.onReconnect});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +78,7 @@ class NoNetworkWidget extends StatelessWidget {
       message: Column(
         children: [
           Text(
-            '网络错误，请检查后重试'.tr,
+            ComLocalizations.of(context).networkError,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(
@@ -81,9 +86,24 @@ class NoNetworkWidget extends StatelessWidget {
           ),
           ComButton(
             onPressed: () => onReconnect?.call(),
-            child: Text('点击重试'.tr),
+            child: Text(ComLocalizations.of(context).retry),
           )
         ],
+      ),
+    );
+  }
+}
+
+class ComErrorWidget extends StatelessWidget {
+  const ComErrorWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ComEmpty(
+      image: Image.asset("assets/images/error.png"),
+      message: Text(
+        ComLocalizations.of(Get.context!).loadingFailed,
+        style: Theme.of(Get.context!).textTheme.bodySmall,
       ),
     );
   }

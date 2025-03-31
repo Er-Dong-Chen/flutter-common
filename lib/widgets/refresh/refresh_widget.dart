@@ -72,14 +72,14 @@ class RefreshListWidget<T> extends StatelessWidget {
         child: Padding(
           padding:
               EdgeInsets.only(top: emptyTop != null ? (emptyTop! + 60) : 260),
-          child: BaseWidget.loadingWidget,
+          child: BaseWidget.loadingWidget(context),
         ),
       );
     } else if (data.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
           padding: EdgeInsets.only(top: emptyTop != null ? emptyTop! : 200),
-          child: empty ?? BaseWidget.emptyWidget,
+          child: empty ?? BaseWidget.emptyWidget(context),
         ),
       );
     } else if (!showList) {

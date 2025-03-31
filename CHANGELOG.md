@@ -1,3 +1,7 @@
+## 1.8.0
+
+* TODO: Support internationalization and ComConfiguration.
+
 ## 1.7.1
 
 * TODO: Updated README.

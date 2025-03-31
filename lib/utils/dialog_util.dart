@@ -5,7 +5,7 @@ import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:flutter_chen_common/widgets/base/com_title_bar.dart';
 import 'package:get/get.dart';
 
-class DialogHelper {
+class DialogUtil {
   static showToast(text) {
     if (text == null || text.toString().isEmpty) return;
     BotToast.showText(
@@ -23,7 +23,7 @@ class DialogHelper {
       if (BaseWidget.loadingWidget is ComLoading) {
         return ComLoading(message: text);
       } else {
-        return BaseWidget.loadingWidget;
+        return BaseWidget.loadingWidget(Get.context!);
       }
     });
   }
@@ -36,8 +36,8 @@ class DialogHelper {
     Widget? title,
     Widget? content,
     String contentText = "",
-    String cancelText = "取消",
-    String confirmText = "确定",
+    String? cancelText,
+    String? confirmText,
     Widget? cancel,
     Widget? confirm,
     VoidCallback? onCancel,
@@ -57,7 +57,7 @@ class DialogHelper {
       baseAlertDialog = AlertDialog(
         contentPadding: const EdgeInsets.all(0),
         title: Center(
-          child: title ?? Text("温馨提示".tr),
+          child: title ?? Text(ComLocalizations.of(context).warmTips),
         ),
         titleTextStyle: Theme.of(Get.context!).textTheme.titleMedium,
         // titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
@@ -105,7 +105,8 @@ class DialogHelper {
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(16)),
                             ),
-                            child: cancel ?? Text(cancelText.tr),
+                            child: cancel ??
+                                Text(ComLocalizations.of(context).cancel),
                           ),
                           onTap: () =>
                               onCancel != null ? onCancel.call() : Get.back(),
@@ -136,7 +137,8 @@ class DialogHelper {
                             borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(16)),
                           ),
-                          child: confirm ?? Text(confirmText.tr),
+                          child: confirm ??
+                              Text(ComLocalizations.of(context).confirm),
                         ),
                         onTap: () =>
                             onConfirm != null ? onConfirm.call() : Get.back(),
@@ -153,7 +155,7 @@ class DialogHelper {
       baseAlertDialog = CupertinoAlertDialog(
         title: title ??
             Center(
-              child: Text("温馨提示".tr),
+              child: Text(ComLocalizations.of(context).warmTips),
             ),
         content: Padding(
           padding: const EdgeInsets.only(top: 12),
@@ -165,12 +167,12 @@ class DialogHelper {
                 CupertinoDialogAction(
                   onPressed: () =>
                       onCancel != null ? onCancel.call() : Get.back(),
-                  child: cancel ?? Text('取消'.tr),
+                  child: cancel ?? Text(ComLocalizations.of(context).cancel),
                 ),
               ],
               CupertinoDialogAction(
                 onPressed: () => onConfirm?.call(),
-                child: confirm ?? Text('确定'.tr),
+                child: confirm ?? Text(ComLocalizations.of(context).confirm),
               ),
             ],
       );
@@ -207,7 +209,7 @@ class DialogHelper {
         actions: actionsList,
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => onCancel != null ? onCancel.call() : Get.back(),
-          child: cancel ?? Text('取消'.tr),
+          child: cancel ?? Text(ComLocalizations.of(Get.context!).cancel),
         ),
       ),
     );
@@ -218,9 +220,9 @@ class DialogHelper {
     Widget? content,
     Widget? cancel,
     Widget? confirm,
-    String titleText = "温馨提示",
-    String cancelText = "取消",
-    String confirmText = "确定",
+    String? titleText,
+    String? cancelText,
+    String? confirmText,
     EdgeInsets? titlePadding,
     EdgeInsets? contentPadding,
     EdgeInsets? actionPadding,
@@ -268,7 +270,8 @@ class DialogHelper {
                         style: dialogTheme.titleTextStyle ??
                             themeData.textTheme.titleLarge!,
                         textAlign: TextAlign.center,
-                        child: title ?? Text(titleText),
+                        child: title ??
+                            Text(ComLocalizations.of(context).warmTips),
                       ),
                     ),
                   ],
@@ -315,7 +318,7 @@ class DialogHelper {
                                   gradient: context.comTheme.primaryGradient,
                                   child: confirm ??
                                       Text(
-                                        confirmText.tr,
+                                        ComLocalizations.of(context).confirm,
                                         style: TextStyle(
                                             color: context
                                                 .comTheme.theme.shade900),
@@ -338,7 +341,9 @@ class DialogHelper {
                                             : constraints.maxWidth,
                                     plain: true,
                                     color: context.comTheme.theme.shade700,
-                                    child: cancel ?? Text(cancelText.tr),
+                                    child: cancel ??
+                                        Text(ComLocalizations.of(context)
+                                            .cancel),
                                     onPressed: () => onCancel != null
                                         ? onCancel.call()
                                         : Get.back(),
@@ -472,7 +477,7 @@ class DialogHelper {
                     onTap: onCancel ?? () => Get.back(),
                     child: cancel ??
                         Text(
-                          "取消".tr,
+                          ComLocalizations.of(context).cancel,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                   ),
@@ -483,7 +488,7 @@ class DialogHelper {
                     },
                     child: confirm ??
                         Text(
-                          "确定".tr,
+                          ComLocalizations.of(context).confirm,
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
@@ -544,7 +549,7 @@ class DialogHelper {
                     onTap: onCancel ?? () => Get.back(),
                     child: cancel ??
                         Text(
-                          "取消".tr,
+                          ComLocalizations.of(context).cancel,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                   ),
@@ -555,7 +560,7 @@ class DialogHelper {
                     },
                     child: confirm ??
                         Text(
-                          "确定".tr,
+                          ComLocalizations.of(context).confirm,
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium

@@ -52,6 +52,8 @@ await RequestClient.init(
 RequestClient.instance.request(
   "/xxxx",
   method: HttpType.post.name,
+  fromJson: (json) => User.fromJson(json),
+  showLoading: true,
 )
 ```
 
@@ -133,6 +135,49 @@ static MaterialColor lightTheme = const MaterialColor(
     900: Color(0xff322f35), // inverseSurface 相反色
   },
 );
+```
+
+### 国际化配置
+
+```dart
+/// 库中包含中英文默认中文，添加新语言可以继承ComIntl实现
+class FrIntl extends ComIntl {
+  @override String get confirm => "...";
+  @override String get cancel => "...";
+}
+/// 添加或覆盖
+ComLocalizations.addLocalization('fr', FrIntl());
+
+/// 全局代理以及语言配置
+localizationsDelegates: [
+  ComLocalizations.delegate,
+  GlobalMaterialLocalizations.delegate,
+  GlobalWidgetsLocalizations.delegate,
+],
+supportedLocales: [
+  Locale('zh', 'CN'),
+  Locale('en', 'US'),
+  Locale('fr'),
+],
+```
+
+### 全局状态组件配置
+
+```dart
+/// 不配置使用库中默认一套状态组件
+ComConfiguration(
+  config: ComConfig.defaults(),
+  child: GetMaterialApp()
+);
+
+/// ComConfig
+factory ComConfig.defaults() => ComConfig(
+        loadingWidget: const ComLoading(),
+        emptyWidget: const ComEmpty(),
+        errorWidget: const ComErrorWidget(),
+        noNetworkWidget: (VoidCallback? onReconnect) =>
+            ComNoNetworkWidget(onReconnect: onReconnect),
+      );
 ```
 
 ---

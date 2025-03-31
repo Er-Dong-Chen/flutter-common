@@ -1,38 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/widgets/base/base_widget.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 class ComConfig {
-  static Future<Map<String, dynamic>> Function()? ossConfig;
+  final Widget loadingWidget;
+  final Widget emptyWidget;
+  final Widget errorWidget;
+  final Widget Function(VoidCallback? onReconnect) noNetworkWidget;
 
-  static void setOssConfig(Future<Map<String, dynamic>> Function() getter) {
-    ossConfig = getter;
-  }
+  const ComConfig({
+    required this.loadingWidget,
+    required this.emptyWidget,
+    required this.errorWidget,
+    required this.noNetworkWidget,
+  });
 
-  static Future<Map<String, dynamic>> getOssConfig() async {
-    if (ossConfig != null) {
-      return ossConfig!();
-    } else {
-      throw Exception("OSS配置获取函数未设置");
-    }
-  }
-
-  static config({
-    Widget? loadingWidget,
-    Widget? emptyWidget,
-    Widget? errorWidget,
-    Widget Function(VoidCallback? onReconnect)? noNetworkWidget,
-  }) {
-    if (loadingWidget != null) {
-      BaseWidget.loadingWidget = loadingWidget;
-    }
-    if (emptyWidget != null) {
-      BaseWidget.emptyWidget = emptyWidget;
-    }
-    if (errorWidget != null) {
-      BaseWidget.errorWidget = errorWidget;
-    }
-    if (noNetworkWidget != null) {
-      BaseWidget.noNetworkWidget = noNetworkWidget;
-    }
-  }
+  factory ComConfig.defaults() => ComConfig(
+        loadingWidget: const ComLoading(),
+        emptyWidget: const ComEmpty(),
+        errorWidget: const ComErrorWidget(),
+        noNetworkWidget: (VoidCallback? onReconnect) =>
+            ComNoNetworkWidget(onReconnect: onReconnect),
+      );
 }

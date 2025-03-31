@@ -8,7 +8,6 @@ export 'base/com_checkbox_list_tile.dart';
 export 'base/com_container.dart';
 export 'base/com_divider.dart';
 export 'base/com_empty.dart';
-export 'base/com_gallery.dart';
 export 'base/com_image.dart';
 export 'base/com_loading.dart';
 export 'refresh/back_top_widget.dart';

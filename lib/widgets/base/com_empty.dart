@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/extension/extension.dart';
-import 'package:get/get.dart';
+import 'package:flutter_chen_common/localization/com_localizations.dart';
 
 class ComEmpty extends StatelessWidget {
   final Widget? image;
@@ -23,7 +23,7 @@ class ComEmpty extends StatelessWidget {
         children: [
           image ?? _getDefaultImage(),
           SizedBox(height: context.comTheme.spacing.small),
-          message ?? _getDefaultMessage(),
+          message ?? _getDefaultMessage(context),
         ],
       ),
     );
@@ -37,10 +37,10 @@ class ComEmpty extends StatelessWidget {
     );
   }
 
-  Widget _getDefaultMessage() {
+  Widget _getDefaultMessage(BuildContext context) {
     return Text(
-      "暂无数据".tr,
-      style: Theme.of(Get.context!).textTheme.bodySmall,
+      ComLocalizations.of(context).noData,
+      style: Theme.of(context).textTheme.bodySmall,
     );
   }
 }

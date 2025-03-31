@@ -1,7 +1,9 @@
 library flutter_chen_common;
 
-export 'config/com_config.dart';
+export 'config/config.dart';
 export 'extension/extension.dart';
-export 'helper/helper.dart';
+export 'localization/localization.dart';
+export 'network/network.dart';
+export 'theme/theme.dart';
 export 'utils/utils.dart';
 export 'widgets/widgets.dart';
