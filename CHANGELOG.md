@@ -1,3 +1,7 @@
+## 1.8.1
+
+* TODO: Re-implement the log interceptor
+
 ## 1.8.0
 
 * TODO:

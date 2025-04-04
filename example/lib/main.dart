@@ -1,33 +1,21 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'locale_controller.dart';
-
-void main() {
-  // HttpClient.init(
-  //   config: HttpConfig(
-  //     baseUrl: '',
-  //     connectTimeout: const Duration(seconds: 30),
-  //     receiveTimeout: const Duration(seconds: 30),
-  //     enableLog: true,
-  //     maxRetries: 3,
-  //   ),
-  // );
-  // final adapter = DioAdapter(dio: HttpClient.instance.dio);
-  // adapter.onPost(
-  //   '/login',
-  //   (request) => request.reply(200, {
-  //     "id": "1",
-  //     "name": "张三",
-  //     "email": "zhangsan@example.com",
-  //     "profilePictureUrl": "https://example.com/images/zhangsan.jpg"
-  //   }),
-  //   data: {},
-  // );
-  Get.put(LocaleController());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HttpClient.init(
+    config: HttpConfig(
+      baseUrl: '',
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      enableLog: true,
+      maxRetries: 3,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -44,7 +32,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        locale: Get.find<LocaleController>().currentLocale,
         localizationsDelegates: const [
           ComLocalizations.delegate,
           RefreshLocalizations.delegate,
@@ -62,7 +49,6 @@ class MyApp extends StatelessWidget {
 }
 
 class DemoLogic extends PagingController {
-  final localeController = Get.find<LocaleController>();
   @override
   Future<void> onInit() async {
     // TODO: implement onReady
@@ -71,14 +57,18 @@ class DemoLogic extends PagingController {
 
   @override
   Future<PagingResponse> loadData() async {
-    // 切换中英文
-    final newLocale = localeController.currentLocale.languageCode == 'zh'
-        ? const Locale('en', 'US')
-        : const Locale('zh', 'CN');
-    localeController.switchLocale(newLocale);
-
-    // DialogUtil.showAlertDialog();
-
+    await HttpClient.instance.request(
+      "http://www.weather.com.cn/data/sk/101010100.html",
+      options: Options(headers: {
+        "token": "xxxxx",
+        "xxxx": "xxxx",
+      }),
+      data: {
+        "xxxx": "xxxx",
+        "xxxxx": "xxxxx",
+      },
+      method: HttpMethod.get.name,
+    );
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};
     await Future.delayed(2000.milliseconds, () {

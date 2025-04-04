@@ -1,5 +1,3 @@
-import 'dart:math';
-
 export 'clipboard_util.dart';
 export 'clone_util.dart';
 export 'color_util.dart';
@@ -16,9 +14,3 @@ export 'permission_util.dart';
 export 'sp_util.dart';
 export 'text_util.dart';
 export 'utils.dart';
-
-class CommonUtils {
-  static int randomNumber({int max = 999}) {
-    return Random.secure().nextInt(max);
-  }
-}

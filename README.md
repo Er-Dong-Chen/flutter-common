@@ -28,7 +28,7 @@
 在 `pubspec.yaml` 中添加依赖：
 
 ```yaml
-/// 1.8.0版本已移除图片选择裁剪上传oss一站式方案
+/// 1.8.0版本已移除图片选择裁剪上传oss一站式解决方案
 dependencies:
   flutter_chen_common: 最新版本
 ```
@@ -47,7 +47,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 初始化必备服务
-  await SpUtil.init(); // 本地存储
+  await SpUtil.init();    // 本地存储
   await HttpClient.init(  // 网络模块
       config: HttpConfig(
         baseUrl: 'https://api.example.com',
@@ -103,7 +103,7 @@ HttpClient.instance.request(
   showLoading: true,
 )
 
-// HttpConfig，内置日志打印、网络重试拦截器，日志拦截器正在重新实现优化更新，记录日志方面查看支持导出
+// HttpConfig，内置日志打印、网络重试拦截器，后续会记录日志方便查看支持导出排查问题
 HttpConfig({
     required this.baseUrl,
     this.connectTimeout = const Duration(seconds: 15),
@@ -239,7 +239,6 @@ MaterialApp(
 class DemoLogic extends PagingController {
   @override
   Future<PagingResponse> loadData() async {
-    // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};
     await Future.delayed(2000.milliseconds, () {
       for (var i = 0; i < 20; ++i) {
@@ -304,6 +303,7 @@ flutter run
 
 ## 🤝贡献指南
 我们欢迎以下类型的贡献：
+
 🐛 Bug 报告
 
 💡 功能建议

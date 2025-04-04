@@ -35,6 +35,7 @@ dependencies:
   flutter_chen_common:
     path: ../
 
+  dio: ^5.4.3                           # 网络请求
   get: ^4.0.0                           # GetX
   pull_to_refresh: ^2.0.0               # 刷新
 
