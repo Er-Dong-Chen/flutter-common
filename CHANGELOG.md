@@ -1,3 +1,7 @@
+## 1.8.2
+
+* TODO: Pref log interceptor
+
 ## 1.8.1
 
 * TODO: Re-implement the log interceptor
@@ -5,7 +9,7 @@
 ## 1.8.0
 
 * TODO:
-1.Support internationalization and ComConfiguration and pref http.
+1. Support internationalization and ComConfiguration and pref http.
 2. Remove the image select crop upload oss one-stop solution.
 3. Remove the helper.
 4. Replace the RequestClient with the HttpClient.

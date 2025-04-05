@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 class RetryInterceptor extends Interceptor {
   final Dio dio;
@@ -26,7 +25,6 @@ class RetryInterceptor extends Interceptor {
   }
 
   bool _shouldRetry(DioException err) {
-    Log.d(err.type);
     return err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
         err.type == DioExceptionType.sendTimeout;

@@ -48,16 +48,16 @@ void main() async {
 
   // 初始化必备服务
   await SpUtil.init();    // 本地存储
-  await HttpClient.init(  // 网络模块
-      config: HttpConfig(
-        baseUrl: 'https://api.example.com',
-        connectTimeout: const Duration(seconds: 30),
-        receiveTimeout: const Duration(seconds: 30),
-        enableLog: true,
-        maxRetries: 3,
-        interceptors: [CustomInterceptor()]
-      ),
-    );
+  HttpClient.init(        // 网络模块
+    config: HttpConfig(
+      baseUrl: 'https://api.example.com',
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      enableLog: true,
+      maxRetries: 3,
+      interceptors: [CustomInterceptor()]
+   ),
+  );
 
   runApp(MyApp());
 }
@@ -114,13 +114,22 @@ HttpConfig({
     this.enableLog = true,
     this.maxRetries = 3,
   });
+
+// 打印样式如下（日志不会截断，json格式化方便复制查看数据，后续也如下写入日志方便排查问题）
+┌─────────────────────────────────────────────────────────────────────────────
+│ ✅ [HTTP] 2025-04-05 23:30:29 Request sent [Duration] 88ms
+│ Request: 200 GET http://www.weather.com.cn/data/sk/101010100.html?xxxx=xxxx
+│ Headers: {"token":"xxxxx","content-type":"application/json"}
+│ Query: {"xxxx":"xxxx"}
+│ Response: {"weatherinfo":{"city":"北京","cityid":"101010100","WD":"东南风"}}
+└──────────────────────────────────────────────────────────────────────────────
 ```
 
 ## 🎨 主题系统
 
 ### 内置主题
 
-| 主题名称    | 示例代码         |
+| 主题名称      | 示例代码          |
 | ----------- | ---------------- |
 | Light Theme | `ComTheme.light` |
 | Dark Theme  | `ComTheme.dark`  |

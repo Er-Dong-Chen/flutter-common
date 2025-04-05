@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,16 +30,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        localizationsDelegates: const [
-          ComLocalizations.delegate,
-          RefreshLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('zh', 'CN'),
-          Locale('en', 'US'),
-        ],
         home: DemoPage(),
       ),
     );
@@ -61,7 +49,6 @@ class DemoLogic extends PagingController {
       "http://www.weather.com.cn/data/sk/101010100.html",
       options: Options(headers: {
         "token": "xxxxx",
-        "xxxx": "xxxx",
       }),
       data: {
         "xxxx": "xxxx",

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 
+import 'interceptors/log_interceptor.dart';
+
 enum HttpMethod { get, post, put, delete, patch }
 
 class HttpClient {
@@ -58,14 +60,7 @@ class HttpClient {
 
     // 日志拦截器
     if (config.enableLog) {
-      interceptors.add(LogInterceptor(
-        request: true,
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-      ));
+      interceptors.add(LoggerInterceptor());
     }
 
     // 重试拦截器
