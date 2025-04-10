@@ -1,10 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_chen_common/log/log_config.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Log.init(LogConfig());
+  await Log.init(
+    const LogConfig(
+      retentionDays: 3,
+      enableFileLog: true,
+      logLevel: LogLevel.all,
+      recordLevel: LogLevel.info,
+      output: [],
+    ),
+  );
   HttpClient.init(
     config: HttpConfig(
       baseUrl: '',
@@ -49,7 +60,12 @@ class DemoLogic extends PagingController {
       "https://gutendex.com/books",
       method: HttpMethod.get.name,
     );
-    Log.d(res);
+    Log.d("debug message");
+    Log.i("info message");
+    Log.w("warning message");
+    Log.e("error message");
+    Log.console("console message 可完整打印不被截断并且无前缀");
+    final Directory dir = await Log.getLogDir(); // 获取日志文件目录
 
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};

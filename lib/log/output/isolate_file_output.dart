@@ -2,67 +2,55 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../log_config.dart';
 
 class IsolateFileOutput extends LogOutput {
   final LogConfig config;
   late SendPort _sendPort;
   Isolate? _isolate;
   final Completer<void> _initCompleter = Completer();
-  final _receivePort = ReceivePort();
+  final ReceivePort _receivePort = ReceivePort();
+  final Completer<void> _exitCompleter = Completer<void>();
+  bool _isPortClosed = false;
 
   IsolateFileOutput(this.config) {
-    _initIsolate();
+    _initIsolate().catchError((e) => _initCompleter.completeError(e));
   }
 
   Future<void> _initIsolate() async {
-    final rootIsolateToken = RootIsolateToken.instance!;
-    _isolate = await Isolate.spawn(
-      _isolateMain,
-      _IsolateInitData(
-        _receivePort.sendPort,
-        config,
-        rootIsolateToken,
-      ),
-      onError: _receivePort.sendPort,
-      onExit: _receivePort.sendPort,
-    );
+    try {
+      final rootIsolateToken = RootIsolateToken.instance!;
+      _isolate = await Isolate.spawn(
+        _isolateMain,
+        _IsolateInitData(
+          _receivePort.sendPort,
+          config,
+          rootIsolateToken,
+        ),
+        debugName: 'LoggerIsolate',
+        onError: _receivePort.sendPort,
+        onExit: _receivePort.sendPort,
+      );
 
-    _receivePort.listen((message) {
-      if (message is SendPort) {
-        _sendPort = message;
-        _initCompleter.complete();
-      } else if (message == 'isolate_exit') {
-        _cleanUp();
-      }
-    });
-  }
-
-  @override
-  Future<void> init() async {
-    await _initCompleter.future;
-  }
-
-  @override
-  Future<void> destroy() async {
-    _sendPort.send('stop');
-    _receivePort.close();
-    _isolate?.kill(priority: Isolate.immediate);
-  }
-
-  void _cleanUp() {
-    _receivePort.close();
-    _isolate = null;
-  }
-
-  @override
-  void output(OutputEvent event) {
-    if (_initCompleter.isCompleted &&
-        event.level.index >= config.recordLevel.index) {
-      _sendPort.send(event);
+      _receivePort.listen((message) {
+        if (message is SendPort) {
+          _sendPort = message;
+          _initCompleter.complete();
+        } else if (message == 'isolate_exit') {
+          _cleanUp();
+          _exitCompleter.complete();
+        } else if (message is List && message[0] == 'error') {
+          _initCompleter.completeError(
+              message[1], StackTrace.fromString(message[2]));
+        }
+      });
+    } catch (e, s) {
+      _initCompleter.completeError(e, s);
     }
   }
 
@@ -86,7 +74,42 @@ class IsolateFileOutput extends LogOutput {
     });
 
     flushTimer =
-        Timer.periodic(const Duration(seconds: 3), (_) => worker.flush());
+        Timer.periodic(const Duration(seconds: 5), (_) => worker.flush());
+  }
+
+  @override
+  Future<void> init() async {
+    await _initCompleter.future;
+  }
+
+  @override
+  Future<void> destroy() async {
+    try {
+      _sendPort.send('stop');
+      await _exitCompleter.future.timeout(const Duration(seconds: 5));
+    } on TimeoutException {
+      _isolate?.kill(priority: Isolate.immediate);
+    } finally {
+      _cleanUp();
+    }
+  }
+
+  void _cleanUp() {
+    if (!_isPortClosed) {
+      _receivePort.close();
+      _isPortClosed = true;
+    }
+    _isolate?.kill(priority: Isolate.immediate);
+    _isolate = null;
+  }
+
+  @override
+  void output(OutputEvent event) {
+    if (_initCompleter.isCompleted &&
+        !_exitCompleter.isCompleted &&
+        event.level.value >= config.recordLevel.value) {
+      _sendPort.send(event);
+    }
   }
 }
 
@@ -95,12 +118,20 @@ class _IsolateWorker {
   final List<OutputEvent> _buffer = [];
   File? _currentFile;
   DateTime? _currentDate;
+  Timer? _flushTimer;
 
   _IsolateWorker(this._config);
 
   void addEvent(OutputEvent event) {
     _buffer.add(event);
-    if (_buffer.length >= _config.bufferSize) flush();
+    if (_buffer.length >= 50) {
+      _scheduleFlush();
+    }
+  }
+
+  void _scheduleFlush() {
+    if (_flushTimer?.isActive ?? false) return;
+    _flushTimer = Timer(const Duration(milliseconds: 100), () => flush());
   }
 
   Future<void> flush() async {
@@ -108,23 +139,27 @@ class _IsolateWorker {
     final events = _buffer.toList();
     _buffer.clear();
 
-    final file = await _getCurrentFile();
-    final lines = events.expand((e) => e.lines).join('\n');
-    await file.writeAsString('$lines\n', mode: FileMode.append);
-    await _cleanOldLogs();
+    try {
+      final file = await _getCurrentFile();
+      final lines = events.expand((e) => e.lines).join('\n');
+      await file.writeAsString('$lines\n', mode: FileMode.append);
+      await _cleanOldLogs();
+    } catch (e, s) {
+      debugPrint('Log write failed: $e\n$s');
+    }
   }
 
   Future<File> _getCurrentFile() async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    if (_currentDate == null || _currentDate != today) {
+    if (_currentDate != today) {
       final dir = await getApplicationDocumentsDirectory();
       final logDir = Directory('${dir.path}/logs');
       if (!await logDir.exists()) await logDir.create(recursive: true);
 
-      final dateStr =
-          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+      final dateStr = "${now.year}-${now.month.toString().padLeft(2, '0')}"
+          "-${now.day.toString().padLeft(2, '0')}";
       _currentFile = File('${logDir.path}/log_$dateStr.log');
       _currentDate = today;
     }
@@ -133,16 +168,22 @@ class _IsolateWorker {
   }
 
   Future<void> _cleanOldLogs() async {
-    final cutoffDate =
-        DateTime.now().subtract(Duration(days: _config.retentionDays));
-    final dir =
-        Directory('${(await getApplicationDocumentsDirectory()).path}/logs');
+    try {
+      final cutoffDate =
+          DateTime.now().subtract(Duration(days: _config.retentionDays));
+      final dir =
+          Directory('${(await getApplicationDocumentsDirectory()).path}/logs');
 
-    await for (final file in dir.list()) {
-      if (file is File && file.path.endsWith('.log')) {
-        final modified = await file.lastModified();
-        if (modified.isBefore(cutoffDate)) await file.delete();
+      if (!await dir.exists()) return;
+
+      await for (final file in dir.list()) {
+        if (file is File && file.path.endsWith('.log')) {
+          final modified = await file.lastModified();
+          if (modified.isBefore(cutoffDate)) await file.delete();
+        }
       }
+    } catch (e, s) {
+      debugPrint('Log cleanup failed: $e\n$s');
     }
   }
 }
@@ -151,6 +192,7 @@ class _IsolateInitData {
   final SendPort mainSendPort;
   final LogConfig config;
   final RootIsolateToken rootIsolateToken;
+
   _IsolateInitData(
     this.mainSendPort,
     this.config,

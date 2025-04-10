@@ -1,7 +1,5 @@
 # Flutter Chen Common
 
-[![pub package](https://img.shields.io/pub/v/awesome_library.svg)](https://pub.dev/packages/flutter_chen_common)![license](https://img.shields.io/badge/license-MIT-blue.svg)
-
 ## 🌟 简介
 
 本库为Flutter应用开发提供一站式解决方案，包含：
@@ -9,6 +7,7 @@
 - 可定制的主题系统
 - 完整的国际化支持
 - 企业级网络请求封装
+- 企业级日志体系封装
 - N+高质量常用组件
 - 常用开发工具及扩展集合
 - 刷新列表一整套解决方案
@@ -22,6 +21,7 @@
 - 🌍 **国际化支持**：内置中英文，支持自定义文本和动态语言切换
 - ⚡ **优先级覆盖**：支持全局配置 + 组件级参数覆盖
 - 📱 **自适应设计**：完美适配 iOS/Material 设计规范
+- 🚀 **企业级方案**：内置日志/网络/安全等通用模块，提供开箱即用的复杂场景解决方案
 
 ## 安装
 
@@ -46,9 +46,20 @@ flutter pub get
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 初始化必备服务
-  await SpUtil.init();    // 本地存储
-  HttpClient.init(        // 网络模块
+  // 存储初始化
+  await SpUtil.init();
+  // 日志初始化
+  await Log.init(
+    const LogConfig(
+      retentionDays: 3,
+      enableFileLog: true,
+      logLevel: LogLevel.all,
+      recordLevel: LogLevel.info,
+      output: [CustomSentryOutput()],
+    ),
+  );
+  // 网络模块初始化
+  HttpClient.init(
     config: HttpConfig(
       baseUrl: 'https://api.example.com',
       connectTimeout: const Duration(seconds: 30),
@@ -91,7 +102,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-### 网络请求配置
+### 网络请求
 
 ```dart
 // 网络请求使用
@@ -102,7 +113,7 @@ HttpClient.instance.request(
   showLoading: true,
 )
 
-// HttpConfig，内置日志打印、网络重试拦截器，后续会记录日志方便查看支持导出排查问题
+// HttpConfig，内置日志打印、网络重试拦截器（后续会新增token无感刷新以及相关队列操作）
 HttpConfig({
     required this.baseUrl,
     this.connectTimeout = const Duration(seconds: 15),
@@ -114,7 +125,7 @@ HttpConfig({
     this.maxRetries = 3,
   });
 
-// 打印样式如下（日志不会截断，json格式化方便复制查看数据，后续也如下写入日志方便排查问题）
+// 打印样式如下（日志打印完全不会被截断，json格式化方便复制查看数据，在开启日志拦截以及记录日志时会将日志写入文件
 ┌─────────────────────────────────────────────────────────────────────────────
 │ ✅ [HTTP] 2025-04-05 23:30:29 Request sent [Duration] 88ms
 │ Request: 200 GET http://www.weather.com.cn/data/sk/101010100.html?xxxx=xxxx
@@ -122,6 +133,34 @@ HttpConfig({
 │ Query: {"xxxx":"xxxx"}
 │ Response: {"weatherinfo":{"city":"北京","cityid":"101010100","WD":"东南风"}}
 └──────────────────────────────────────────────────────────────────────────────
+```
+
+### 📝日志体系
+
+```dart
+// 统一调用示例
+Log.d("debug message");
+Log.i("info message");
+Log.w("warning message");
+Log.e("error message");
+Log.console("console message 可完整打印不被截断并且无前缀");
+final Directory dir = await Log.getLogDir(); // 获取日志文件目录
+
+class LogConfig {
+  final int retentionDays; // 日志保留天数
+  final bool enableFileLog; // 是否启用日志写入
+  final LogLevel logLevel;  // 日志过滤级别，低于该日志级别不打印
+  final LogLevel recordLevel;   // 日志记录级别（Network日志级别分别是Info、Error），低于该日志级别不写入日志文件
+  final List<LogOutput>? output;  // 可自定义扩展LogOutput，如Sentry上报、日志上传服务器、加密脱敏输出等（类似dio拦截器）
+
+  const LogConfig({
+    this.retentionDays = 3,
+    this.enableFileLog = true,
+    this.logLevel = LogLevel.all,
+    this.recordLevel = LogLevel.info,
+    this.output,
+  });
+}
 ```
 
 ## 🎨 主题系统
@@ -190,6 +229,42 @@ MaterialApp(
     Locale('fr'), // 新增法语支持
   ],
 )
+```
+
+## 全局状态布局
+
+```dart
+// 全局配置或局部配置
+ComConfiguration(
+  config: ComConfig.defaults().copyWith(
+    emptyWidget: const ComLoading(), // 定义全局空视图
+    loadingWidget: const ComEmpty(),   // 定义全局加载视图
+    errorWidget: const ComErrorWidget(), // 定义错误加载视图
+    noNetworkWidget: (VoidCallback? onReconnect) =>
+                    ComNoNetworkWidget(onReconnect: onReconnect), // // 定义全局网络错误视图
+  ),
+  child: child,
+);
+
+// BaseWidget的各状态布局默认使用全局统一配置，局部可自定义
+// isConnected配合connectivity_plus库自动实现无网络情况显示无网络状态布局，网络正常情况显示正常布局
+// status控制页面各状态内容布局显示
+BaseWidget(
+  isConnected: isConnected,
+  status: LayoutStatus.loading,
+  loading: const ComLoading(),
+  empty: const CustomEmpty(),
+  error: BaseWidget.errorWidget(context),
+  noNetwork: BaseWidget.noNetworkWidget(context),
+  onReconnect: (){},
+  child: child,
+)
+
+// 全局统一使用
+BaseWidget.loadingWidget(context)
+BaseWidget.errorWidget(context)
+...
+
 ```
 
 ## 📦 工具类（Utils）

@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'package:flutter_chen_common/log/filter/log_filter.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'filter/log_filter.dart';
 import 'log_config.dart';
 import 'output/isolate_file_output.dart';
 import 'output/silent_file_output.dart';
@@ -18,7 +19,7 @@ class Log {
 
   static Future<void> init(LogConfig config) async {
     _config = config;
-    final outputs = <LogOutput>[ConsoleOutput()];
+    List<LogOutput> outputs = [ConsoleOutput()];
 
     if (config.enableFileLog) {
       _fileOutput = IsolateFileOutput(config);
@@ -27,11 +28,11 @@ class Log {
     }
 
     if (config.output != null) {
-      outputs.addAll(outputs);
+      outputs = [...outputs, ...config.output!];
     }
 
     _logger = Logger(
-      filter: ComLogFilter(config.logLevel),
+      filter: ComLogFilter(LevelAdapter.toLevel(config.logLevel)),
       printer: PrettyPrinter(),
       output: MultiOutput(outputs),
     );
@@ -57,7 +58,7 @@ class Log {
   }
 
   static void console(
-    dynamic message, {
+    String message, {
     DateTime? time,
     int level = 500,
     String name = '',
@@ -67,7 +68,7 @@ class Log {
     final logLevel = _developerLevelToLoggerLevel(level);
 
     developer.log(
-      message.toString(),
+      message,
       time: time ?? DateTime.now(),
       level: level,
       name: name.isNotEmpty ? name : 'CONSOLE',
@@ -92,14 +93,14 @@ class Log {
     }
   }
 
-  /// 映射 developer.log 的 int level 到 Logger 的 Level 枚举
+  /// 映射枚举
   static Level _developerLevelToLoggerLevel(int developerLevel) {
     return switch (developerLevel) {
-      >= 1000 => Level.error, // FINE
-      >= 900 => Level.warning, // CONFIG
-      >= 800 => Level.info, // INFO
-      >= 500 => Level.debug, // WARNING
-      _ => Level.all, // SEVERE/SHOUT
+      >= 1000 => Level.error,
+      >= 900 => Level.warning,
+      >= 800 => Level.info,
+      >= 500 => Level.debug,
+      _ => Level.all,
     };
   }
 
