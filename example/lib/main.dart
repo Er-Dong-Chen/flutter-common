@@ -1,10 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Log.init(LogConfig());
   HttpClient.init(
     config: HttpConfig(
       baseUrl: '',
@@ -45,17 +45,12 @@ class DemoLogic extends PagingController {
 
   @override
   Future<PagingResponse> loadData() async {
-    await HttpClient.instance.request(
-      "http://www.weather.com.cn/data/sk/101010100.html",
-      options: Options(headers: {
-        "token": "xxxxx",
-      }),
-      data: {
-        "xxxx": "xxxx",
-        "xxxxx": "xxxxx",
-      },
+    final res = await HttpClient.instance.request(
+      "https://gutendex.com/books",
       method: HttpMethod.get.name,
     );
+    Log.d(res);
+
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};
     await Future.delayed(2000.milliseconds, () {

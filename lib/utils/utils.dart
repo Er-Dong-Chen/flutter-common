@@ -9,7 +9,6 @@ export 'function_util.dart';
 export 'image_util.dart';
 export 'json_util.dart';
 export 'keyboard_util.dart';
-export 'log_util.dart';
 export 'permission_util.dart';
 export 'sp_util.dart';
 export 'text_util.dart';

@@ -80,7 +80,6 @@ class MyApp extends StatelessWidget {
         home: MainPage(),
         localizationsDelegates: [
           ComLocalizations.delegate, // 国际化
-          GlobalMaterialLocalizations.delegate,
         ],
         supportedLocales: [
           const Locale('zh', 'CN'),

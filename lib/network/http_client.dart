@@ -106,9 +106,10 @@ class HttpClient {
       }
       Response response = await _dio.request(
         baseUrl != null ? baseUrl + path : config.baseUrl + path,
-        data: data,
-        queryParameters:
-            options.method == HttpMethod.get.name.toUpperCase() ? data : null,
+        data: options.method != HttpMethod.get.name.toUpperCase() ? data : null,
+        queryParameters: options.method == HttpMethod.get.name.toUpperCase()
+            ? (data is Map<String, dynamic> ? data : null)
+            : null,
         options: options,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,

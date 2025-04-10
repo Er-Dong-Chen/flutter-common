@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
+
+import '../../log/logger.dart';
 
 class LoggerInterceptor extends Interceptor {
   @override
@@ -15,16 +16,16 @@ class LoggerInterceptor extends Interceptor {
     final duration = _calculateDuration(response.requestOptions);
     final time = _getTime(response.requestOptions);
     final statusEmoji = response.statusCode == 200 ? '✅' : '⚠️';
-    developer.log('''
+    Log.console('''
     
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ $statusEmoji [HTTP] $time Request sent [Duration] ${duration}ms
 │ Request: ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.uri}
 │ Headers: ${_formatJson(response.requestOptions.headers)}
-│ Query: ${_formatJson(response.requestOptions.data)}
-│ Response: ${_indentMultiline(response.data)}
+│ Query: ${_indentMultiline(_formatJson(response.requestOptions.data))}
+│ Response: ${_indentMultiline(_formatJson(response.data))}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-''', name: 'NETWORK', level: 500);
+''', name: 'NETWORK', level: 800);
     handler.next(response);
   }
 
@@ -32,14 +33,14 @@ class LoggerInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final duration = _calculateDuration(err.requestOptions);
     final time = _getTime(err.requestOptions);
-    developer.log('''
+    Log.console('''
     
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ ❌ [HTTP] $time Request sent [Duration] ${duration}ms
 │ Request: ${err.requestOptions.method} ${err.requestOptions.uri}
 │ Headers: ${_formatJson(err.requestOptions.headers)}
 │ Query: ${_formatJson(err.requestOptions.data)}
-│ Response: ${_indentMultiline(err.response?.data)}
+│ Response: ${_indentMultiline(_formatJson(err.response?.data))}
 │ Error: ${_indentMultiline(err.toString())}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ''', name: 'NETWORK-ERROR', level: 1000);
