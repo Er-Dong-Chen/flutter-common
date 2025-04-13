@@ -2,13 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 import 'interceptors/log_interceptor.dart';
+import 'interceptors/token_interceptor.dart';
 
 enum HttpMethod { get, post, put, delete, patch }
 
 class HttpClient {
   static HttpClient? _instance;
 
-  late final Dio _dio;
+  static late final Dio _dio;
   final HttpConfig config;
 
   // 私有构造函数
@@ -68,6 +69,16 @@ class HttpClient {
       dio: _dio,
       maxRetries: config.maxRetries,
     ));
+
+    // token拦截
+    if (config.enableToken) {
+      interceptors.add(TokenInterceptor(
+        dio: _dio,
+        getToken: config.getToken ?? () => SpUtil.getString("token"),
+        onRefreshToken: config.onRefreshToken,
+        onRefreshTokenFailed: config.onRefreshTokenFailed,
+      ));
+    }
 
     // // 错误处理拦截器
     // interceptors.add(ErrorHandlerInterceptor(

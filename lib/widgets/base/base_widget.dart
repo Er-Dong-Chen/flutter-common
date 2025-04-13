@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 
-enum LayoutStatus { loading, empty, noNetwork, complete, error }
+enum LayoutStatus { loading, empty, noNetwork, success, error }
 
 class BaseWidget extends StatelessWidget {
   final Widget child;
@@ -58,7 +58,7 @@ class BaseWidget extends StatelessWidget {
         return noNetwork ?? noNetworkWidget(context, onReconnect: onReconnect);
       case LayoutStatus.error:
         return error ?? errorWidget(context);
-      case LayoutStatus.complete:
+      case LayoutStatus.success:
       default:
         return child;
     }

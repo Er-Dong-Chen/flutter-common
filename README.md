@@ -1,4 +1,5 @@
 # Flutter Chen Common
+[![Pub Version](https://img.shields.io/pub/v/flutter_chen_common)](https://pub.dev/packages/flutter_chen_common)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourname/yourrepo/blob/master/LICENSE)
 
 ## 🌟 简介
 
@@ -21,9 +22,12 @@
 - 🌍 **国际化支持**：内置中英文，支持自定义文本和动态语言切换
 - ⚡ **优先级覆盖**：支持全局配置 + 组件级参数覆盖
 - 📱 **自适应设计**：完美适配 iOS/Material 设计规范
-- 🚀 **企业级方案**：内置日志/网络/安全等通用模块，提供开箱即用的复杂场景解决方案
+- 🔥 **企业级方案**：内置日志/网络/安全等通用模块，提供开箱即用的复杂场景解决方案
 
-## 安装
+
+## 🚀 快速接入
+
+### 安装依赖
 
 在 `pubspec.yaml` 中添加依赖：
 
@@ -37,8 +41,6 @@ dependencies:
 ```bash
 flutter pub get
 ```
-
-## 快速开始
 
 ### 初始化配置
 
@@ -64,9 +66,19 @@ void main() async {
       baseUrl: 'https://api.example.com',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
-      enableLog: true,
-      maxRetries: 3,
+      sendTimeout: const Duration(seconds: 30),
+      commonHeaders: {"platform": Platform.isIOS ? 'ios' : 'android'},
       interceptors: [CustomInterceptor()]
+      enableLog: true,
+      enableToken: true,
+      maxRetries: 3,
+      getToken: () => "token",
+      onRefreshToken: () async {
+        return "new_token";
+      },
+      onRefreshTokenFailed: () async {
+        Log.d("重新登录");
+      },
    ),
   );
 
@@ -102,7 +114,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-### 网络请求
+### 🌐 网络请求
 
 ```dart
 // 网络请求使用
@@ -113,7 +125,7 @@ HttpClient.instance.request(
   showLoading: true,
 )
 
-// HttpConfig，内置日志打印、网络重试拦截器（后续会新增token无感刷新以及相关队列操作）
+// HttpConfig，内置日志打印、网络重试拦截器、token无感刷新以及相关操作
 HttpConfig({
     required this.baseUrl,
     this.connectTimeout = const Duration(seconds: 15),
@@ -122,7 +134,11 @@ HttpConfig({
     this.commonHeaders = const {},
     this.interceptors = const [],
     this.enableLog = true,
+    this.enableToken = true,
     this.maxRetries = 3,
+    this.getToken,
+    this.onRefreshToken,
+    this.onRefreshTokenFailed,
   });
 
 // 打印样式如下（日志打印完全不会被截断，json格式化方便复制查看数据，在开启日志拦截以及记录日志时会将日志写入文件
@@ -259,6 +275,15 @@ BaseWidget(
   onReconnect: (){},
   child: child,
 )
+
+// 状态类型说明
+enum LayoutStatus {
+  loading,    // 加载中
+  success,    // 加载成功
+  empty,      // 数据为空
+  error,      // 加载失败
+  noNetwork,  // 无网络连接
+}
 
 // 全局统一使用
 BaseWidget.loadingWidget(context)

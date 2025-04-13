@@ -1,3 +1,7 @@
+## 1.8.4
+
+* TODO: Added token insensitive refreshing
+
 ## 1.8.3
 
 * TODO: Rewrite logs, support log writing

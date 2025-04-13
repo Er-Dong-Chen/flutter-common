@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SpUtil.init();
   await Log.init(
     const LogConfig(
       retentionDays: 3,
@@ -21,8 +22,19 @@ Future<void> main() async {
       baseUrl: '',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30),
+      commonHeaders: {"platform": Platform.isIOS ? 'ios' : 'android'},
+      interceptors: [],
       enableLog: true,
+      enableToken: true,
       maxRetries: 3,
+      getToken: () => "token",
+      onRefreshToken: () async {
+        return "new_token";
+      },
+      onRefreshTokenFailed: () async {
+        Log.d("重新登录");
+      },
     ),
   );
   runApp(const MyApp());
@@ -56,16 +68,17 @@ class DemoLogic extends PagingController {
 
   @override
   Future<PagingResponse> loadData() async {
-    final res = await HttpClient.instance.request(
-      "https://gutendex.com/books",
-      method: HttpMethod.get.name,
-    );
     Log.d("debug message");
     Log.i("info message");
     Log.w("warning message");
     Log.e("error message");
     Log.console("console message 可完整打印不被截断并且无前缀");
     final Directory dir = await Log.getLogDir(); // 获取日志文件目录
+
+    final res = await HttpClient.instance.request(
+      "https://gutendex.com/books",
+      method: HttpMethod.get.name,
+    );
 
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};
