@@ -177,6 +177,25 @@ class LogConfig {
     this.output,
   });
 }
+
+// 自定义输出插件
+class SentryOutput extends LogOutput {
+  @override
+  void output(OutputEvent event) {
+    if (event.level.value >= LogLevel.error.value) {
+      Sentry.captureException(
+        event.error,
+        stackTrace: event.stackTrace,
+        tags: {'log_level': event.level.name},
+      );
+    }
+  }
+}
+
+// 配置使用
+Log.init(LogConfig(
+  output: [SentryOutput()]
+));
 ```
 
 ## 🎨 主题系统
@@ -290,6 +309,33 @@ BaseWidget.loadingWidget(context)
 BaseWidget.errorWidget(context)
 ...
 
+```
+
+## 全局日期时间
+
+```dart
+// default_formatter默认实现中英文，使用示例
+Log.d(DateUtil.formatDate(DateTime.now()));
+Log.d(DateUtil.formatDateMs(DateTime.now().millisecondsSinceEpoch,
+    format: "yyyy/MM/dd"));
+Log.d(DateUtil.getTimeAgoByMs(DateTime.now().millisecondsSinceEpoch));
+Log.d(DateUtil.getTimeAgoForChatByMs(DateTime.now().millisecondsSinceEpoch));
+
+// 自定义Formatter
+class IntlDateFormatter implements DateFormatterDelegate {
+  @override
+  String format(DateTime? dateTime, {String? pattern, Locale? locale}) {
+    if (dateTime == null) return '';
+    return DateFormat(pattern, locale?.languageCode).format(dateTime);
+  }
+  // 其他方法实现...
+}
+
+// 初始化时注入
+void main() {
+  DateTimeFormatter.setDelegate(IntlDateFormatter());
+  runApp(MyApp());
+}
 ```
 
 ## 📦 工具类（Utils）

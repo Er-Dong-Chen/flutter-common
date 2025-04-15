@@ -68,17 +68,25 @@ class DemoLogic extends PagingController {
 
   @override
   Future<PagingResponse> loadData() async {
-    Log.d("debug message");
-    Log.i("info message");
-    Log.w("warning message");
-    Log.e("error message");
-    Log.console("console message 可完整打印不被截断并且无前缀");
-    final Directory dir = await Log.getLogDir(); // 获取日志文件目录
+    Log.d(DateUtil.formatDate(DateTime.now()));
+    Log.d(DateUtil.formatDateMs(DateTime.now().millisecondsSinceEpoch,
+        format: "yyyy/MM/dd"));
 
-    final res = await HttpClient.instance.request(
-      "https://gutendex.com/books",
-      method: HttpMethod.get.name,
-    );
+    Log.d(DateUtil.getTimeAgoByMs(DateTime.now().millisecondsSinceEpoch));
+    Log.d(
+        DateUtil.getTimeAgoForChatByMs(DateTime.now().millisecondsSinceEpoch));
+
+    // Log.d("debug message");
+    // Log.i("info message");
+    // Log.w("warning message");
+    // Log.e("error message");
+    // Log.console("console message 可完整打印不被截断并且无前缀");
+    // final Directory dir = await Log.getLogDir(); // 获取日志文件目录
+    //
+    // final res = await HttpClient.instance.request(
+    //   "https://gutendex.com/books",
+    //   method: HttpMethod.get.name,
+    // );
 
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};

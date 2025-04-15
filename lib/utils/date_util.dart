@@ -1,12 +1,6 @@
-/// 一些常用格式参照。可以自定义格式，例如：'yyyy/MM/dd HH:mm:ss'，'yyyy/M/d HH:mm:ss'。
-/// 格式要求
-/// year -> yyyy/yy   month -> MM/M    day -> dd/d
-/// hour -> HH/H      minute -> mm/m   second -> ss/s
-class DateFormats {
-  static String dateTime = 'yyyy-MM-dd HH:mm';
-  static String date = 'yyyy-MM-dd';
-  static String time = 'HH:mm';
-}
+import 'dart:ui';
+
+import 'package:flutter_chen_common/date/datetime_formatter.dart';
 
 /// month->days.
 Map<int, int> monthDay = {
@@ -37,60 +31,14 @@ class DateUtil {
     return difference;
   }
 
-  static String getTimeAgoForChatByMs(int? milliSecond,
-      {String languageCode = 'en', bool short = false}) {
-    if (milliSecond == null || milliSecond <= 0) {
-      return "";
-    }
-
-    var nowTime = DateTime.now();
-    var dateTime = DateTime.fromMillisecondsSinceEpoch(milliSecond);
-    if (nowTime.year != dateTime.year) {
-      return DateUtil.formatDate(dateTime,
-          format:
-              languageCode == "zh" ? "yyyy年MM月dd HH:mm" : "yyyy-MM-dd HH:mm");
-    } else if (nowTime.month != dateTime.month) {
-      return DateUtil.formatDate(dateTime,
-          format: languageCode == "zh" ? "M月dd HH:mm" : "M-dd HH:mm");
-    } else if (nowTime.day != dateTime.day) {
-      if (isYesterdayByMs(milliSecond, DateTime.now().millisecondsSinceEpoch)) {
-        return languageCode == "zh" ? "昨天" : "Yesterday";
-      }
-      if (isWeek(milliSecond)) {
-        var weekday = getWeekdayByMs(milliSecond,
-            languageCode: languageCode, short: short);
-        return "$weekday ${DateUtil.formatDate(dateTime, format: "HH:mm")}";
-      }
-      return DateUtil.formatDate(dateTime,
-          format: languageCode == "zh" ? "M月dd HH:mm" : "M-dd HH:mm");
-    } else {
-      final threeMinutesAgo = nowTime.subtract(const Duration(minutes: 3));
-      if (dateTime.isAfter(threeMinutesAgo) && dateTime.isBefore(nowTime)) {
-        return languageCode == "zh" ? "刚刚" : "just now";
-      } else {
-        return DateUtil.formatDate(dateTime, format: "HH:mm");
-      }
-    }
+  static String getTimeAgoForChatByMs(int? milliSecond, {Locale? locale}) {
+    if (milliSecond == null || milliSecond <= 0) return '';
+    return DateTimeFormatter.getTimeAgoForChat(getDateTimeByMs(milliSecond));
   }
 
-  static String getTimeAgoByMs(int? milliSecond, {String languageCode = 'en'}) {
-    if (milliSecond == null || milliSecond <= 0) {
-      return "";
-    }
-
-    var dateTime = DateTime.fromMillisecondsSinceEpoch(milliSecond);
-    final difference = DateTime.now().difference(dateTime);
-    if (difference.inMinutes < 3) {
-      return languageCode == "zh" ? "刚刚" : "just now";
-    } else if (difference.inMinutes < 60) {
-      return "${difference.inMinutes}${languageCode == "zh" ? "分钟前" : "minutes ago"}";
-    } else if (difference.inHours < 24) {
-      return "${(difference.inHours).toInt()}${languageCode == "zh" ? "小时前" : "hours ago"}";
-    } else if (difference.inDays < 365) {
-      return "${(difference.inDays).toInt()}${languageCode == "zh" ? "天前" : "days ago"}";
-    } else {
-      return "${difference.inDays ~/ 365}${languageCode == "zh" ? "年前" : "years ago"}";
-    }
+  static String getTimeAgoByMs(int? milliSecond, {Locale? locale}) {
+    if (milliSecond == null || milliSecond <= 0) return '';
+    return DateTimeFormatter.getTimeAgo(getDateTimeByMs(milliSecond));
   }
 
   /// get DateTime By DateStr.
@@ -130,7 +78,7 @@ class DateUtil {
   /// format date by milliseconds.
   /// milliseconds 日期毫秒
   static String formatDateMs(int? ms, {bool isUtc = false, String? format}) {
-    if (ms == null || ms <= 0) return "";
+    if (ms == null || ms <= 0) return '';
 
     return formatDate(getDateTimeByMs(ms, isUtc: isUtc), format: format);
   }
@@ -147,40 +95,7 @@ class DateUtil {
   /// year -> yyyy/yy   month -> MM/M    day -> dd/d
   /// hour -> HH/H      minute -> mm/m   second -> ss/s
   static String formatDate(DateTime? dateTime, {String? format}) {
-    if (dateTime == null) return '';
-    format = format ?? DateFormats.dateTime;
-    if (format.contains('yy')) {
-      String year = dateTime.year.toString();
-      if (format.contains('yyyy')) {
-        format = format.replaceAll('yyyy', year);
-      } else {
-        format = format.replaceAll(
-            'yy', year.substring(year.length - 2, year.length));
-      }
-    }
-
-    format = _comFormat(dateTime.month, format, 'M', 'MM');
-    format = _comFormat(dateTime.day, format, 'd', 'dd');
-    format = _comFormat(dateTime.hour, format, 'H', 'HH');
-    format = _comFormat(dateTime.minute, format, 'm', 'mm');
-    format = _comFormat(dateTime.second, format, 's', 'ss');
-    format = _comFormat(dateTime.millisecond, format, 'S', 'SSS');
-
-    return format;
-  }
-
-  /// com format.
-  static String _comFormat(
-      int value, String format, String single, String full) {
-    if (format.contains(single)) {
-      if (format.contains(full)) {
-        format =
-            format.replaceAll(full, value < 10 ? '0$value' : value.toString());
-      } else {
-        format = format.replaceAll(single, value.toString());
-      }
-    }
-    return format;
+    return DateTimeFormatter.formatDate(dateTime, pattern: format);
   }
 
   /// get WeekDay.
@@ -188,47 +103,14 @@ class DateUtil {
   /// isUtc
   /// languageCode zh or en
   /// short
-  static String getWeekday(DateTime? dateTime,
-      {String languageCode = 'en', bool short = false}) {
-    if (dateTime == null) return "";
-    String weekday = "";
-    switch (dateTime.weekday) {
-      case 1:
-        weekday = languageCode == 'zh' ? '星期一' : 'Monday';
-        break;
-      case 2:
-        weekday = languageCode == 'zh' ? '星期二' : 'Tuesday';
-        break;
-      case 3:
-        weekday = languageCode == 'zh' ? '星期三' : 'Wednesday';
-        break;
-      case 4:
-        weekday = languageCode == 'zh' ? '星期四' : 'Thursday';
-        break;
-      case 5:
-        weekday = languageCode == 'zh' ? '星期五' : 'Friday';
-        break;
-      case 6:
-        weekday = languageCode == 'zh' ? '星期六' : 'Saturday';
-        break;
-      case 7:
-        weekday = languageCode == 'zh' ? '星期日' : 'Sunday';
-        break;
-      default:
-        break;
-    }
-    return languageCode == 'zh'
-        ? (short ? weekday.replaceAll('星期', '周') : weekday)
-        : weekday.substring(0, short ? 3 : weekday.length);
+  static String getWeekday(DateTime? dateTime, {Locale? locale}) {
+    return DateTimeFormatter.getWeekDay(dateTime, locale: locale);
   }
 
   /// get WeekDay By Milliseconds.
-  static String getWeekdayByMs(int? milliseconds,
-      {bool isUtc = false, String languageCode = 'en', bool short = false}) {
-    if (milliseconds == null || milliseconds <= 0) return "";
-
-    DateTime dateTime = getDateTimeByMs(milliseconds, isUtc: isUtc);
-    return getWeekday(dateTime, languageCode: languageCode, short: short);
+  static String getWeekdayByMs(int? milliseconds, {Locale? locale}) {
+    if (milliseconds == null || milliseconds <= 0) return '';
+    return getWeekday(getDateTimeByMs(milliseconds), locale: locale);
   }
 
   /// get day of year.
