@@ -13,12 +13,14 @@ class HttpResponse<T> {
 
   factory HttpResponse.fromJson(
     Map<String, dynamic> json,
-    T Function(dynamic json) fromJsonT,
+    T Function(dynamic json)? fromJsonT,
   ) {
     return HttpResponse(
       code: json['code'],
       message: json['message'],
-      data: json['data'] != null ? fromJsonT(json['data']) : null,
+      data: json['data'] != null
+          ? fromJsonT?.call(json['data']) ?? json['data']
+          : null,
     );
   }
 

@@ -94,6 +94,8 @@ class MyApp extends StatelessWidget {
         loadingWidget: CustomLoading(),  // 自定义全局加载视图
       ),
       child: MaterialApp(
+        builder: BotToastInit(), // Initialization BotToast
+        navigatorObservers: [BotToastNavigatorObserver()],
         theme: ThemeData.light().copyWith(
           extensions: [ComTheme.light()], // 启用亮色主题
         ),
@@ -309,6 +311,11 @@ BaseWidget.loadingWidget(context)
 BaseWidget.errorWidget(context)
 ...
 
+// 使用默认库中状态组件项目需要包含以下图片资源才能正常加载显示
+assets/images/empty.png
+assets/images/error.png
+assets/images/no_network.png
+
 ```
 
 ## 全局日期时间
@@ -349,6 +356,7 @@ void main() {
 | `device_util.dart`     | 设备信息工具（获取设备信息）                                               |
 | `encrypt_util.dart`    | 加密解密工具（算法封装）                                                     |
 | `file_util.dart`       | 文件操作工具（读写文件、目录管理、文件压缩/解压）                        |
+| `path_util.dart`       | 文件目录工具（获取应用目录）                        |
 | `function_util.dart`   | 通用函数工具（防抖/节流、空安全处理、类型转换）                          |
 | `image_util.dart`      | 图片处理工具（压缩、缓存管理、网络图片加载、格式转换）                   |
 | `json_util.dart`       | JSON工具（序列化/反序列化、动态解析、数据校验）                          |

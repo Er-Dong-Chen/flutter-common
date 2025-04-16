@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
-import 'package:flutter_chen_common/log/log_config.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
@@ -53,6 +53,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
         home: DemoPage(),
       ),
     );
@@ -68,25 +70,17 @@ class DemoLogic extends PagingController {
 
   @override
   Future<PagingResponse> loadData() async {
-    Log.d(DateUtil.formatDate(DateTime.now()));
-    Log.d(DateUtil.formatDateMs(DateTime.now().millisecondsSinceEpoch,
-        format: "yyyy/MM/dd"));
+    Log.d("debug message");
+    Log.i("info message");
+    Log.w("warning message");
+    Log.e("error message");
+    Log.console("console message 可完整打印不被截断并且无前缀");
+    final Directory dir = await Log.getLogDir(); // 获取日志文件目录
 
-    Log.d(DateUtil.getTimeAgoByMs(DateTime.now().millisecondsSinceEpoch));
-    Log.d(
-        DateUtil.getTimeAgoForChatByMs(DateTime.now().millisecondsSinceEpoch));
-
-    // Log.d("debug message");
-    // Log.i("info message");
-    // Log.w("warning message");
-    // Log.e("error message");
-    // Log.console("console message 可完整打印不被截断并且无前缀");
-    // final Directory dir = await Log.getLogDir(); // 获取日志文件目录
-    //
-    // final res = await HttpClient.instance.request(
-    //   "https://gutendex.com/books",
-    //   method: HttpMethod.get.name,
-    // );
+    final res = await HttpClient.instance.request(
+      "https://gutendex.com/books",
+      method: HttpMethod.get.name,
+    );
 
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};

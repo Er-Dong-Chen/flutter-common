@@ -1,3 +1,7 @@
+## 1.8.6
+
+* TODO: Added PathUtil and pref code
+
 ## 1.8.5
 
 * TODO: Added DateTimeFormatterDelegate

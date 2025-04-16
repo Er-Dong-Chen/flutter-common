@@ -18,7 +18,7 @@ packages:
     source: hosted
     version: "2.1.1"
   bot_toast:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bot_toast
       sha256: "6b93030a99a98335b8827ecd83021e92e885ffc61d261d3825ffdecdd17f3bdf"
@@ -156,7 +156,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.8.4"
+    version: "1.8.6"
   flutter_lints:
     dependency: "direct dev"
     description:
