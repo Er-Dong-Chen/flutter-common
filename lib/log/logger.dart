@@ -7,7 +7,6 @@ import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'filter/log_filter.dart';
-import 'log_config.dart';
 import 'output/isolate_file_output.dart';
 import 'output/silent_file_output.dart';
 

@@ -1,3 +1,7 @@
+## 1.8.7
+
+* TODO: dart format
+
 ## 1.8.6
 
 * TODO: Added PathUtil and pref code
