@@ -1,3 +1,7 @@
+## 1.8.8
+
+* TODO: Pref ComButton
+
 ## 1.8.7
 
 * TODO: dart format

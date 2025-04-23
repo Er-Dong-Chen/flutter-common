@@ -124,7 +124,7 @@ class ComButton extends StatelessWidget {
   ButtonStyle _getFilledButtonStyle(BuildContext context) {
     return FilledButton.styleFrom(
       padding: padding,
-      foregroundColor: Colors.black,
+      foregroundColor: Colors.white,
       backgroundColor:
           _getButtonColor(context).withValues(alpha: loading ? 0.5 : 1),
       disabledBackgroundColor: _getButtonColor(context).withValues(alpha: 0.5),
@@ -154,12 +154,6 @@ class ComButton extends StatelessWidget {
   }
 
   VoidCallback? _getOnPressed() {
-    return disabled
-        ? null
-        : () {
-            if (!loading) {
-              onPressed?.call();
-            }
-          }.throttle();
+    return disabled || loading ? null : onPressed?.throttle();
   }
 }
