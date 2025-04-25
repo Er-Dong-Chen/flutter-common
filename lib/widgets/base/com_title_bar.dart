@@ -25,7 +25,7 @@ class ComTitleBar extends StatelessWidget {
       backgroundColor: backgroundColor ?? Colors.transparent,
       automaticallyImplyLeading: false,
       centerTitle: true,
-      toolbarHeight: toolbarHeight ?? 48,
+      toolbarHeight: toolbarHeight ?? 46,
       titleTextStyle: Theme.of(context).textTheme.titleSmall,
       title: title,
       actions: actions ??

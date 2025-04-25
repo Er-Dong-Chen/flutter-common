@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/widgets/base/base_widget.dart';
-import 'package:flutter_chen_common/widgets/base/com_arrow.dart';
-import 'package:flutter_chen_common/widgets/base/com_button.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 
 import '../../../common/style/style.dart';
@@ -103,12 +101,6 @@ class ButtonPage extends StatelessWidget {
     return Wrap(
       spacing: 8,
       children: [
-        ComButton(
-          loading: true,
-          color: AppTheme.comTheme.success,
-          child: Text('加载中...'),
-          onPressed: () {},
-        ),
         ComButton(
           loading: true,
           color: AppTheme.comTheme.success,

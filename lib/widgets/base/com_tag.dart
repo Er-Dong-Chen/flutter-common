@@ -12,9 +12,9 @@ class ComTag extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
-    this.radius = 6.0,
+    this.radius = 6,
     this.margin,
-    this.padding = const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
     this.onTap,
   });
 

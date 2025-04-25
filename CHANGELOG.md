@@ -1,3 +1,7 @@
+## 1.8.9
+
+* TODO: Added widgets and extension
+
 ## 1.8.8
 
 * TODO: Pref ComButton

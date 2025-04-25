@@ -392,6 +392,7 @@ void main() {
 | `com_tag.dart`                  | 标签组件（多颜色/尺寸、圆角样式）                                |
 | `com_title_bar.dart`            | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）                           |
 | `com_divider.dart`              | 下划线组件（CustomPainter实现的Divider,支持负数）                           |
+| `com_sliver_header.dart`        | SliverPinnedHeader固定Header组件                                                  |
 
 ---
 
