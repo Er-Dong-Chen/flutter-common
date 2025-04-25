@@ -11,10 +11,8 @@ class HttpResponse<T> {
     this.data,
   });
 
-  factory HttpResponse.fromJson(
-    Map<String, dynamic> json,
-    T Function(dynamic json)? fromJsonT,
-  ) {
+  factory HttpResponse.fromJson(Map<String, dynamic> json,
+      {T Function(dynamic json)? fromJsonT}) {
     return HttpResponse(
       code: json['code'],
       message: json['message'],

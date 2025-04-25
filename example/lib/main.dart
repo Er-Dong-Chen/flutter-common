@@ -26,7 +26,7 @@ Future<void> main() async {
       commonHeaders: {"platform": Platform.isIOS ? 'ios' : 'android'},
       interceptors: [],
       enableLog: true,
-      enableToken: true,
+      enableToken: false,
       maxRetries: 3,
       getToken: () => "token",
       onRefreshToken: () async {
@@ -77,10 +77,8 @@ class DemoLogic extends PagingController {
     Log.console("console message 可完整打印不被截断并且无前缀");
     final Directory dir = await Log.getLogDir(); // 获取日志文件目录
 
-    final res = await HttpClient.instance.request(
-      "https://gutendex.com/books",
-      method: HttpMethod.get.name,
-    );
+    final res = await HttpClient.instance
+        .request("https://gutendex.com/books", data: {"xx": "xx"});
 
     // TODO: implement loadData
     dynamic result = {"current": 1, "total": 3, "records": []};

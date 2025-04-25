@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 
@@ -8,27 +10,17 @@ enum HttpMethod { get, post, put, delete, patch }
 
 class HttpClient {
   static HttpClient? _instance;
-
   static late final Dio _dio;
   final HttpConfig config;
 
   // 私有构造函数
-  HttpClient._internal({
-    required this.config,
-  }) {
+  HttpClient._internal({required this.config}) {
     _initDio();
   }
 
   /// 初始化单例，必须在应用启动时调用
-  static void init({
-    required HttpConfig config,
-  }) {
-    if (_instance != null) {
-      throw Exception('HttpClient already initialized. Only call init once!');
-    }
-    _instance = HttpClient._internal(
-      config: config,
-    );
+  static void init({required HttpConfig config}) {
+    _instance ??= HttpClient._internal(config: config);
   }
 
   /// 获取单例实例
@@ -64,12 +56,6 @@ class HttpClient {
       interceptors.add(LoggerInterceptor());
     }
 
-    // 重试拦截器
-    interceptors.add(RetryInterceptor(
-      dio: _dio,
-      maxRetries: config.maxRetries,
-    ));
-
     // token拦截
     if (config.enableToken) {
       interceptors.add(TokenInterceptor(
@@ -79,6 +65,12 @@ class HttpClient {
         onRefreshTokenFailed: config.onRefreshTokenFailed,
       ));
     }
+
+    // 重试拦截器
+    interceptors.add(RetryInterceptor(
+      dio: _dio,
+      maxRetries: config.maxRetries,
+    ));
 
     // // 错误处理拦截器
     // interceptors.add(ErrorHandlerInterceptor(
@@ -95,10 +87,10 @@ class HttpClient {
     _dio.interceptors.addAll(interceptors);
   }
 
-  Future request<T>(
+  Future<T?> request<T>(
     String path, {
     String? baseUrl,
-    String? method,
+    HttpMethod method = HttpMethod.get,
     Options? options,
     dynamic data,
     T Function(dynamic json)? fromJson,
@@ -109,40 +101,167 @@ class HttpClient {
   }) async {
     try {
       options ??= Options();
-      options.method =
-          method?.toUpperCase() ?? HttpMethod.get.name.toUpperCase();
+      options.method = method.name.toUpperCase();
+
+      // 处理 GET 请求参数
+      final isGetMethod = method == HttpMethod.get;
+      final queryParams = isGetMethod ? _convertParams(data) : null;
 
       if (showLoading) {
         DialogUtil.showLoading();
       }
       Response response = await _dio.request(
-        baseUrl != null ? baseUrl + path : config.baseUrl + path,
-        data: options.method != HttpMethod.get.name.toUpperCase() ? data : null,
-        queryParameters: options.method == HttpMethod.get.name.toUpperCase()
-            ? (data is Map<String, dynamic> ? data : null)
-            : null,
+        _buildUrl(path, baseUrl),
+        data: data,
+        queryParameters: queryParams,
         options: options,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      if (showLoading) {
-        DialogUtil.hideLoading();
-      }
-
       if (fromJson != null) {
         if (response.data is Map<String, dynamic>) {
           return fromJson(response.data);
         } else if (response.data is List) {
-          return (response.data as List).map(fromJson).toList();
+          return data.map((e) => fromJson(e)).toList() as T;
         }
       }
       return response.data;
     } catch (e) {
+      throw e.toString();
+    } finally {
       if (showLoading) {
         DialogUtil.hideLoading();
       }
+    }
+  }
+
+  /// 动态构建完整请求地址
+  String _buildUrl(String path, String? baseUrl) {
+    if (baseUrl != null) return baseUrl + path;
+    if (path.startsWith(RegExp(r'https?://'))) return path;
+    return config.baseUrl + path;
+  }
+
+  /// 转换请求参数
+  Map<String, dynamic>? _convertParams(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  // 便捷请求方法 --------------------------------------------------------------
+
+  Future<T?> get<T>(
+    String path, {
+    Map<String, dynamic>? data,
+    String? baseUrl,
+    Options? options,
+    T Function(dynamic json)? fromJson,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    return request<T>(
+      path,
+      method: HttpMethod.get,
+      data: data,
+      baseUrl: baseUrl,
+      options: options,
+      fromJson: fromJson,
+      showLoading: showLoading,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  Future<T?> post<T>(
+    String path, {
+    dynamic data,
+    String? baseUrl,
+    Options? options,
+    T Function(dynamic json)? fromJson,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    return request<T>(
+      path,
+      method: HttpMethod.post,
+      data: data,
+      baseUrl: baseUrl,
+      options: options,
+      fromJson: fromJson,
+      showLoading: showLoading,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  Future<T?> uploadFile<T>(
+    String path,
+    String filePath, {
+    String? baseUrl,
+    HttpMethod method = HttpMethod.post,
+    Options? options,
+    Map<String, dynamic>? extraFields,
+    T Function(dynamic json)? fromJson,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(filePath),
+      ...?extraFields,
+    });
+
+    return request<T>(
+      path,
+      method: method,
+      baseUrl: baseUrl,
+      data: formData,
+      options: options,
+      fromJson: fromJson,
+      showLoading: showLoading,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  Future<File> downloadFile(
+    String path,
+    String savePath, {
+    String? baseUrl,
+    Options? options,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    ProgressCallback? onReceiveProgress,
+    ProgressCallback? onSendProgress,
+  }) async {
+    try {
+      if (showLoading) DialogUtil.showLoading();
+
+      await _dio.download(
+        _buildUrl(path, baseUrl),
+        savePath,
+        options: options,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+      );
+
+      return File(savePath);
+    } on DioException catch (e) {
       throw e.toString();
+    } finally {
+      if (showLoading) DialogUtil.hideLoading();
     }
   }
 }
