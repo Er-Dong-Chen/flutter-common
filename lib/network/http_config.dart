@@ -10,6 +10,7 @@ class HttpConfig {
   final bool enableLog;
   final bool enableToken;
   final int maxRetries;
+  final Duration retriesDelay;
   final String? Function()? getToken;
   final Future<String> Function()? onRefreshToken;
   final Future<void> Function()? onRefreshTokenFailed;
@@ -24,6 +25,7 @@ class HttpConfig {
     this.enableLog = true,
     this.enableToken = true,
     this.maxRetries = 3,
+    this.retriesDelay = const Duration(seconds: 1),
     this.getToken,
     this.onRefreshToken,
     this.onRefreshTokenFailed,

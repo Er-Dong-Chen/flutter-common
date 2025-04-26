@@ -28,6 +28,7 @@ Future<void> main() async {
       enableLog: true,
       enableToken: false,
       maxRetries: 3,
+      retriesDelay: const Duration(seconds: 1),
       getToken: () => "token",
       onRefreshToken: () async {
         return "new_token";

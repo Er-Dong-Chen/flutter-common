@@ -70,6 +70,7 @@ class HttpClient {
     interceptors.add(RetryInterceptor(
       dio: _dio,
       maxRetries: config.maxRetries,
+      initialDelay: config.retriesDelay,
     ));
 
     // // 错误处理拦截器

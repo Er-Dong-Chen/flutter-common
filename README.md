@@ -121,11 +121,15 @@ class MyApp extends StatelessWidget {
 ```dart
 // 网络请求使用
 HttpClient.instance.request(
-  "/xxxx",
+  "/api",
   method: HttpType.post.name,
   fromJson: (json) => User.fromJson(json),
   showLoading: true,
 )
+HttpClient.instance.get("/api");
+HttpClient.instance.post("/api");
+HttpClient.instance.uploadFile("/api","filePath");
+HttpClient.instance.downloadFile("/api", "savePath");
 
 // HttpConfig，内置日志打印、网络重试拦截器、token无感刷新以及相关操作
 HttpConfig({
@@ -138,6 +142,7 @@ HttpConfig({
     this.enableLog = true,
     this.enableToken = true,
     this.maxRetries = 3,
+    this.retriesDelay = const Duration(seconds: 1),
     this.getToken,
     this.onRefreshToken,
     this.onRefreshTokenFailed,
