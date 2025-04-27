@@ -1,3 +1,7 @@
+## 1.9.2
+
+* TODO: Pref PermissionUtil
+
 ## 1.9.1
 
 * TODO: Pref RetryInterceptor
