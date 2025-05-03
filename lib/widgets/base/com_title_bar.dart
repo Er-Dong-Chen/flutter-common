@@ -34,7 +34,7 @@ class ComTitleBar extends StatelessWidget {
               onTap: () => Get.back(),
               child: Icon(
                 Icons.close,
-                color: context.comTheme.theme.shade700,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 size: 20,
               ),
             ).paddingOnly(right: context.comTheme.spacing.medium),

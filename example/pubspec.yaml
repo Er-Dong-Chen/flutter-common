@@ -34,6 +34,8 @@ dependencies:
 
   flutter_chen_common:
     path: ../
+  module_base:
+    path: modules/module_base
     
 #  module_base:
 #    path: modules/module_base

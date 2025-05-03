@@ -46,11 +46,11 @@ class ComAvatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      color: context.comTheme.theme.shade200,
+      color: Theme.of(context).colorScheme.secondaryContainer,
       child: builder ??
           Icon(
             Icons.person,
-            color: context.comTheme.theme.shade400,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             size: size * 0.8,
           ),
     );
@@ -120,7 +120,7 @@ class ComAvatarGroup extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: context.comTheme.theme.shade200,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius:
             BorderRadius.circular(context.comTheme.shapes.circularRadius),
       ),

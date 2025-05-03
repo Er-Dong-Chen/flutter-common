@@ -1,3 +1,7 @@
+## 1.10.0
+
+* TODO: Pref ComTheme remove theme for use material colorScheme
+
 ## 1.9.2
 
 * TODO: Pref PermissionUtil

@@ -18,16 +18,16 @@ class ComLoading extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SpinKitPouringHourGlassRefined(
-            color: color ?? context.comTheme.theme.shade400,
+            color:
+                color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
             size: size,
           ),
           SizedBox(height: context.comTheme.spacing.medium),
           Text(
             message ?? ComLocalizations.of(context).loading,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: color ?? context.comTheme.theme.shade400),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: color ??
+                    Theme.of(context).colorScheme.surfaceContainerHighest),
           ),
         ],
       ),

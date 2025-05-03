@@ -314,13 +314,13 @@ class DialogUtil {
                                           ? constraints.maxWidth / 2 -
                                               actionSpacing / 2
                                           : constraints.maxWidth,
-                                  gradient: context.comTheme.primaryGradient,
                                   child: confirm ??
                                       Text(
                                         ComLocalizations.of(context).confirm,
                                         style: TextStyle(
-                                            color: context
-                                                .comTheme.theme.shade900),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inverseSurface),
                                       ),
                                   onPressed: () => onConfirm != null
                                       ? onConfirm.call()
@@ -339,7 +339,9 @@ class DialogUtil {
                                                 actionSpacing / 2
                                             : constraints.maxWidth,
                                     plain: true,
-                                    color: context.comTheme.theme.shade700,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                     child: cancel ??
                                         Text(ComLocalizations.of(context)
                                             .cancel),
@@ -491,7 +493,8 @@ class DialogUtil {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: context.comTheme.theme),
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                   ),
                 ],
@@ -563,7 +566,8 @@ class DialogUtil {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
-                              ?.copyWith(color: context.comTheme.theme),
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
                         ),
                   ),
                 ],

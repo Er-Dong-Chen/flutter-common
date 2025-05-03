@@ -1,13 +1,10 @@
-import 'package:example/common/theme/theme_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_chen_common/utils/sp_util.dart';
 import 'package:get/get.dart';
+import 'package:module_base/module_base.dart';
 
-class AppTheme {
-  static ThemeData currentTheme = AppThemeData.lightTheme;
-  static ThemeData lightTheme = AppThemeData.lightTheme;
-  static ThemeData darkTheme = AppThemeData.darkTheme;
-  static ComTheme comTheme = Get.context!.comTheme;
+class AppThemeMode {
+  static ThemeData currentTheme = AppTheme.lightTheme;
 
   static void changeTheme(theme) {
     SpUtil.putString("theme", theme.toString());
@@ -20,20 +17,20 @@ class AppTheme {
   }
 
   static ThemeMode getLocalThemeModel() {
-    String theme = SpUtil.getString("theme");
+    String theme = SpUtil.getString("theme", defValue: Constant.theme);
     ThemeMode themeMode = ThemeMode.light;
     if (theme == "light") {
       themeMode = ThemeMode.light;
-      currentTheme = AppThemeData.lightTheme;
+      currentTheme = AppTheme.lightTheme;
     } else if (theme == "dark") {
       themeMode = ThemeMode.dark;
-      currentTheme = AppThemeData.darkTheme;
+      currentTheme = AppTheme.darkTheme;
     } else {
       if (Get.context != null &&
           MediaQuery.of(Get.context!).platformBrightness == Brightness.dark) {
-        currentTheme = AppThemeData.darkTheme;
+        currentTheme = AppTheme.darkTheme;
       } else {
-        currentTheme = AppThemeData.lightTheme;
+        currentTheme = AppTheme.lightTheme;
       }
       themeMode = ThemeMode.system;
     }

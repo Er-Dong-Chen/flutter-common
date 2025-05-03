@@ -73,10 +73,10 @@ class ComImage extends StatelessWidget {
       width: width,
       height: height,
       alignment: Alignment.center,
-      color: context.comTheme.theme.shade200,
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: Icon(
         Icons.terrain,
-        color: context.comTheme.theme.shade400,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
       ),
     );
   }

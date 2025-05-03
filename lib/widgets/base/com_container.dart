@@ -46,7 +46,7 @@ class ComContainer extends StatelessWidget {
 
   BoxDecoration _getDefaultDecoration(BuildContext context) {
     return BoxDecoration(
-      color: color ?? context.comTheme.theme.shade200,
+      color: color ?? Theme.of(context).colorScheme.surfaceContainer,
       image: image,
       borderRadius:
           BorderRadius.circular(radius ?? context.comTheme.shapes.baseRadius),

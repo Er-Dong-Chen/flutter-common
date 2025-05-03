@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:example/pages/component/button/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
+import 'package:module_base/theme/theme.dart';
+import 'package:module_base/theme/theme_mode.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,13 +53,13 @@ class MyApp extends StatelessWidget {
     return ComConfiguration(
       config: ComConfig.defaults(),
       child: GetMaterialApp(
+        home: ButtonPage(),
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: AppThemeMode.getLocalThemeModel(),
         builder: BotToastInit(),
         navigatorObservers: [BotToastNavigatorObserver()],
-        home: DemoPage(),
       ),
     );
   }

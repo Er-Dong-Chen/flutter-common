@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
+import 'package:module_base/module_base.dart';
 
-import '../../../common/style/style.dart';
-import '../../../common/theme/theme.dart';
 import 'logic.dart';
 
 class ButtonPage extends StatelessWidget {
@@ -21,22 +20,22 @@ class ButtonPage extends StatelessWidget {
       ),
       body: BaseWidget(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppStyle.spacing.medium),
+          padding: EdgeInsets.all(AppTheme.comTheme.spacing.medium),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('按钮类型', style: Theme.of(context).textTheme.titleMedium),
               buildType(),
-              SizedBox(height: AppStyle.spacing.medium),
+              SizedBox(height: AppTheme.comTheme.spacing.medium),
               Text('镂空按钮', style: Theme.of(context).textTheme.titleMedium),
               buildPlain(),
-              SizedBox(height: AppStyle.spacing.medium),
+              SizedBox(height: AppTheme.comTheme.spacing.medium),
               Text('禁用按钮', style: Theme.of(context).textTheme.titleMedium),
               buildDisable(),
-              SizedBox(height: AppStyle.spacing.medium),
+              SizedBox(height: AppTheme.comTheme.spacing.medium),
               Text('加载按钮', style: Theme.of(context).textTheme.titleMedium),
               buildLoading(),
-              SizedBox(height: AppStyle.spacing.medium),
+              SizedBox(height: AppTheme.comTheme.spacing.medium),
               Text('自定义按钮', style: Theme.of(context).textTheme.titleMedium),
               buildSize(),
             ],
@@ -71,12 +70,12 @@ class ButtonPage extends StatelessWidget {
               AppTheme.comTheme.success!,
               AppTheme.comTheme.warning!
             ]),
-            radius: AppStyle.shapes.smallRadius,
+            radius: AppTheme.comTheme.shapes.smallRadius,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.adb_sharp, size: 14),
-                SizedBox(width: AppStyle.spacing.extraSmall),
+                SizedBox(width: AppTheme.comTheme.spacing.extraSmall),
                 Text('图标按钮'),
               ],
             ),
@@ -108,7 +107,7 @@ class ButtonPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               CupertinoActivityIndicator(),
-              SizedBox(width: AppStyle.spacing.extraSmall),
+              SizedBox(width: AppTheme.comTheme.spacing.extraSmall),
               Text('加载中...'),
             ],
           ),
@@ -125,7 +124,7 @@ class ButtonPage extends StatelessWidget {
                   height: 16,
                   child: CircularProgressIndicator(
                       strokeWidth: 2, color: Colors.white)),
-              SizedBox(width: AppStyle.spacing.extraSmall),
+              SizedBox(width: AppTheme.comTheme.spacing.extraSmall),
               Text('加载中...'),
             ],
           ),
@@ -164,7 +163,7 @@ class ButtonPage extends StatelessWidget {
         ),
         ComButton(
           disabled: true,
-          color: AppColors.theme.shade400,
+          color: AppTheme.colorScheme.surfaceContainerHighest,
           child: Text(
             '其他按钮',
           ),
@@ -203,7 +202,7 @@ class ButtonPage extends StatelessWidget {
         ),
         ComButton(
           plain: true,
-          color: AppColors.theme.shade400,
+          color: AppTheme.colorScheme.surfaceContainerHighest,
           child: Text(
             '其他按钮',
           ),
@@ -237,7 +236,7 @@ class ButtonPage extends StatelessWidget {
           onPressed: () {},
         ),
         ComButton(
-          color: AppColors.theme.shade400,
+          color: AppTheme.colorScheme.surfaceContainerHighest,
           child: Text(
             '其他按钮',
           ),
