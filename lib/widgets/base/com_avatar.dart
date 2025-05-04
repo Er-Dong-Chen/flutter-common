@@ -9,7 +9,7 @@ class ComAvatar extends StatelessWidget {
   final double? radius;
   final BoxFit fit;
   final Widget? placeholder;
-  final Widget? builder;
+  final Widget? child;
 
   const ComAvatar(
     this.src, {
@@ -18,7 +18,7 @@ class ComAvatar extends StatelessWidget {
     this.radius,
     this.fit = BoxFit.cover,
     this.placeholder,
-    this.builder,
+    this.child,
   });
 
   @override
@@ -47,7 +47,7 @@ class ComAvatar extends StatelessWidget {
       height: size,
       alignment: Alignment.center,
       color: Theme.of(context).colorScheme.secondaryContainer,
-      child: builder ??
+      child: child ??
           Icon(
             Icons.person,
             color: Theme.of(context).colorScheme.surfaceContainerHighest,

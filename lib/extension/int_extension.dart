@@ -1,4 +1,6 @@
-extension DurationExt on int {
+import '../date/datetime_formatter.dart';
+
+extension IntExtension on int {
   Duration get seconds => Duration(seconds: this);
 
   Duration get days => Duration(days: this);
@@ -12,4 +14,12 @@ extension DurationExt on int {
   Duration get microseconds => Duration(microseconds: this);
 
   Duration get ms => milliseconds;
+
+  /// 转换为时间格式（毫秒）
+  String toDateStr({String? pattern}) {
+    return DateTimeFormatter.formatDate(
+      DateTime.fromMillisecondsSinceEpoch(this),
+      pattern: pattern,
+    );
+  }
 }

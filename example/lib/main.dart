@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:example/pages/component/button/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
     return ComConfiguration(
       config: ComConfig.defaults(),
       child: GetMaterialApp(
-        home: ButtonPage(),
+        home: DemoPage(),
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

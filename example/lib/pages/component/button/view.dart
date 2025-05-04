@@ -16,7 +16,7 @@ class ButtonPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const ComBack(),
-        title: Text('按钮组件'),
+        title: const Text('按钮组件'),
       ),
       body: BaseWidget(
         child: SingleChildScrollView(
@@ -53,17 +53,17 @@ class ButtonPage extends StatelessWidget {
         ComButton(
           padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
           color: AppTheme.comTheme.success,
-          child: Text('小尺寸'),
+          child: const Text('小尺寸'),
           onPressed: () {},
         ),
         ComButton(
           color: AppTheme.comTheme.warning,
-          child: Text('正常尺寸'),
+          child: const Text('正常尺寸'),
           onPressed: () {},
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
-          margin: EdgeInsets.only(bottom: 4),
+          margin: const EdgeInsets.only(bottom: 4),
           child: ComButton(
             width: Get.width / 2,
             gradient: LinearGradient(colors: [
@@ -74,9 +74,9 @@ class ButtonPage extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.adb_sharp, size: 14),
+                const Icon(Icons.adb_sharp, size: 14),
                 SizedBox(width: AppTheme.comTheme.spacing.extraSmall),
-                Text('图标按钮'),
+                const Text('图标按钮'),
               ],
             ),
             onPressed: () {},
@@ -88,7 +88,7 @@ class ButtonPage extends StatelessWidget {
           child: ComButton(
             gradient: LinearGradient(
                 colors: [AppTheme.comTheme.error!, AppTheme.comTheme.warning!]),
-            child: Text('渐变按钮'),
+            child: const Text('渐变按钮'),
             onPressed: () {},
           ),
         ),
@@ -106,9 +106,9 @@ class ButtonPage extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CupertinoActivityIndicator(),
+              const CupertinoActivityIndicator(),
               SizedBox(width: AppTheme.comTheme.spacing.extraSmall),
-              Text('加载中...'),
+              const Text('加载中...'),
             ],
           ),
           onPressed: () {},
@@ -119,13 +119,13 @@ class ButtonPage extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
+              const SizedBox(
                   width: 16,
                   height: 16,
                   child: CircularProgressIndicator(
                       strokeWidth: 2, color: Colors.white)),
               SizedBox(width: AppTheme.comTheme.spacing.extraSmall),
-              Text('加载中...'),
+              const Text('加载中...'),
             ],
           ),
           onPressed: () {},
@@ -140,31 +140,31 @@ class ButtonPage extends StatelessWidget {
       children: [
         ComButton(
           disabled: true,
-          child: Text('主要按钮'),
+          child: const Text('主要按钮'),
           onPressed: () {},
         ),
         ComButton(
           disabled: true,
           color: AppTheme.comTheme.success,
-          child: Text('成功按钮'),
+          child: const Text('成功按钮'),
           onPressed: () {},
         ),
         ComButton(
           disabled: true,
           color: AppTheme.comTheme.warning,
-          child: Text('警告按钮'),
+          child: const Text('警告按钮'),
           onPressed: () {},
         ),
         ComButton(
           disabled: true,
           color: AppTheme.comTheme.error,
-          child: Text('危险按钮'),
+          child: const Text('危险按钮'),
           onPressed: () {},
         ),
         ComButton(
           disabled: true,
           color: AppTheme.colorScheme.surfaceContainerHighest,
-          child: Text(
+          child: const Text(
             '其他按钮',
           ),
           onPressed: () {},
@@ -179,31 +179,31 @@ class ButtonPage extends StatelessWidget {
       children: [
         ComButton(
           plain: true,
-          child: Text('主要按钮'),
+          child: const Text('主要按钮'),
           onPressed: () {},
         ),
         ComButton(
           plain: true,
           color: AppTheme.comTheme.success,
-          child: Text('成功按钮'),
+          child: const Text('成功按钮'),
           onPressed: () {},
         ),
         ComButton(
           plain: true,
           color: AppTheme.comTheme.warning,
-          child: Text('警告按钮'),
+          child: const Text('警告按钮'),
           onPressed: () {},
         ),
         ComButton(
           plain: true,
           color: AppTheme.comTheme.error,
-          child: Text('危险按钮'),
+          child: const Text('危险按钮'),
           onPressed: () {},
         ),
         ComButton(
           plain: true,
           color: AppTheme.colorScheme.surfaceContainerHighest,
-          child: Text(
+          child: const Text(
             '其他按钮',
           ),
           onPressed: () {},
@@ -217,27 +217,27 @@ class ButtonPage extends StatelessWidget {
       spacing: 8,
       children: [
         ComButton(
-          child: Text('主要按钮'),
+          child: const Text('主要按钮'),
           onPressed: () {},
         ),
         ComButton(
           color: AppTheme.comTheme.success,
-          child: Text('成功按钮'),
+          child: const Text('成功按钮'),
           onPressed: () {},
         ),
         ComButton(
           color: AppTheme.comTheme.warning,
-          child: Text('警告按钮'),
+          child: const Text('警告按钮'),
           onPressed: () {},
         ),
         ComButton(
           color: AppTheme.comTheme.error,
-          child: Text('危险按钮'),
+          child: const Text('危险按钮'),
           onPressed: () {},
         ),
         ComButton(
           color: AppTheme.colorScheme.surfaceContainerHighest,
-          child: Text(
+          child: const Text(
             '其他按钮',
           ),
           onPressed: () {},

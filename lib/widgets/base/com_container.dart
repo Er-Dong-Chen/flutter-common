@@ -49,7 +49,7 @@ class ComContainer extends StatelessWidget {
       color: color ?? Theme.of(context).colorScheme.surfaceContainer,
       image: image,
       borderRadius:
-          BorderRadius.circular(radius ?? context.comTheme.shapes.baseRadius),
+          BorderRadius.circular(radius ?? context.comTheme.shapes.mediumRadius),
       boxShadow: [
         if (elevation > 0)
           BoxShadow(

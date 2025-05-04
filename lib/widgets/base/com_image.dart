@@ -30,7 +30,7 @@ class ComImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius:
-          BorderRadius.circular(radius ?? context.comTheme.shapes.baseRadius),
+          BorderRadius.circular(radius ?? context.comTheme.shapes.mediumRadius),
       child: Container(
         constraints: BoxConstraints(
           minWidth: width ?? minWidth,

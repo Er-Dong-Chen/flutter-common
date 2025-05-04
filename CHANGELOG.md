@@ -1,3 +1,7 @@
+## 1.11.0
+
+* TODO: Added extension
+
 ## 1.10.0
 
 * TODO: Pref ComTheme remove theme for use material colorScheme

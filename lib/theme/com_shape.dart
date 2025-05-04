@@ -9,7 +9,7 @@ class ComShapes {
   //-------------------
 
   /// 基础圆角（用于常规组件）
-  final double baseRadius;
+  final double mediumRadius;
 
   /// 小圆角（用于紧凑型组件）
   final double smallRadius;
@@ -30,7 +30,7 @@ class ComShapes {
 
   const ComShapes({
     // 基础圆角体系（必须参数）
-    required this.baseRadius,
+    required this.mediumRadius,
     required this.smallRadius,
     required this.largeRadius,
 
@@ -41,9 +41,9 @@ class ComShapes {
     this.buttonRadius,
     this.cardRadius,
     this.dialogRadius,
-  })  : assert(baseRadius >= 0 && baseRadius <= 32),
-        assert(smallRadius <= baseRadius),
-        assert(largeRadius >= baseRadius);
+  })  : assert(mediumRadius >= 0 && mediumRadius <= 32),
+        assert(smallRadius <= mediumRadius),
+        assert(largeRadius >= mediumRadius);
 
   //-------------------
   // 预设配置方案
@@ -51,21 +51,21 @@ class ComShapes {
 
   /// 默认配置（Material Design 标准）
   static const standard = ComShapes(
-    baseRadius: 8.0,
+    mediumRadius: 8.0,
     smallRadius: 4.0,
     largeRadius: 16.0,
   );
 
   /// 紧凑型配置
   static const compact = ComShapes(
-    baseRadius: 4.0,
+    mediumRadius: 4.0,
     smallRadius: 2.0,
     largeRadius: 8.0,
   );
 
   /// 圆角配置
   static const rounded = ComShapes(
-    baseRadius: 16.0,
+    mediumRadius: 16.0,
     smallRadius: 8.0,
     largeRadius: 32.0,
   );
@@ -75,10 +75,10 @@ class ComShapes {
   //-------------------
 
   /// 解析按钮圆角（优先使用组件级配置）
-  double get resolvedButtonRadius => buttonRadius ?? baseRadius;
+  double get resolvedButtonRadius => buttonRadius ?? mediumRadius;
 
   /// 解析卡片圆角（优先使用组件级配置）
-  double get resolvedCardRadius => cardRadius ?? baseRadius;
+  double get resolvedCardRadius => cardRadius ?? mediumRadius;
 
   /// 解析对话框圆角（默认使用大圆角）
   double get resolvedDialogRadius => dialogRadius ?? largeRadius;
@@ -89,7 +89,7 @@ class ComShapes {
 
   /// 拷贝并覆盖配置
   ComShapes copyWith({
-    double? baseRadius,
+    double? mediumRadius,
     double? smallRadius,
     double? largeRadius,
     double? buttonRadius,
@@ -97,7 +97,7 @@ class ComShapes {
     double? dialogRadius,
   }) {
     return ComShapes(
-      baseRadius: baseRadius ?? this.baseRadius,
+      mediumRadius: mediumRadius ?? this.mediumRadius,
       smallRadius: smallRadius ?? this.smallRadius,
       largeRadius: largeRadius ?? this.largeRadius,
       buttonRadius: buttonRadius ?? this.buttonRadius,
@@ -109,7 +109,7 @@ class ComShapes {
   /// 线性插值（用于主题切换动画）
   static ComShapes lerp(ComShapes a, ComShapes b, double t) {
     return ComShapes(
-      baseRadius: _lerpDouble(a.baseRadius, b.baseRadius, t),
+      mediumRadius: _lerpDouble(a.mediumRadius, b.mediumRadius, t),
       smallRadius: _lerpDouble(a.smallRadius, b.smallRadius, t),
       largeRadius: _lerpDouble(a.largeRadius, b.largeRadius, t),
       buttonRadius: _lerpDouble(a.buttonRadius, b.buttonRadius, t),
