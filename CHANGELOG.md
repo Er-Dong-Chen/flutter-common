@@ -1,3 +1,7 @@
+## 1.11.1
+
+* TODO: Pref Widgets
+
 ## 1.11.0
 
 * TODO: Added extension

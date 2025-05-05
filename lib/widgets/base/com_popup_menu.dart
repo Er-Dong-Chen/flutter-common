@@ -39,9 +39,9 @@ class ComPopupMenu extends StatefulWidget {
     super.key,
     required this.child,
     required this.menuBuilder,
-    required this.pressType,
+    this.pressType = PressType.singleClick,
     this.controller,
-    this.arrowColor = const Color(0xFF4C4C4C),
+    this.arrowColor,
     this.showArrow = true,
     this.barrierColor = Colors.black12,
     this.arrowSize = 14.0,
@@ -55,7 +55,7 @@ class ComPopupMenu extends StatefulWidget {
   final Widget child;
   final PressType pressType;
   final bool showArrow;
-  final Color arrowColor;
+  final Color? arrowColor;
   final Color barrierColor;
   final double horizontalMargin;
   final double verticalMargin;
@@ -81,17 +81,17 @@ class ComPopupMenuState extends State<ComPopupMenu> {
   bool _canResponse = true;
 
   _showMenu() {
-    Widget arrow = ClipPath(
-      clipper: _ArrowClipper(),
-      child: Container(
-        width: widget.arrowSize,
-        height: widget.arrowSize,
-        color: widget.arrowColor,
-      ),
-    );
-
     _overlayEntry = OverlayEntry(
       builder: (context) {
+        Widget arrow = ClipPath(
+          clipper: _ArrowClipper(),
+          child: Container(
+            width: widget.arrowSize,
+            height: widget.arrowSize,
+            color: widget.arrowColor ??
+                Theme.of(context).colorScheme.surfaceContainerLowest,
+          ),
+        );
         Widget menu = Center(
           child: Container(
             constraints: BoxConstraints(

@@ -9,7 +9,7 @@ class ComDivider extends StatelessWidget {
   const ComDivider({
     super.key,
     this.color,
-    this.thickness = 1.0,
+    this.thickness = 0.5,
     this.indent = 0.0,
     this.endIndent = 0.0,
   });
@@ -19,9 +19,7 @@ class ComDivider extends StatelessWidget {
     return CustomPaint(
       size: Size(double.infinity, thickness),
       painter: _DividerPainter(
-        color: color ??
-            Theme.of(context).dividerTheme.color ??
-            Theme.of(context).dividerColor,
+        color: color ?? Theme.of(context).colorScheme.outline,
         thickness: thickness,
         indent: indent,
         endIndent: endIndent,
