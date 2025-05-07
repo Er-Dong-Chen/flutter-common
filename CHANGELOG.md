@@ -1,3 +1,7 @@
+## 1.11.2
+
+* TODO: Added demo
+
 ## 1.11.1
 
 * TODO: Pref Widgets

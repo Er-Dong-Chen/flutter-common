@@ -30,16 +30,12 @@ class AppTheme {
   static final ColorScheme _lightColorScheme =
       ColorScheme.fromSeed(seedColor: AppColors.lightColor).copyWith(
     primary: AppColors.lightColor,
-    secondary: AppColors.lightColor.shade600,
-    // surface: AppColors.lightColor.shade50,
-    // surfaceContainerLow: Colors.white,
   );
   static final ColorScheme _darkColorScheme = ColorScheme.fromSeed(
     seedColor: AppColors.darkColor,
     brightness: Brightness.dark,
   ).copyWith(
     primary: AppColors.darkColor,
-    secondary: AppColors.lightColor.shade600,
   );
 
   static ThemeData _themeData(

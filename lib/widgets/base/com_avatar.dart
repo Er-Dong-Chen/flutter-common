@@ -46,7 +46,7 @@ class ComAvatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      color: Theme.of(context).colorScheme.secondaryContainer,
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: child ??
           Icon(
             Icons.person,
