@@ -9,7 +9,7 @@ import 'package:module_base/theme/theme.dart';
 import 'logic.dart';
 
 class StatusPage extends StatelessWidget {
-  StatusPage({Key? key}) : super(key: key);
+  StatusPage({super.key});
 
   final logic = Get.put(StatusLogic());
 
@@ -18,13 +18,13 @@ class StatusPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const ComBack(),
-        title: Text('Status'),
+        title: const Text('Status'),
         actions: [
           ComPopupMenu(
             verticalMargin: 0,
             menuBuilder: ComContainer(
               width: 100,
-              padding: EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               // padding: EdgeInsets.zero,
               radius: AppTheme.comTheme.shapes.smallRadius,
               child: Column(
@@ -32,7 +32,7 @@ class StatusPage extends StatelessWidget {
                     .map((e) => GestureDetector(
                           onTap: () => logic.changeStatus(e),
                           child: ComContainer(
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             width: double.infinity,
                             alignment: Alignment.center,
                             child: Text(
@@ -47,7 +47,7 @@ class StatusPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: AppTheme.comTheme.spacing.medium),
-              child: Text('切换状态'),
+              child: const Text('切换状态'),
             ),
           ),
         ],
@@ -66,7 +66,7 @@ class StatusPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(height: AppTheme.comTheme.spacing.small),
-                  Text('根据不同状态显示不同状态布局内容\n网络自动监听，无网络情况下优先状态'),
+                  const Text('根据不同状态显示不同状态布局内容\n网络自动监听，无网络情况下优先状态'),
                   SizedBox(height: AppTheme.comTheme.spacing.extraSmall),
                   Text(
                     'Tips: RefreshList 自带所有状态',

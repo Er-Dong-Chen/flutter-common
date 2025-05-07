@@ -1,5 +1,3 @@
 import 'package:get/get.dart';
 
-class ImageLogic extends GetxController {
-
-}
+class ImageLogic extends GetxController {}

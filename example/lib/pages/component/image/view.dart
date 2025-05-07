@@ -6,7 +6,7 @@ import 'package:module_base/theme/theme.dart';
 import 'logic.dart';
 
 class ImagePage extends StatelessWidget {
-  ImagePage({Key? key}) : super(key: key);
+  ImagePage({super.key});
 
   final logic = Get.put(ImageLogic());
 
@@ -15,7 +15,7 @@ class ImagePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const ComBack(),
-        title: Text('Image'),
+        title: const Text('Image'),
       ),
       body: BaseWidget(
         child: SingleChildScrollView(
@@ -83,10 +83,10 @@ class ImagePage extends StatelessWidget {
               Text('Avatar 头像组',
                   style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: AppTheme.comTheme.spacing.small),
-              Container(
+              SizedBox(
                 height: 64,
                 child: ComAvatarGroup(
-                  ["", "", "", "", "", "", "", ""],
+                  const ["", "", "", "", "", "", "", ""],
                   spacing: 32,
                   maxCount: 5,
                   size: 64,
@@ -122,7 +122,7 @@ class ImagePage extends StatelessWidget {
                       ComAvatar("",
                           size: 64,
                           radius: AppTheme.comTheme.shapes.mediumRadius),
-                      Positioned(
+                      const Positioned(
                           right: 0,
                           top: 0,
                           child: ComContainer(
@@ -136,7 +136,7 @@ class ImagePage extends StatelessWidget {
                       ComAvatar("",
                           size: 64,
                           radius: AppTheme.comTheme.shapes.circularRadius),
-                      Positioned(
+                      const Positioned(
                           right: 0,
                           bottom: 0,
                           child: ComContainer(

@@ -15,7 +15,7 @@ class ListPage extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
             appBar: AppBar(
-              leading: ComBack(),
+              leading: const ComBack(),
               title: const Text("Refresh List"),
             ),
             body: RefreshWidget(

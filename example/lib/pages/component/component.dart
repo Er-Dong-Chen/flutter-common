@@ -32,7 +32,7 @@ class ComponentListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('组件示例'),
+        title: const Text('组件示例'),
       ),
       body: ListView.builder(
         itemCount: _sections.length,
@@ -48,7 +48,7 @@ class ComponentListPage extends StatelessWidget {
                     final item = section['items'][itemIndex];
                     return CupertinoListTile(
                       title: Text(item['title']),
-                      trailing: ComArrow(),
+                      trailing: const ComArrow(),
                       onTap: () => Get.to(item['page']),
                     );
                   }),
