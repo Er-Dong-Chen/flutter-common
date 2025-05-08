@@ -88,13 +88,23 @@ class ComButton extends StatelessWidget {
           ));
   }
 
+  Color _getButtonColor(BuildContext context) {
+    return color ?? Theme.of(context).colorScheme.primary;
+  }
+
+  Color _getForegroundColor(BuildContext context, Color backgroundColor) {
+    final luminance = backgroundColor.computeLuminance();
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
+
   ButtonStyle _getGradientButtonStyle(BuildContext context) {
+    final foregroundColor = _getForegroundColor(context, Colors.transparent);
     return ElevatedButton.styleFrom(
       padding: padding,
       backgroundColor: Colors.transparent,
-      foregroundColor: Colors.white,
+      foregroundColor: foregroundColor,
       disabledBackgroundColor: Colors.transparent,
-      disabledForegroundColor: Colors.white.withValues(alpha: 0.5),
+      disabledForegroundColor: foregroundColor.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
             radius ?? context.comTheme.shapes.circularRadius),
@@ -122,23 +132,21 @@ class ComButton extends StatelessWidget {
   }
 
   ButtonStyle _getFilledButtonStyle(BuildContext context) {
+    final buttonColor = _getButtonColor(context);
+    final foregroundColor = _getForegroundColor(context, buttonColor);
+
     return FilledButton.styleFrom(
       padding: padding,
-      foregroundColor: Colors.white,
-      backgroundColor:
-          _getButtonColor(context).withValues(alpha: loading ? 0.5 : 1),
-      disabledBackgroundColor: _getButtonColor(context).withValues(alpha: 0.5),
-      disabledForegroundColor: Colors.white.withValues(alpha: 0.8),
+      foregroundColor: foregroundColor,
+      backgroundColor: buttonColor.withValues(alpha: loading ? 0.5 : 1),
+      disabledBackgroundColor: buttonColor.withValues(alpha: 0.5),
+      disabledForegroundColor: foregroundColor.withValues(alpha: 0.8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
             radius ?? context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(_minHeight, 0),
     );
-  }
-
-  Color _getButtonColor(BuildContext context) {
-    return color ?? Theme.of(context).colorScheme.primary;
   }
 
   List<BoxShadow> _buildButtonShadow(BuildContext context) {

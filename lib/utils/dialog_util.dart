@@ -414,7 +414,7 @@ class DialogUtil {
       isScrollControlled: isScrollControlled,
       useSafeArea: useSafeArea,
       constraints: boxConstraints,
-      backgroundColor: Theme.of(Get.context!).dialogBackgroundColor,
+      backgroundColor: Theme.of(Get.context!).dialogTheme.backgroundColor,
       builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -463,7 +463,7 @@ class DialogUtil {
     showModalBottomSheet(
       context: context,
       useSafeArea: useSafeArea,
-      backgroundColor: Theme.of(context).dialogBackgroundColor,
+      backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
       builder: (BuildContext context) => SizedBox(
         height: 300,
         child: Column(
@@ -537,7 +537,7 @@ class DialogUtil {
     showModalBottomSheet(
       context: Get.context!,
       useSafeArea: useSafeArea,
-      backgroundColor: Theme.of(Get.context!).dialogBackgroundColor,
+      backgroundColor: Theme.of(Get.context!).dialogTheme.backgroundColor,
       builder: (BuildContext context) => SizedBox(
         height: 300,
         child: Column(

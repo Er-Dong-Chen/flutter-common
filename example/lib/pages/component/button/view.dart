@@ -202,7 +202,7 @@ class ButtonPage extends StatelessWidget {
         ),
         ComButton(
           plain: true,
-          color: AppTheme.colorScheme.surfaceContainerHighest,
+          color: Colors.grey,
           child: const Text(
             '其他按钮',
           ),

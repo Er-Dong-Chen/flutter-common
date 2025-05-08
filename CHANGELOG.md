@@ -1,3 +1,7 @@
+## 1.11.3
+
+* TODO: Pref Dynamic foreground view of the button
+
 ## 1.11.2
 
 * TODO: Added demo
