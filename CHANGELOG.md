@@ -1,3 +1,7 @@
+## 1.12.0
+
+* TODO: Remove permission_handler、package_info_plus、crypto
+
 ## 1.11.4
 
 * TODO: Pref PopupMenu and added demo
