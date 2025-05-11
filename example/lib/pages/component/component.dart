@@ -1,5 +1,6 @@
 import 'package:example/pages/component/image/view.dart';
 import 'package:example/pages/component/list/view.dart';
+import 'package:example/pages/component/popup_menu/page.dart';
 import 'package:example/pages/component/status/view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +16,21 @@ class ComponentListPage extends StatelessWidget {
     {
       'title': '基础组件',
       'items': [
-        {'title': '按钮组件', 'page': () => ButtonPage()},
-        {'title': '图片组件', 'page': () => ImagePage()},
+        {'title': 'Button', 'page': () => ButtonPage()},
+        {'title': 'Image', 'page': () => ImagePage()},
       ],
     },
     {
       'title': '视图组件',
       'items': [
-        {'title': '刷新组件', 'page': () => ListPage()},
-        {'title': '状态组件', 'page': () => StatusPage()},
+        {'title': 'Refresh List', 'page': () => ListPage()},
+        {'title': 'Layout Status', 'page': () => StatusPage()},
+      ],
+    },
+    {
+      'title': '反馈组件',
+      'items': [
+        {'title': 'PopupMenu', 'page': () => const PopupMenuPage()},
       ],
     },
   ];
