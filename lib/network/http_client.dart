@@ -67,11 +67,13 @@ class HttpClient {
     }
 
     // 重试拦截器
-    interceptors.add(RetryInterceptor(
-      dio: _dio,
-      maxRetries: config.maxRetries,
-      initialDelay: config.retriesDelay,
-    ));
+    if (config.enableRetry) {
+      interceptors.add(RetryInterceptor(
+        dio: _dio,
+        maxRetries: config.maxRetries,
+        initialDelay: config.retriesDelay,
+      ));
+    }
 
     // // 错误处理拦截器
     // interceptors.add(ErrorHandlerInterceptor(

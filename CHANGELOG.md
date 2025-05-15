@@ -1,3 +1,7 @@
+## 1.13.0
+
+* TODO: Pref network and added interceptor demo
+
 ## 1.12.0
 
 * TODO: Remove permission_handler、package_info_plus、crypto

@@ -15,7 +15,7 @@ class HttpResponse<T> {
       {T Function(dynamic json)? fromJsonT}) {
     return HttpResponse(
       code: json['code'],
-      message: json['message'],
+      message: json['message'] ?? json['msg'],
       data: json['data'] != null
           ? fromJsonT?.call(json['data']) ?? json['data']
           : null,

@@ -9,6 +9,7 @@ class HttpConfig {
   final List<Interceptor> interceptors;
   final bool enableLog;
   final bool enableToken;
+  final bool enableRetry;
   final int maxRetries;
   final Duration retriesDelay;
   final String? Function()? getToken;
@@ -24,6 +25,7 @@ class HttpConfig {
     this.interceptors = const [],
     this.enableLog = true,
     this.enableToken = true,
+    this.enableRetry = true,
     this.maxRetries = 3,
     this.retriesDelay = const Duration(seconds: 1),
     this.getToken,

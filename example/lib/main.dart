@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:example/pages/component/component.dart';
+import 'package:example/network/network_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
-import 'package:module_base/theme/theme.dart';
-import 'package:module_base/theme/theme_mode.dart';
+import 'package:module_base/module_base.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,17 +21,18 @@ Future<void> main() async {
   );
   HttpClient.init(
     config: HttpConfig(
-      baseUrl: '',
+      baseUrl: Env.config.baseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
-      commonHeaders: {"platform": Platform.isIOS ? 'ios' : 'android'},
-      interceptors: [],
+      commonHeaders: {"language": Get.deviceLocale?.languageCode},
+      interceptors: [NetworkInterceptor()],
       enableLog: true,
-      enableToken: false,
+      enableToken: true,
+      enableRetry: true,
       maxRetries: 3,
       retriesDelay: const Duration(seconds: 1),
-      getToken: () => "token",
+      getToken: () => SpUtil.getString("token"),
       onRefreshToken: () async {
         return "new_token";
       },
@@ -53,7 +53,8 @@ class MyApp extends StatelessWidget {
     return ComConfiguration(
       config: ComConfig.defaults(),
       child: GetMaterialApp(
-        home: ComponentListPage(),
+        // home: ComponentListPage(),
+        home: DemoPage(),
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
