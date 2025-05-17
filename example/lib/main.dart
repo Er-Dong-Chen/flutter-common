@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:example/network/network_interceptor.dart';
+import 'package:example/pages/component/component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 import 'package:module_base/module_base.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +44,7 @@ Future<void> main() async {
       },
     ),
   );
+  ComContext.init(navigatorKey);
   runApp(const MyApp());
 }
 
@@ -53,8 +57,8 @@ class MyApp extends StatelessWidget {
     return ComConfiguration(
       config: ComConfig.defaults(),
       child: GetMaterialApp(
-        // home: ComponentListPage(),
-        home: DemoPage(),
+        navigatorKey: navigatorKey,
+        home: ComponentListPage(),
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

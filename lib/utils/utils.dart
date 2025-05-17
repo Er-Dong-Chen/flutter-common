@@ -2,7 +2,6 @@ export 'clipboard_util.dart';
 export 'clone_util.dart';
 export 'color_util.dart';
 export 'date_util.dart';
-export 'device_util.dart';
 export 'dialog_util.dart';
 export 'file_util.dart';
 export 'function_util.dart';

@@ -15,7 +15,7 @@ dependencies:
     path: ../../../
 
   get: ^4.6.6
-  permission_handler: ^12.0.0+1     # 权限获取
+  permission_handler: ^11.0.0       # 权限获取
   package_info_plus: ^8.0.0         # App信息
   crypto: ^3.0.0                    # 加密
 
