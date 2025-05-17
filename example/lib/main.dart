@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:dio/dio.dart';
 import 'package:example/network/network_interceptor.dart';
 import 'package:example/pages/component/component.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +53,8 @@ Future<void> main() async {
   Log.console("console message 可完整打印不被截断并且无前缀");
   final Directory dir = await Log.getLogDir(); // 获取日志文件目录
 
-  final res = await HttpClient.instance
-      .request("https://gutendex.com/books", data: {"xx": "xx"});
+  HttpClient.instance.request("https://gutendex.com/books",
+      data: {"xx": "xx"}, options: Options(extra: {'custom': true}));
   runApp(const MyApp());
 }
 

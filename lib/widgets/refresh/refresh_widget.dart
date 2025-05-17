@@ -104,6 +104,7 @@ class RefreshListWidget<T> extends StatelessWidget {
   }
 
   Widget _buildListItem(BuildContext context, int index, List dataList) {
+    if (index >= dataList.length) return Container();
     final item = dataList[index];
     return GestureDetector(
       onTap: () => onItemClick?.call(item, index),

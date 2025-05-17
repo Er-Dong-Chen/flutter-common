@@ -36,6 +36,7 @@ abstract class PagingController<M> extends GetxController {
 
   /// 刷新数据
   void onRefresh() async {
+    isLoading = true;
     initPaging();
     await _loadData();
     isLoading = false;
