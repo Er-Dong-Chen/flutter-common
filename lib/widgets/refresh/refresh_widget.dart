@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_chen_common/widgets/base/base_widget.dart';
-import 'package:flutter_chen_common/widgets/refresh/back_top_widget.dart';
-import 'package:flutter_chen_common/widgets/refresh/refresh_controller.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../base/base_widget.dart';
+import 'back_top_widget.dart';
+import 'refresh_controller.dart';
+import 'refresh_strategy.dart';
 
 class RefreshWidget extends StatelessWidget {
   final PagingController controller;
@@ -44,21 +45,23 @@ class RefreshListWidget<T> extends StatelessWidget {
   final PagingController controller;
   final Widget Function(T item, int index) itemBuilder;
   final Function(T item, int index)? onItemClick;
+  final GridLayoutStrategy layoutStrategy;
+  final bool useGridLayout;
   final Widget? empty;
   final double? emptyTop;
   final int crossAxisCount;
   final double spacing;
-  final bool showList;
 
   const RefreshListWidget({
     super.key,
     required this.controller,
     required this.itemBuilder,
     this.onItemClick,
+    this.layoutStrategy = const StandardGridStrategy(),
+    this.useGridLayout = false,
     this.empty,
     this.crossAxisCount = 2,
     this.spacing = 12,
-    this.showList = true,
     this.emptyTop,
   });
 
@@ -82,13 +85,13 @@ class RefreshListWidget<T> extends StatelessWidget {
           child: empty ?? BaseWidget.emptyWidget(context),
         ),
       );
-    } else if (!showList) {
-      return SliverMasonryGrid.count(
+    } else if (useGridLayout) {
+      return layoutStrategy.buildSliverLayout(
+        context: context,
         crossAxisCount: crossAxisCount,
-        childCount: data.length,
+        spacing: spacing,
+        items: data,
         itemBuilder: (context, index) => _buildListItem(context, index, data),
-        mainAxisSpacing: spacing,
-        crossAxisSpacing: spacing,
       );
     } else {
       return SliverList(

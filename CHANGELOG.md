@@ -1,3 +1,7 @@
+## 1.15.0
+
+* TODO: Remove flutter_staggered_grid_view and introduce the integrated GridLayoutStrategy as needed to implement the waterfall flow
+
 ## 1.14.0
 
 * TODO: Added ComContext

@@ -19,4 +19,5 @@ export 'base/com_title_bar.dart';
 export 'refresh/back_top_widget.dart';
 export 'refresh/refresh_controller.dart';
 export 'refresh/refresh_state.dart';
+export 'refresh/refresh_strategy.dart';
 export 'refresh/refresh_widget.dart';

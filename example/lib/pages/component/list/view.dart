@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/widgets/widgets.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import 'logic.dart';
@@ -24,7 +25,8 @@ class ListPage extends StatelessWidget {
                 RefreshListWidget(
                   itemBuilder: (item, index) => _buildItem(index),
                   controller: logic,
-                  showList: false,
+                  useGridLayout: true,
+                  layoutStrategy: const WaterfallFlowStrategy(),
                 ),
               ],
             ));
@@ -45,6 +47,27 @@ class ListPage extends StatelessWidget {
       color: Colors.green,
       width: double.infinity,
       height: 200,
+    );
+  }
+}
+
+class WaterfallFlowStrategy extends GridLayoutStrategy {
+  const WaterfallFlowStrategy();
+
+  @override
+  Widget buildSliverLayout({
+    required BuildContext context,
+    required int crossAxisCount,
+    required double spacing,
+    required List<dynamic> items,
+    required Widget Function(BuildContext, int) itemBuilder,
+  }) {
+    return SliverMasonryGrid.count(
+      crossAxisCount: crossAxisCount,
+      childCount: items.length,
+      itemBuilder: (context, index) => itemBuilder(context, index),
+      mainAxisSpacing: spacing,
+      crossAxisSpacing: spacing,
     );
   }
 }
