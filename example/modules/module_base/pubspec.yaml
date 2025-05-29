@@ -4,8 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -15,9 +14,10 @@ dependencies:
     path: ../../../
 
   get: ^4.6.6
-  permission_handler: ^11.0.0       # 权限获取
-  package_info_plus: ^8.0.0         # App信息
-  crypto: ^3.0.0                    # 加密
+  permission_handler: ^11.4.0
+  package_info_plus: ^8.0.0
+  crypto: ^3.0.0
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:

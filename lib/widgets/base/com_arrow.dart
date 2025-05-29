@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 enum ArrowDirection { left, right, up, down }
 
@@ -55,7 +54,7 @@ class ComBack extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: onTap ?? () => Get.back(),
+      onTap: onTap ?? () => Navigator.of(context).pop(),
       child: Icon(
         Icons.arrow_back_ios,
         color: color,

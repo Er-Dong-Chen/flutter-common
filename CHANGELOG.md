@@ -1,3 +1,7 @@
+## 2.0.0
+
+* TODO: Eliminate the unnecessary third library and optimize and restructure each module
+
 ## 1.15.0
 
 * TODO: Remove flutter_staggered_grid_view and introduce the integrated GridLayoutStrategy as needed to implement the waterfall flow

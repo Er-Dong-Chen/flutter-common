@@ -1,4 +1,5 @@
 # Flutter Chen Common
+
 [![Pub Version](https://img.shields.io/pub/v/flutter_chen_common)](https://pub.dev/packages/flutter_chen_common)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourname/yourrepo/blob/master/LICENSE)
 
 ## 🌟 简介
@@ -11,8 +12,8 @@
 - 企业级日志体系封装
 - N+高质量常用组件
 - 常用开发工具及扩展集合
-- 刷新列表一整套解决方案
-- 开箱即用的通用各类弹窗
+- 智能刷新列表解决方案
+- 开箱即用的各类通用弹窗
 - 全局统一各状态布局
 
 
@@ -37,6 +38,7 @@ dependencies:
 ```
 
 运行命令：
+
 ```bash
 flutter pub get
 ```
@@ -44,19 +46,23 @@ flutter pub get
 ### 初始化配置
 
 ```dart
+final navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 存储初始化
   await SpUtil.init();
   // 日志初始化
+  Directory dir = await getApplicationDocumentsDirectory();
   await Log.init(
-    const LogConfig(
+    LogConfig(
       retentionDays: 3,
       enableFileLog: true,
       logLevel: LogLevel.all,
       recordLevel: LogLevel.info,
-      output: [CustomSentryOutput()],
+      output: const [],
+      logDirectory: Directory('${dir.path}/logs'),
     ),
   );
   // 网络模块初始化
@@ -66,7 +72,7 @@ void main() async {
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
-      commonHeaders: {"platform": Platform.isIOS ? 'ios' : 'android'},
+      commonHeaders: {},
       interceptors: [CustomInterceptor()]
       enableLog: true,
       enableToken: true,
@@ -80,7 +86,8 @@ void main() async {
       },
    ),
   );
-
+  // 全局context服务初始化
+  ComContext.init(navigatorKey);
   runApp(MyApp());
 }
 
@@ -93,6 +100,7 @@ class MyApp extends StatelessWidget {
         loadingWidget: CustomLoading(),
       ),
       child: MaterialApp(
+		navigatorKey: navigatorKey,
         builder: BotToastInit(), // Initialization BotToast
         navigatorObservers: [BotToastNavigatorObserver()],
         theme: ThemeData.light().copyWith(
@@ -174,6 +182,7 @@ class LogConfig {
   final LogLevel logLevel;  // 日志过滤级别，低于该日志级别不打印
   final LogLevel recordLevel;   // 日志记录级别（Network日志级别分别是Info、Error），低于该日志级别不写入日志文件
   final List<LogOutput>? output;  // 可自定义扩展LogOutput，如Sentry上报、日志上传服务器、加密脱敏输出等（类似dio拦截器）
+  final Directory? logDirectory; // 日志文件目录，若为null不开启日志写入
 
   const LogConfig({
     this.retentionDays = 3,
@@ -181,6 +190,7 @@ class LogConfig {
     this.logLevel = LogLevel.all,
     this.recordLevel = LogLevel.info,
     this.output,
+		this.logDirectory,
   });
 }
 
@@ -208,7 +218,7 @@ Log.init(LogConfig(
 
 ### 内置主题
 
-| 主题名称      | 示例代码          |
+| 主题名称    | 示例代码         |
 | ----------- | ---------------- |
 | Light Theme | `ComTheme.light` |
 | Dark Theme  | `ComTheme.dark`  |
@@ -218,7 +228,7 @@ Log.init(LogConfig(
 ```dart
 ComTheme(
   // theme: ComColors.lightTheme,  // 颜色体系(已删除使用ColorScheme中颜色)
-  // primaryGradient: LinearGradient( // 
+  // primaryGradient: LinearGradient( //
   //   colors: [
   //     ComColors.lightTheme.shade500,
   //     ComColors.lightTheme.shade500,
@@ -351,108 +361,166 @@ void main() {
 
 ## 📦 工具类（Utils）
 
-| 文件名                 | 功能描述                                                                 |
-|------------------------|--------------------------------------------------------------------------|
-| `clipboard_util.dart`  | 剪贴板操作工具（复制/粘贴文本、监听剪贴板内容）                          |
-| `clone_util.dart`      | 对象深拷贝/浅拷贝工具（支持复杂对象克隆）                                |
-| `color_util.dart`      | 颜色处理工具（HEX与RGB互转、颜色混合、随机颜色生成）                     |
-| `date_util.dart`       | 日期时间工具（格式化、解析、计算时间差）                                     |
-| `device_util.dart`     | 设备信息工具（获取设备信息）                                               |
-| `encrypt_util.dart`    | 加密解密工具（算法封装）                                                     |
-| `file_util.dart`       | 文件操作工具（读写文件、目录管理、文件压缩/解压）                        |
-| `path_util.dart`       | 文件目录工具（获取应用目录）                        |
-| `function_util.dart`   | 通用函数工具（防抖/节流、空安全处理、类型转换）                          |
-| `image_util.dart`      | 图片处理工具（压缩、缓存管理、网络图片加载、格式转换）                   |
-| `json_util.dart`       | JSON工具（序列化/反序列化、动态解析、数据校验）                          |
-| `keyboard_util.dart`   | 键盘工具（控制键盘显隐、监听高度变化）                                   |
-| `log_util.dart`        | 日志工具（分级输出、日志存储、调试模式开关）                             |
-| `package_util.dart`    | 应用包管理工具（获取应用包信息）                                     |
-| `permission_util.dart` | 权限管理工具（全局权限处理、多权限判断及请求）                       |
-| `sp_util.dart`         | 本地存储工具（基于SharedPreferences，支持复杂数据存取）                  |
-| `text_util.dart`       | 文本处理工具（字符串校验、截断、正则匹配）                                |
-| `dialog_util.dart`     | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等）                                |
+| 文件名                 | 功能描述                                                     |
+| ---------------------- | ------------------------------------------------------------ |
+| `clipboard_util.dart`  | 剪贴板操作工具（复制/粘贴文本、监听剪贴板内容）              |
+| `clone_util.dart`      | 对象深拷贝/浅拷贝工具（支持复杂对象克隆）                    |
+| `color_util.dart`      | 颜色处理工具（HEX与RGB互转、颜色混合、随机颜色生成）         |
+| `date_util.dart`       | 日期时间工具（格式化、解析、计算时间差）                     |
+| `encrypt_util.dart`    | 加密解密工具（算法封装）                                     |
+| `file_util.dart`       | 文件操作工具（读写文件、目录管理、文件压缩/解压）            |
+| `function_util.dart`   | 通用函数工具（防抖/节流、空安全处理、类型转换）              |
+| `image_util.dart`      | 图片处理工具（压缩、缓存管理、网络图片加载、格式转换）       |
+| `json_util.dart`       | JSON工具（序列化/反序列化、动态解析、数据校验）              |
+| `keyboard_util.dart`   | 键盘工具（控制键盘显隐、监听高度变化）                       |
+| `permission_util.dart` | 权限管理工具（全局权限处理、多权限判断及请求，已移入module_base） |
+| `sp_util.dart`         | 本地存储工具（基于SharedPreferences，支持复杂数据存取）      |
+| `text_util.dart`       | 文本处理工具（字符串校验、截断、正则匹配）                   |
+| `dialog_util.dart`     | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等） |
 
 ---
 
 ## 🎨 通用组件（Widgets）
 
-| 文件名                          | 功能描述                                                                 |
-|---------------------------------|--------------------------------------------------------------------------|
-| `refresh_widget.dart`           | 刷新列表组件（包含上拉加载、下拉刷新、回至顶部、页面数据状态视图（加载、空数据、列表、瀑布流）等功能）                               |
-| `base_widget.dart`              | 基础组件基类（统一多状态管理，无网络自动切换该状态布局）                               |
-| `com_album.dart`                | 相册组件（图片九宫格仿微信朋友圈显示）                                     |
-| `com_arrow.dart`                | 方向箭头组件（支持上下左右箭头，常用于列表项导航）                          |
-| `com_avatar.dart`               | 头像组件（圆形/方形、网络/本地/文字头像）                                |
-| `com_button.dart`               | 按钮组件（主按钮、线性按钮、禁用状态、渐变色、自定义样式）                         |
-| `com_checkbox.dart`             | 复选框组件（支持单选/多选、自定义图标）                                  |
-| `com_checkbox_list_title.dart`  | 列表复选框组件（ListTitle形式下的复现框）                             |
-| `com_empty.dart`                | 空状态组件（数据为空时展示占位图或提示文字）                             |
-| `com_gallery.dart`              | 图片画廊组件（图片查看预览等操作）                             |
-| `com_image.dart`                | 增强图片组件（占位图、加载失败兜底、缓存策略）                           |
-| `com_list_group.dart`           | 分组列表组件（下划线分隔的列表项布局，自定义下划线）                          |
-| `com_loading.dart`              | 加载组件（全局Loading，可自定义）                                 |
-| `com_popup_menu.dart`           | 弹出菜单组件（自定义菜单项、位置调整）                         |
-| `com_rating.dart`               | 评分组件（星级评分、支持半星、自定义图标）                               |
-| `com_tag.dart`                  | 标签组件（多颜色/尺寸、圆角样式）                                |
-| `com_title_bar.dart`            | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）                           |
-| `com_divider.dart`              | 下划线组件（CustomPainter实现的Divider,支持负数）                           |
-| `com_sliver_header.dart`        | SliverPinnedHeader固定Header组件                                                  |
+| 文件名                         | 功能描述                                                     |
+| ------------------------------ | ------------------------------------------------------------ |
+| `refresh_widget.dart`          | 智能刷新列表（包含上拉加载、下拉刷新、回至顶部、页面数据状态视图（加载、空数据、列表、网格）等功能），支持自定义视图 |
+| `base_widget.dart`             | 基础组件基类（统一多状态管理，无网络自动切换该状态布局）     |
+| `com_album.dart`               | 图片九宫格组件（已移入到module_base）                        |
+| `com_arrow.dart`               | 方向箭头组件（支持上下左右箭头，常用于列表项导航）           |
+| `com_avatar.dart`              | 头像组件（已移入到module_base中）                            |
+| `com_button.dart`              | 按钮组件（主按钮、线性按钮、禁用状态、渐变色、自定义样式）   |
+| `com_checkbox.dart`            | 复选框组件（支持radio效果）                                  |
+| `com_checkbox_list_title.dart` | 列表复选框组件（支持radio效果）                              |
+| `com_empty.dart`               | 空状态组件（数据为空时展示占位图或提示文字）                 |
+| `com_image.dart`               | 图片组件（占位图、加载失败兜底）（已移入module_base）        |
+| `com_list_group.dart`          | 分组列表组件（下划线分隔的列表项布局，自定义下划线）         |
+| `com_loading.dart`             | 加载组件（全局Loading，可自定义）                            |
+| `com_popup_menu.dart`          | 弹出菜单组件（自定义菜单项、位置调整）                       |
+| `com_rating.dart`              | 评分组件（星级评分、支持半星、自定义图标）                   |
+| `com_tag.dart`                 | 标签组件（多颜色/尺寸、圆角样式）                            |
+| `com_title_bar.dart`           | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）       |
+| `com_divider.dart`             | 下划线组件（CustomPainter实现的Divider,支持负数）            |
+| `com_sliver_header.dart`       | SliverPinnedHeader固定Header组件                             |
 
 ---
 
 
-## 智能列表解决方案（RefreshWidget）
+## 智能列表解决方案（SmartRefresh）
+
 ```dart
-class DemoLogic extends PagingController {
+// 方式一：继承PagingController
+class ListPagingController extends PagingController<dynamic> {
   @override
   Future<PagingResponse> loadData() async {
-    dynamic result = {"current": 1, "total": 3, "records": []};
-    await Future.delayed(2000.milliseconds, () {
-      for (var i = 0; i < 20; ++i) {
-        result["records"]?.add(i);
-      }
-    });
-
+    final result = {
+      "total": 2,
+      "records": List.generate(20, (i) => i + (state.pageNum - 1) * 20)
+    };
+    await Future.delayed(1.seconds);
     return PagingResponse.fromMapJson(result);
   }
 }
 
-class DemoPage extends StatelessWidget {
-  DemoPage({Key? key}) : super(key: key);
+class ListPage extends StatefulWidget {
+  const ListPage({super.key});
 
-  final logic = Get.find<DemoLogic>();
+  @override
+  State<ListPage> createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
+  // 一：继承PagingController
+  // final pagingController = ListPagingController();
+  // 二：工厂方法
+  late final PagingController pagingController = PagingController.withLoader(
+    dataLoader: _loadData,
+  );
+
+  Future<PagingResponse> _loadData(int pageNum, int pageSize) async {
+    final result = {
+      "total": 2,
+      "records": List.generate(20, (i) => i + (pageNum - 1) * 20)
+    };
+    await Future.delayed(1.seconds);
+    return PagingResponse.fromMapJson(result);
+  }
+
+  @override
+  void dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DemoLogic>(
-      builder: (controller) {
-        return Scaffold(
-            body: RefreshWidget(
-              controller: logic,
-              slivers: [
-                RefreshListWidget(
-                    itemBuilder: (item, index) => _buildItem(index),
-                    controller: logic,
-                    showList: false),
-              ],
-            ));
-      },
-      id: logic.pagingState.refreshId,
+    return Scaffold(
+      appBar: AppBar(
+        leading: const ComBack(),
+        title: const Text("Refresh List"),
+      ),
+      body: SmartRefresh(
+        controller: pagingController,
+        // 一：策略形式，默认列表策略
+        // strategy: const ListRefreshStrategy(),
+        // itemBuilder: (_, item, index) => _buildItem(index),
+        // 二：childBuilder自定义
+        childBuilder: (_, state) {
+          if (state.initialRefresh) {
+            return BaseWidget.loadingWidget(context);
+          } else if (state.dataList.isEmpty) {
+            return BaseWidget.emptyWidget(context);
+          }
+          return CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(8),
+                sliver: SliverMasonryGrid.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childCount: state.dataList.length,
+                  itemBuilder: (context, index) => _buildItem(index),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+      floatingActionButton: BackTopWidget(pagingController.scrollController),
     );
   }
 
   Widget _buildItem(index) {
-    if (index % 3 == 0) {
-      return Container(
-        color: Colors.deepOrange,
-        width: double.infinity,
-        height: 300.h,
-      );
-    }
+    final height = 150.0 + (index % 5) * 50.0;
     return Container(
-      color: Colors.green,
-      width: double.infinity,
-      height: 200.h,
+      color: Colors.primaries[index % Colors.primaries.length],
+      height: height,
+      child: Center(
+        child: Text('Item $index', style: const TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+}
+
+/// 三：自定义实现布局策略，全局复用
+class CustomRefreshStrategy<T> implements IRefreshStrategy<T> {
+  @override
+  Widget buildLayout({
+    required BuildContext context,
+    required IRefreshState<T> state,
+    required Widget Function(BuildContext, T, int) itemBuilder,
+  }) {
+    if (state.initialRefresh) {
+      return BaseWidget.loadingWidget(context);
+    } else if (state.dataList.isEmpty) {
+      return BaseWidget.emptyWidget(context);
+    }
+
+    return ListView.builder(
+      itemCount: state.dataList.length,
+      itemBuilder: (context, index) =>
+          itemBuilder(context, state.dataList[index], index),
     );
   }
 }
@@ -469,6 +537,7 @@ flutter run
 ```
 
 ## 🤝贡献指南
+
 我们欢迎以下类型的贡献：
 
 🐛 Bug 报告

@@ -8,19 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 import 'package:module_base/module_base.dart';
+import 'package:path_provider/path_provider.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SpUtil.init();
+  Directory dir = await getApplicationDocumentsDirectory();
   await Log.init(
-    const LogConfig(
+    LogConfig(
       retentionDays: 3,
       enableFileLog: true,
       logLevel: LogLevel.all,
       recordLevel: LogLevel.info,
-      output: [],
+      output: const [],
+      logDirectory: Directory('${dir.path}/logs'),
     ),
   );
   HttpClient.init(
@@ -45,16 +48,18 @@ Future<void> main() async {
       },
     ),
   );
-  ComContext.init(navigatorKey);
+
   Log.d("debug message");
   Log.i("info message");
   Log.w("warning message");
   Log.e("error message");
   Log.console("console message 可完整打印不被截断并且无前缀");
-  final Directory dir = await Log.getLogDir(); // 获取日志文件目录
+  await Log.getLogDir(); // 获取日志文件目录
 
   HttpClient.instance.request("https://gutendex.com/books",
       data: {"xx": "xx"}, options: Options(extra: {'custom': true}));
+
+  ComContext.init(navigatorKey);
   runApp(const MyApp());
 }
 

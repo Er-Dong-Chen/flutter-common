@@ -4,10 +4,8 @@ import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
-
-import '../log_config.dart';
 
 class IsolateFileOutput extends LogOutput {
   final LogConfig config;
@@ -141,7 +139,8 @@ class _IsolateWorker {
 
     try {
       final file = await _getCurrentFile();
-      final lines = events.expand((e) => e.lines).join('\n');
+      final lines =
+          events.expand((e) => e.lines.map(_removeAnsiCodes)).join('\n');
       await file.writeAsString('$lines\n', mode: FileMode.append);
       await _cleanOldLogs();
     } catch (e, s) {
@@ -154,9 +153,19 @@ class _IsolateWorker {
     final today = DateTime(now.year, now.month, now.day);
 
     if (_currentDate != today) {
-      final dir = await getApplicationDocumentsDirectory();
-      final logDir = Directory('${dir.path}/logs');
-      if (!await logDir.exists()) await logDir.create(recursive: true);
+      if (_config.logDirectory == null) {
+        throw Exception('日志目录未配置');
+      }
+
+      final logDir = _config.logDirectory!;
+      if (!await logDir.exists()) {
+        try {
+          await logDir.create(recursive: true);
+        } catch (e) {
+          debugPrint('创建日志目录失败: $e');
+          throw Exception('无法创建日志目录');
+        }
+      }
 
       final dateStr = "${now.year}-${now.month.toString().padLeft(2, '0')}"
           "-${now.day.toString().padLeft(2, '0')}";
@@ -169,10 +178,11 @@ class _IsolateWorker {
 
   Future<void> _cleanOldLogs() async {
     try {
+      if (_config.logDirectory == null) return;
+
       final cutoffDate =
           DateTime.now().subtract(Duration(days: _config.retentionDays));
-      final dir =
-          Directory('${(await getApplicationDocumentsDirectory()).path}/logs');
+      final dir = _config.logDirectory!;
 
       if (!await dir.exists()) return;
 
@@ -185,6 +195,14 @@ class _IsolateWorker {
     } catch (e, s) {
       debugPrint('Log cleanup failed: $e\n$s');
     }
+  }
+
+  // 过滤方法
+  String _removeAnsiCodes(String input) {
+    return input.replaceAll(
+      RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'),
+      '',
+    );
   }
 }
 

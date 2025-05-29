@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
-import 'package:get/get.dart';
 
 enum LayoutStatus { loading, empty, noNetwork, success, error }
 
@@ -101,8 +100,8 @@ class ComErrorWidget extends StatelessWidget {
     return ComEmpty(
       image: Image.asset("assets/images/error.png"),
       message: Text(
-        ComLocalizations.of(Get.context!).loadingFailed,
-        style: Theme.of(Get.context!).textTheme.bodySmall,
+        ComLocalizations.of(context).loadingFailed,
+        style: Theme.of(context).textTheme.bodySmall,
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/extension/extension.dart';
-import 'package:get/get.dart';
+import 'package:flutter_chen_common/extension/context_extension.dart';
 
 /// 主要为底部弹窗标题栏
 class ComTitleBar extends StatelessWidget {
@@ -31,13 +30,17 @@ class ComTitleBar extends StatelessWidget {
       actions: actions ??
           [
             GestureDetector(
-              onTap: () => Get.back(),
-              child: Icon(
-                Icons.close,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 20,
+              onTap: () => Navigator.of(context).pop(),
+              child: Padding(
+                padding:
+                    EdgeInsets.only(right: context.comTheme.spacing.medium),
+                child: Icon(
+                  Icons.close,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 20,
+                ),
               ),
-            ).paddingOnly(right: context.comTheme.spacing.medium),
+            ),
           ],
     );
   }

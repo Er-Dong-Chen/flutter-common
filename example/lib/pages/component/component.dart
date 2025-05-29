@@ -1,13 +1,14 @@
-import 'package:example/pages/component/image/view.dart';
-import 'package:example/pages/component/list/view.dart';
-import 'package:example/pages/component/popup_menu/page.dart';
-import 'package:example/pages/component/status/view.dart';
+import 'package:example/pages/component/image/image_page.dart';
+import 'package:example/pages/component/list/list_page.dart';
+import 'package:example/pages/component/popup_menu/popup_page.dart';
+import 'package:example/pages/component/status/status_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/widgets/base/com_arrow.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 
-import 'button/view.dart';
+import 'button/button_page.dart';
+import 'dialog/dialog_page.dart';
 
 class ComponentListPage extends StatelessWidget {
   ComponentListPage({super.key});
@@ -16,14 +17,14 @@ class ComponentListPage extends StatelessWidget {
     {
       'title': '基础组件',
       'items': [
-        {'title': 'Button', 'page': () => ButtonPage()},
-        {'title': 'Image', 'page': () => ImagePage()},
+        {'title': 'Button', 'page': () => const ButtonPage()},
+        {'title': 'Image', 'page': () => const ImagePage()},
       ],
     },
     {
       'title': '视图组件',
       'items': [
-        {'title': 'Refresh List', 'page': () => ListPage()},
+        {'title': 'Refresh List', 'page': () => const ListPage()},
         {'title': 'Layout Status', 'page': () => StatusPage()},
       ],
     },
@@ -31,6 +32,7 @@ class ComponentListPage extends StatelessWidget {
       'title': '反馈组件',
       'items': [
         {'title': 'PopupMenu', 'page': () => const PopupMenuPage()},
+        {'title': 'Dialog', 'page': () => const DialogPage()},
       ],
     },
   ];

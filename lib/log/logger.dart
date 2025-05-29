@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'filter/log_filter.dart';
 import 'output/isolate_file_output.dart';
@@ -20,8 +19,9 @@ class Log {
     _config = config;
     List<LogOutput> outputs = [ConsoleOutput()];
 
-    if (config.enableFileLog) {
+    if (config.canWriteToFile) {
       _fileOutput = IsolateFileOutput(config);
+      await _fileOutput.init();
       outputs.add(_fileOutput);
       _silentOutput = SilentFileOutput(_fileOutput);
     }
@@ -38,18 +38,21 @@ class Log {
   }
 
   static Future<Directory> getLogDir() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final logDir = Directory('${dir.path}/logs');
-    if (!await logDir.exists()) await logDir.create(recursive: true);
-    return logDir;
+    if (_config.logDirectory == null) {
+      throw Exception('Log directory not configured');
+    }
+    return _config.logDirectory!;
   }
 
   static Future<List<String>> readLogsByDate({DateTime? date}) async {
+    if (!_config.canWriteToFile) {
+      return [];
+    }
+
     date ??= DateTime.now();
-    final dir = await getApplicationDocumentsDirectory();
     final dateStr =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-    final file = File('${dir.path}/logs/log_$dateStr.log');
+    final file = File('${_config.logDirectory!.path}/log_$dateStr.log');
     if (await file.exists()) {
       return await file.readAsLines();
     }
@@ -75,20 +78,22 @@ class Log {
       stackTrace: stackTrace,
     );
 
-    if (_config.enableFileLog) {
-      final outputEvent = OutputEvent(
-        LogEvent(
-          logLevel,
-          message,
-          error: error,
-          stackTrace: stackTrace,
-          time: time,
-        ),
-        [message.toString()],
-      );
-      _silentOutput.output(outputEvent);
-    } else {
-      developer.log('SilentOutput not initialized!', level: 900);
+    if (_config.canWriteToFile) {
+      try {
+        final outputEvent = OutputEvent(
+          LogEvent(
+            logLevel,
+            message,
+            error: error,
+            stackTrace: stackTrace,
+            time: time,
+          ),
+          [message.toString()],
+        );
+        _silentOutput.output(outputEvent);
+      } catch (e) {
+        developer.log('日志写入失败: $e');
+      }
     }
   }
 
