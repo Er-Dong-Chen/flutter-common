@@ -4,7 +4,7 @@ import 'refresh_interface.dart';
 
 class RefreshState<T> implements IRefreshState<T> {
   int _pageNum = 1;
-  int _pageSize = 10;
+  int _pageSize = 20;
   bool _hasMore = true;
   List<T> _dataList = <T>[];
   bool _initialRefresh = true;
@@ -63,16 +63,19 @@ class RefreshState<T> implements IRefreshState<T> {
 
 class PagingResponse<T> {
   final int total;
+  final int pages;
   final List<T> data;
 
   PagingResponse({
     this.total = 0,
+    this.pages = 0,
     required this.data,
   });
 
   factory PagingResponse.fromMapJson(Map<String, dynamic> json) {
     return PagingResponse(
       total: json['total'] ?? 0,
+      pages: json['pages'] ?? 0,
       data: json['records'] ?? [],
     );
   }

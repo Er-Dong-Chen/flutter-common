@@ -6,12 +6,18 @@ class ListPagingController extends PagingController<dynamic> {
   @override
   Future<PagingResponse> loadData() async {
     final result = {
-      "total": 2,
+      "pages": 3,
       "records": List.generate(20, (i) => i + (state.pageNum - 1) * 20)
     };
     await Future.delayed(1.seconds);
     return PagingResponse.fromMapJson(result);
   }
+
+  @override
+  int get pageSize => 20;
+
+  @override
+  bool get shouldInitialRefresh => true;
 }
 
 class ListPage extends StatefulWidget {
@@ -25,13 +31,12 @@ class _ListPageState extends State<ListPage> {
   // 一：继承PagingController
   // final pagingController = ListPagingController();
   // 二：工厂方法
-  late final PagingController pagingController = PagingController.withLoader(
-    dataLoader: _loadData,
-  );
+  late final PagingController pagingController =
+      PagingController.withLoader(dataLoader: _loadData, pageSize: 100);
 
   Future<PagingResponse> _loadData(int pageNum, int pageSize) async {
     final result = {
-      "total": 2,
+      "pages": 3,
       "records": List.generate(20, (i) => i + (pageNum - 1) * 20)
     };
     await Future.delayed(1.seconds);
@@ -56,7 +61,7 @@ class _ListPageState extends State<ListPage> {
         // 一：策略形式，默认列表策略
         // strategy: const ListRefreshStrategy(),
         // itemBuilder: (_, item, index) => _buildItem(index),
-        // 二：childBuilder自定义
+        // 二：完全自定义形式
         childBuilder: (_, state) {
           if (state.initialRefresh) {
             return BaseWidget.loadingWidget(context);
@@ -95,7 +100,7 @@ class _ListPageState extends State<ListPage> {
   }
 }
 
-/// 三：自定义实现布局策略，全局复用
+/// 自定义布局策略
 class CustomRefreshStrategy<T> implements IRefreshStrategy<T> {
   @override
   Widget buildLayout({

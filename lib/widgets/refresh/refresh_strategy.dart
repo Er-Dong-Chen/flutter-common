@@ -6,6 +6,32 @@ import '../base/base_widget.dart';
 
 /// 列表布局策略
 class ListRefreshStrategy<T> implements IRefreshStrategy<T> {
+  final ScrollController? scrollController;
+  final bool? primary;
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
+  final EdgeInsetsGeometry? padding;
+  final double? itemExtent;
+  final Widget? prototypeItem;
+  final double? cacheExtent;
+  final int? semanticChildCount;
+  final String? restorationId;
+  final Clip clipBehavior;
+
+  ListRefreshStrategy({
+    this.scrollController,
+    this.primary,
+    this.physics,
+    this.shrinkWrap = false,
+    this.padding,
+    this.itemExtent,
+    this.prototypeItem,
+    this.cacheExtent,
+    this.semanticChildCount,
+    this.restorationId,
+    this.clipBehavior = Clip.hardEdge,
+  });
+
   @override
   Widget buildLayout({
     required BuildContext context,
@@ -19,7 +45,18 @@ class ListRefreshStrategy<T> implements IRefreshStrategy<T> {
     }
 
     return ListView.builder(
+      controller: scrollController,
+      primary: primary,
+      physics: physics,
+      shrinkWrap: shrinkWrap,
+      padding: padding,
+      itemExtent: itemExtent,
+      prototypeItem: prototypeItem,
       itemCount: state.dataList.length,
+      cacheExtent: cacheExtent,
+      semanticChildCount: semanticChildCount,
+      restorationId: restorationId,
+      clipBehavior: clipBehavior,
       itemBuilder: (context, index) =>
           itemBuilder(context, state.dataList[index], index),
     );

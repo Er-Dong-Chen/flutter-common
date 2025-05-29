@@ -12,6 +12,9 @@ abstract class PagingController<T> extends ChangeNotifier
   IRefreshState<T> get state => _state;
 
   PagingController() {
+    if (pageSize != 20) {
+      _state.updateState(pageSize: pageSize);
+    }
     if (shouldInitialRefresh) {
       refresh();
     } else {
@@ -22,16 +25,19 @@ abstract class PagingController<T> extends ChangeNotifier
 
   bool get shouldInitialRefresh => true;
 
+  int get pageSize => 20;
+
   @override
   Future<void> refresh() async {
-    _state.updateState(isRefreshing: true);
+    _state.updateState(isRefreshing: true, pageNum: 1);
     notifyListeners();
     try {
       final response = await loadData();
       _state.clear();
       _state.addData(response.data);
       _state.updateState(
-        hasMore: _state.dataList.length >= _state.pageSize,
+        pageNum: _state.pageNum + 1,
+        hasMore: _hasMoreData(response),
         initialRefresh: false,
         isRefreshing: false,
       );
@@ -58,7 +64,7 @@ abstract class PagingController<T> extends ChangeNotifier
       _state.addData(response.data);
       _state.updateState(
         pageNum: _state.pageNum + 1,
-        hasMore: _state.pageNum + 1 < response.total,
+        hasMore: _hasMoreData(response),
         isLoadingMore: false,
       );
       refreshController.loadComplete();
@@ -82,22 +88,48 @@ abstract class PagingController<T> extends ChangeNotifier
   factory PagingController.withLoader({
     required Future<PagingResponse<T>> Function(int page, int size) dataLoader,
     bool shouldInitialRefresh = true,
+    int pageSize = 20,
   }) {
     return _PagingControllerWithLoader<T>(
       dataLoader: dataLoader,
+      pageSize: pageSize,
       shouldInitialRefresh: shouldInitialRefresh,
     );
+  }
+
+  /// 判断是否还有更多数据
+  bool _hasMoreData(PagingResponse<T> response) {
+    // 如果总页数大于0，优先使用总页数判断
+    if (response.pages > 0) {
+      return _state.pageNum < response.pages;
+    }
+
+    // 如果总条数大于0，使用总条数判断
+    if (response.total > 0) {
+      return (_state.pageNum - 1) * _state.pageSize + _state.dataList.length <
+          response.total;
+    }
+
+    // 如果总页数和总条数都为0，且是数据不为空，则根据当前页数据量判断
+    if (response.data.isNotEmpty) {
+      return response.data.length >= _state.pageSize;
+    }
+
+    return false;
   }
 }
 
 class _PagingControllerWithLoader<T> extends PagingController<T> {
   final Future<PagingResponse<T>> Function(int page, int size) dataLoader;
   final bool _shouldInitialRefresh;
+  final int _pageSize;
 
   _PagingControllerWithLoader({
     required this.dataLoader,
     bool shouldInitialRefresh = true,
-  }) : _shouldInitialRefresh = shouldInitialRefresh;
+    int pageSize = 20,
+  })  : _shouldInitialRefresh = shouldInitialRefresh,
+        _pageSize = pageSize;
 
   @override
   Future<PagingResponse<T>> loadData() async {
@@ -106,4 +138,7 @@ class _PagingControllerWithLoader<T> extends PagingController<T> {
 
   @override
   bool get shouldInitialRefresh => _shouldInitialRefresh;
+
+  @override
+  int get pageSize => _pageSize;
 }

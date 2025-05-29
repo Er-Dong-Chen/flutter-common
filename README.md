@@ -414,12 +414,18 @@ class ListPagingController extends PagingController<dynamic> {
   @override
   Future<PagingResponse> loadData() async {
     final result = {
-      "total": 2,
+      "pages": 3,
       "records": List.generate(20, (i) => i + (state.pageNum - 1) * 20)
     };
     await Future.delayed(1.seconds);
     return PagingResponse.fromMapJson(result);
   }
+
+  @override
+  int get pageSize => 20;
+
+  @override
+  bool get shouldInitialRefresh => true;
 }
 
 class ListPage extends StatefulWidget {
@@ -435,11 +441,12 @@ class _ListPageState extends State<ListPage> {
   // 二：工厂方法
   late final PagingController pagingController = PagingController.withLoader(
     dataLoader: _loadData,
+    pageSize: 20，
   );
 
   Future<PagingResponse> _loadData(int pageNum, int pageSize) async {
     final result = {
-      "total": 2,
+      "pages": 3,
       "records": List.generate(20, (i) => i + (pageNum - 1) * 20)
     };
     await Future.delayed(1.seconds);
