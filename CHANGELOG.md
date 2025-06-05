@@ -1,3 +1,7 @@
+## 2.0.2
+
+* TODO: Pref dialog for asynchronous waiting
+
 ## 2.0.1
 
 * TODO: Pref SmartRefresh

@@ -45,7 +45,7 @@ class DialogUtil {
   }
 
   /// 显示警告对话框
-  static void showAlertDialog({
+  static Future<T?> showAlertDialog<T>({
     Widget? title,
     Widget? content,
     String? cancelText,
@@ -58,7 +58,7 @@ class DialogUtil {
     bool showCancel = true,
     bool barrierDismissible = false,
     bool? showIOS,
-  }) {
+  }) async {
     final context = ComContext.context;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS ||
         Theme.of(context).platform == TargetPlatform.macOS;
@@ -86,7 +86,7 @@ class DialogUtil {
             showCancel: showCancel,
           );
 
-    material.showDialog(
+    return await material.showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (context) => baseAlertDialog,
@@ -280,14 +280,14 @@ class DialogUtil {
   }
 
   /// 显示底部操作表
-  static void showActionSheet({
+  static Future<T?> showActionSheet<T>({
     Widget? title,
     Widget? content,
     List<Widget>? actions,
     Widget? cancel,
     VoidCallback? onCancel,
     ValueChanged<int>? onConfirm,
-  }) {
+  }) async {
     final context = ComContext.context;
     final actionsList = (actions ?? []).asMap().entries.map((entry) {
       return CupertinoActionSheetAction(
@@ -301,7 +301,7 @@ class DialogUtil {
       );
     }).toList();
 
-    showModalBottomSheet(
+    return await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => CupertinoActionSheet(
@@ -322,7 +322,7 @@ class DialogUtil {
   }
 
   /// 显示对话框
-  static void showDialog({
+  static Future<T?> showDialog<T>({
     Widget? title,
     Widget? content,
     Widget? cancel,
@@ -343,12 +343,12 @@ class DialogUtil {
     bool barrierDismissible = false,
     TextDirection? actionTextDirection,
     double actionSpacing = _defaultActionSpacing,
-  }) {
+  }) async {
     final context = ComContext.context;
     final themeData = Theme.of(context);
     final dialogTheme = themeData.dialogTheme;
 
-    material.showDialog(
+    return await material.showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (context) => PopScope(
@@ -567,7 +567,7 @@ class DialogUtil {
   }
 
   /// 显示底部模态框
-  static void showModalBottom({
+  static Future<T?> showModalBottom<T>({
     required Widget child,
     Widget? title,
     Widget? leading,
@@ -578,12 +578,12 @@ class DialogUtil {
     bool showTitle = true,
     bool isScrollControlled = true,
     bool useSafeArea = true,
-  }) {
+  }) async {
     final context = ComContext.context;
     final boxConstraints =
         minHeight != null ? BoxConstraints(minHeight: minHeight) : null;
 
-    showModalBottomSheet(
+    return await showModalBottomSheet(
       context: context,
       isScrollControlled: isScrollControlled,
       useSafeArea: useSafeArea,
@@ -620,7 +620,7 @@ class DialogUtil {
   }
 
   /// 显示日期选择器
-  static void showDatePicker({
+  static Future<T?> showDatePicker<T>({
     ValueChanged<DateTime>? onConfirm,
     VoidCallback? onCancel,
     Widget? cancel,
@@ -633,11 +633,11 @@ class DialogUtil {
     bool showDayOfWeek = false,
     bool use24hFormat = false,
     double itemExtent = _defaultItemExtent,
-  }) {
+  }) async {
     final context = ComContext.context;
     DateTime date = initialDateTime ?? DateTime.now();
 
-    showModalBottomSheet(
+    return await showModalBottomSheet(
       context: context,
       useSafeArea: useSafeArea,
       backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
@@ -679,7 +679,7 @@ class DialogUtil {
   }
 
   /// 显示选择器
-  static void showPicker({
+  static Future<T?> showPicker<T>({
     required List<Widget> children,
     ValueChanged<int>? onConfirm,
     VoidCallback? onCancel,
@@ -689,11 +689,11 @@ class DialogUtil {
     double itemExtent = _defaultItemExtent,
     int initialItem = 0,
     Widget selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
-  }) {
+  }) async {
     final context = ComContext.context;
     int selectIndex = initialItem;
 
-    showModalBottomSheet(
+    return await showModalBottomSheet(
       context: context,
       useSafeArea: useSafeArea,
       backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
