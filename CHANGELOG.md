@@ -1,3 +1,7 @@
+## 2.1.1
+
+* TODO: Update docs
+
 ## 2.1.0
 
 * TODO: Added ComToast and remove bot_toast

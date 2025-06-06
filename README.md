@@ -15,6 +15,7 @@
 - 智能刷新列表解决方案
 - 开箱即用的各类通用弹窗
 - 全局统一各状态布局
+- 全局无需Context的Toast
 
 
 ## 特性
@@ -88,6 +89,13 @@ void main() async {
   );
   // 全局context服务初始化
   ComContext.init(navigatorKey);
+  // 全局Toast配置（可选）
+  ComToast.init(
+    config: ComToastConfig(
+      duration: const Duration(seconds: 2),
+      position: ComToastPosition.center,
+    ),
+  );
   runApp(MyApp());
 }
 
@@ -100,9 +108,9 @@ class MyApp extends StatelessWidget {
         loadingWidget: CustomLoading(),
       ),
       child: MaterialApp(
-		navigatorKey: navigatorKey,
-        builder: BotToastInit(), // Initialization BotToast
-        navigatorObservers: [BotToastNavigatorObserver()],
+		    navigatorKey: navigatorKey,
+        builder: ComToastBuilder(),
+        navigatorObservers: [ComToastNavigatorObserver()],
         theme: ThemeData.light().copyWith(
           extensions: [ComTheme.light()],
         ),
@@ -214,150 +222,6 @@ Log.init(LogConfig(
 ));
 ```
 
-## 🎨 主题系统
-
-### 内置主题
-
-| 主题名称    | 示例代码         |
-| ----------- | ---------------- |
-| Light Theme | `ComTheme.light` |
-| Dark Theme  | `ComTheme.dark`  |
-
-### 可配置属性
-
-```dart
-ComTheme(
-  // theme: ComColors.lightTheme,  // 颜色体系(已删除使用ColorScheme中颜色)
-  // primaryGradient: LinearGradient( //
-  //   colors: [
-  //     ComColors.lightTheme.shade500,
-  //     ComColors.lightTheme.shade500,
-  //   ],
-  // ),
-  shapes: ComShapes.standard,	// 圆角体系
-  spacing: ComSpacing.standard,	// 间距体系
-  success: Colors.green.shade600,
-  error: Colors.red.shade600,
-  warning: Colors.orange.shade600,
-  link: Colors.blue.shade600,
-)
-
-// 色系
-static MaterialColor lightTheme = const MaterialColor(
-  0xFF3783FD,
-  <int, Color>{
-    50: Color(0xfff8f6f9), // surface 背景色
-    100: Color(0xfff8f2fa), // surfaceContainerLow 浅色背景色
-    200: Color(0xfff2ecf4), // surfaceContainer 标准背景色
-    300: Color(0xffece6ee), // surfaceContainerHigh 较深背景色
-    400: Color(0xffe6e0e9), // surfaceContainerHighest 深色背景色
-    500: Color(0xFF3783FD), // primary 主题色
-    600: Color(0xff1d1b20), // onSurface 主要内容色
-    700: Color(0xFF909399), // onSurfaceVariant 次要内容色
-    800: Color(0xffffffff), // surfaceContainerLowest 相同色
-    900: Color(0xff322f35), // inverseSurface 相反色
-  },
-);
-```
-
-## 🌍 国际化配置
-
-```dart
-// 语言新增或覆盖
-// 1. 创建法语本地化类
-class FrIntl extends ComIntl {
-  @override String get confirm => "xxx";
-  @override String get cancel => "xxx";
-  @override String get loading => "...";
-}
-
-// 2. 注册语言
-ComLocalizations.addLocalization('fr', FrIntl());
-
-// 3. 配置MaterialApp
-MaterialApp(
-  supportedLocales: [
-    Locale('fr'), // 新增法语支持
-  ],
-)
-```
-
-## 全局状态布局
-
-```dart
-// 全局配置或局部配置
-ComConfiguration(
-  config: ComConfig.defaults().copyWith(
-    emptyWidget: const ComLoading(), // 定义全局空视图
-    loadingWidget: const ComEmpty(),   // 定义全局加载视图
-    errorWidget: const ComErrorWidget(), // 定义错误加载视图
-    noNetworkWidget: (VoidCallback? onReconnect) =>
-                    ComNoNetworkWidget(onReconnect: onReconnect), // // 定义全局网络错误视图
-  ),
-  child: child,
-);
-
-// BaseWidget的各状态布局默认使用全局统一配置，局部可自定义
-// isConnected配合connectivity_plus库自动实现无网络情况显示无网络状态布局，网络正常情况显示正常布局
-// status控制页面各状态内容布局显示
-BaseWidget(
-  isConnected: isConnected,
-  status: LayoutStatus.loading,
-  loading: const ComLoading(),
-  empty: const CustomEmpty(),
-  error: BaseWidget.errorWidget(context),
-  noNetwork: BaseWidget.noNetworkWidget(context),
-  onReconnect: (){},
-  child: child,
-)
-
-// 状态类型说明
-enum LayoutStatus {
-  loading,    // 加载中
-  success,    // 加载成功
-  empty,      // 数据为空
-  error,      // 加载失败
-  noNetwork,  // 无网络连接
-}
-
-// 全局统一使用
-BaseWidget.loadingWidget(context)
-BaseWidget.errorWidget(context)
-...
-
-// 使用默认库中状态组件项目需要包含以下图片资源才能正常加载显示
-assets/images/empty.png
-assets/images/error.png
-assets/images/no_network.png
-
-```
-
-## 全局日期时间
-
-```dart
-// default_formatter默认实现中英文，使用示例
-Log.d(DateUtil.formatDate(DateTime.now()));
-Log.d(DateUtil.formatDateMs(DateTime.now().millisecondsSinceEpoch,
-    format: "yyyy/MM/dd"));
-Log.d(DateUtil.getTimeAgoByMs(DateTime.now().millisecondsSinceEpoch));
-Log.d(DateUtil.getTimeAgoForChatByMs(DateTime.now().millisecondsSinceEpoch));
-
-// 自定义Formatter
-class IntlDateFormatter implements DateFormatterDelegate {
-  @override
-  String format(DateTime? dateTime, {String? pattern, Locale? locale}) {
-    if (dateTime == null) return '';
-    return DateFormat(pattern, locale?.languageCode).format(dateTime);
-  }
-  // 其他方法实现...
-}
-
-// 初始化时注入
-void main() {
-  DateTimeFormatter.setDelegate(IntlDateFormatter());
-  runApp(MyApp());
-}
-```
 
 ## 📦 工具类（Utils）
 
@@ -377,6 +241,7 @@ void main() {
 | `sp_util.dart`         | 本地存储工具（基于SharedPreferences，支持复杂数据存取）      |
 | `text_util.dart`       | 文本处理工具（字符串校验、截断、正则匹配）                   |
 | `dialog_util.dart`     | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等） |
+| `toast.dart`          | Toast提示工具（支持普通提示、成功、错误、警告、信息等类型，支持自定义样式和Loading） |
 
 ---
 
@@ -530,6 +395,289 @@ class CustomRefreshStrategy<T> implements IRefreshStrategy<T> {
           itemBuilder(context, state.dataList[index], index),
     );
   }
+}
+```
+
+## 全局无需Context的Toast
+
+### 特性
+
+- 🚀 全局使用，无需传入 `BuildContext`
+- 🎨 简洁的内置样式（成功、错误、警告、信息、加载）
+- 🌈 自动适配主题颜色（背景色、文本色）
+- ⚡ 平滑的淡入淡出动画效果
+- 🎯 灵活的位置配置
+- 📱 支持自定义内容
+- 🔧 完全可配置
+- 🛡️ 智能消息过滤（空消息、重复消息）
+
+### 初始化配置
+
+在 `MaterialApp` 中配置：
+
+```dart
+MaterialApp(
+  builder: ComToastBuilder(),
+  navigatorObservers: [ComToastNavigatorObserver()],
+)
+```
+
+### 基础使用
+
+```dart
+// 普通提示
+ComToast.show('这是一条普通提示');
+
+// 成功提示
+ComToast.success('操作成功');
+
+// 错误提示
+ComToast.error('操作失败');
+
+// 警告提示
+ComToast.warning('请注意');
+
+// 信息提示
+ComToast.info('这是一条信息');
+```
+
+### 自定义配置
+
+```dart
+// 自定义Toast配置
+ComToast.show(
+  '自定义Toast',
+  config: ComToastConfig(
+    duration: const Duration(seconds: 3),
+    position: ComToastPosition.center,
+    backgroundColor: Colors.black87,
+    textColor: Colors.white,
+    fontSize: 16.0,
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+    borderRadius: 8.0,
+    maxWidth: 200.0,
+    showShadow: true,
+  ),
+);
+
+// 自定义Toast内容
+ComToast.custom(
+  builder: (context) => Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Colors.black87,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.star, color: Colors.yellow),
+        const SizedBox(width: 8),
+        Text('自定义Toast', style: TextStyle(color: Colors.white)),
+      ],
+    ),
+  ),
+);
+```
+
+### Loading使用
+
+```dart
+// 显示Loading
+ComToast.loading(message: '加载中...');
+
+// 隐藏Loading
+ComToast.hideLoading();
+
+// 自动处理Loading的异步操作（自动显示隐藏Loading）
+final result = await ComToast.autoLoading(
+  () => api.getData(),
+  message: '加载数据中...',
+);
+
+// 自定义Loading
+ComToast.customLoading(
+  builder: (context) => Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Colors.black87,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CircularProgressIndicator(color: Colors.white),
+        const SizedBox(height: 8),
+        Text('自定义Loading', style: TextStyle(color: Colors.white)),
+      ],
+    ),
+  ),
+);
+```
+
+### 其他功能
+
+```dart
+// 初始化全局配置
+ComToast.init(
+  config: ComToastConfig(
+    duration: const Duration(seconds: 2),
+    position: ComToastPosition.bottom,
+  ),
+);
+
+// 设置重复消息过滤时间（毫秒）
+ComToast.setDuplicateFilterDuration(1000);
+
+// 清除消息过滤缓存
+ComToast.clearMessageFilter();
+
+// 关闭当前显示的Toast
+ComToast.dismiss();
+```
+
+## 🎨 主题系统
+
+### 内置主题
+
+| 主题名称    | 示例代码         |
+| ----------- | ---------------- |
+| Light Theme | `ComTheme.light` |
+| Dark Theme  | `ComTheme.dark`  |
+
+### 可配置属性
+
+```dart
+ComTheme(
+  // theme: ComColors.lightTheme,  // 颜色体系(已删除使用ColorScheme中颜色)
+  // primaryGradient: LinearGradient( //
+  //   colors: [
+  //     ComColors.lightTheme.shade500,
+  //     ComColors.lightTheme.shade500,
+  //   ],
+  // ),
+  shapes: ComShapes.standard,	// 圆角体系
+  spacing: ComSpacing.standard,	// 间距体系
+  success: Colors.green.shade600,
+  error: Colors.red.shade600,
+  warning: Colors.orange.shade600,
+  link: Colors.blue.shade600,
+)
+
+// 色系
+static MaterialColor lightTheme = const MaterialColor(
+  0xFF3783FD,
+  <int, Color>{
+    50: Color(0xfff8f6f9), // surface 背景色
+    100: Color(0xfff8f2fa), // surfaceContainerLow 浅色背景色
+    200: Color(0xfff2ecf4), // surfaceContainer 标准背景色
+    300: Color(0xffece6ee), // surfaceContainerHigh 较深背景色
+    400: Color(0xffe6e0e9), // surfaceContainerHighest 深色背景色
+    500: Color(0xFF3783FD), // primary 主题色
+    600: Color(0xff1d1b20), // onSurface 主要内容色
+    700: Color(0xFF909399), // onSurfaceVariant 次要内容色
+    800: Color(0xffffffff), // surfaceContainerLowest 相同色
+    900: Color(0xff322f35), // inverseSurface 相反色
+  },
+);
+```
+
+## 🌍 国际化配置
+
+```dart
+// 语言新增或覆盖
+// 1. 创建法语本地化类
+class FrIntl extends ComIntl {
+  @override String get confirm => "xxx";
+  @override String get cancel => "xxx";
+  @override String get loading => "...";
+}
+
+// 2. 注册语言
+ComLocalizations.addLocalization('fr', FrIntl());
+
+// 3. 配置MaterialApp
+MaterialApp(
+  supportedLocales: [
+    Locale('fr'), // 新增法语支持
+  ],
+)
+```
+
+## 全局状态布局
+
+```dart
+// 全局配置或局部配置
+ComConfiguration(
+  config: ComConfig.defaults().copyWith(
+    emptyWidget: const ComLoading(), // 定义全局空视图
+    loadingWidget: const ComEmpty(),   // 定义全局加载视图
+    errorWidget: const ComErrorWidget(), // 定义错误加载视图
+    noNetworkWidget: (VoidCallback? onReconnect) =>
+                    ComNoNetworkWidget(onReconnect: onReconnect), // // 定义全局网络错误视图
+  ),
+  child: child,
+);
+
+// BaseWidget的各状态布局默认使用全局统一配置，局部可自定义
+// isConnected配合connectivity_plus库自动实现无网络情况显示无网络状态布局，网络正常情况显示正常布局
+// status控制页面各状态内容布局显示
+BaseWidget(
+  isConnected: isConnected,
+  status: LayoutStatus.loading,
+  loading: const ComLoading(),
+  empty: const CustomEmpty(),
+  error: BaseWidget.errorWidget(context),
+  noNetwork: BaseWidget.noNetworkWidget(context),
+  onReconnect: (){},
+  child: child,
+)
+
+// 状态类型说明
+enum LayoutStatus {
+  loading,    // 加载中
+  success,    // 加载成功
+  empty,      // 数据为空
+  error,      // 加载失败
+  noNetwork,  // 无网络连接
+}
+
+// 全局统一使用
+BaseWidget.loadingWidget(context)
+BaseWidget.errorWidget(context)
+...
+
+// 使用默认库中状态组件项目需要包含以下图片资源才能正常加载显示
+assets/images/empty.png
+assets/images/error.png
+assets/images/no_network.png
+
+```
+
+## 全局日期时间
+
+```dart
+// default_formatter默认实现中英文，使用示例
+Log.d(DateUtil.formatDate(DateTime.now()));
+Log.d(DateUtil.formatDateMs(DateTime.now().millisecondsSinceEpoch,
+    format: "yyyy/MM/dd"));
+Log.d(DateUtil.getTimeAgoByMs(DateTime.now().millisecondsSinceEpoch));
+Log.d(DateUtil.getTimeAgoForChatByMs(DateTime.now().millisecondsSinceEpoch));
+
+// 自定义Formatter
+class IntlDateFormatter implements DateFormatterDelegate {
+  @override
+  String format(DateTime? dateTime, {String? pattern, Locale? locale}) {
+    if (dateTime == null) return '';
+    return DateFormat(pattern, locale?.languageCode).format(dateTime);
+  }
+  // 其他方法实现...
+}
+
+// 初始化时注入
+void main() {
+  DateTimeFormatter.setDelegate(IntlDateFormatter());
+  runApp(MyApp());
 }
 ```
 
