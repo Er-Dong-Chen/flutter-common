@@ -9,7 +9,7 @@ class DialogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dialog 弹窗'),
+        title: const Text('Dialog'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:example/network/network_interceptor.dart';
 import 'package:example/pages/component/component.dart';
@@ -14,6 +13,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ComContext.init(navigatorKey);
   await SpUtil.init();
   Directory dir = await getApplicationDocumentsDirectory();
   await Log.init(
@@ -59,27 +59,32 @@ Future<void> main() async {
   HttpClient.instance.request("https://gutendex.com/books",
       data: {"xx": "xx"}, options: Options(extra: {'custom': true}));
 
-  ComContext.init(navigatorKey);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ComConfiguration(
       config: ComConfig.defaults(),
       child: GetMaterialApp(
         navigatorKey: navigatorKey,
+        builder: ComToastBuilder(),
+        navigatorObservers: [ComToastNavigatorObserver()],
         home: ComponentListPage(),
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: AppThemeMode.getLocalThemeModel(),
-        builder: BotToastInit(),
-        navigatorObservers: [BotToastNavigatorObserver()],
+        localizationsDelegates: const [
+          ComLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('zh', 'CN'),
+          Locale('en', 'US'),
+        ],
       ),
     );
   }

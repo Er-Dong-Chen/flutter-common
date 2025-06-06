@@ -29,7 +29,7 @@ class NetworkInterceptor extends Interceptor {
       response.data = apiResponse.data;
       handler.next(response);
     } else if (apiResponse.code != 401) {
-      DialogUtil.showToast(apiResponse.message);
+      DialogUtil.showToast(apiResponse.message.toString());
       handler.reject(
         DioException(
             requestOptions: response.requestOptions,

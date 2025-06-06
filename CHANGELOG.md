@@ -1,3 +1,7 @@
+## 2.1.0
+
+* TODO: Added ComToast and remove bot_toast
+
 ## 2.0.2
 
 * TODO: Pref dialog for asynchronous waiting

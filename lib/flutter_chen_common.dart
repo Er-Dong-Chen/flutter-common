@@ -6,5 +6,6 @@ export 'localization/localization.dart';
 export 'log/log.dart';
 export 'network/network.dart';
 export 'theme/theme.dart';
+export 'toast/toast.dart';
 export 'utils/utils.dart';
 export 'widgets/widgets.dart';

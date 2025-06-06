@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material show showDialog;
 import 'package:flutter/material.dart' hide showDialog;
@@ -14,34 +13,24 @@ class DialogUtil {
   static const double _defaultModalHeight = 0.8;
 
   /// 显示Toast提示
-  static void showToast(dynamic text) {
-    if (text == null || text.toString().isEmpty) return;
-    BotToast.showText(
-      text: text.toString(),
-      align: Alignment.center,
-      contentColor: Theme.of(ComContext.context).colorScheme.inverseSurface,
-      textStyle: TextStyle(
-        color: Theme.of(ComContext.context).colorScheme.surfaceContainerHighest,
-      ),
-    );
+  static void showToast(String text) {
+    ComToast.show(text);
   }
 
-  /// 显示加载对话框
-  static void showLoading({String? text}) {
+  /// 显示Loading
+  static void showLoading(
+      {String? text, Widget Function(BuildContext)? builder}) {
     hideLoading();
-    BotToast.showCustomLoading(
-      toastBuilder: (context) {
-        if (BaseWidget.loadingWidget is ComLoading) {
-          return ComLoading(message: text);
-        }
-        return BaseWidget.loadingWidget(ComContext.context);
-      },
-    );
+    if (builder != null) {
+      ComToast.customLoading(builder: builder);
+    } else {
+      ComToast.loading(message: text);
+    }
   }
 
-  /// 隐藏加载对话框
+  /// 隐藏Loading
   static void hideLoading() {
-    BotToast.closeAllLoading();
+    ComToast.hideLoading();
   }
 
   /// 显示警告对话框
