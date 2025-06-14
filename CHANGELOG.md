@@ -1,3 +1,7 @@
+## 2.2.0
+
+* TODO: Pref dialog and added extension
+
 ## 2.1.1
 
 * TODO: Update docs

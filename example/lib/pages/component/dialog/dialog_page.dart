@@ -43,7 +43,8 @@ class DialogPage extends StatelessWidget {
               ComButton(
                 child: const Text('显示基础警告框'),
                 onPressed: () => DialogUtil.showAlertDialog(
-                  content: const Text('这是一个基础的警告框'),
+                  content:
+                      const Text('这是一个基础的警告框这是一个基础的警告框这是一个基础的警告框这是一个基础的警告框'),
                 ),
               ),
               const SizedBox(height: 8),
@@ -62,6 +63,7 @@ class DialogPage extends StatelessWidget {
               ComButton(
                 child: const Text('显示iOS风格警告框'),
                 onPressed: () => DialogUtil.showAlertDialog(
+                  title: const Text('温馨提示'),
                   content: const Text('这是一个iOS风格的警告框'),
                   showIOS: true,
                 ),
@@ -94,6 +96,7 @@ class DialogPage extends StatelessWidget {
               ComButton(
                 child: const Text('显示基础对话框'),
                 onPressed: () => DialogUtil.showDialog(
+                  // title: const Text('温馨提示'),
                   content: const Text('这是一个基础的对话框'),
                 ),
               ),

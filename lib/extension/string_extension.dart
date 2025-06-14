@@ -53,4 +53,10 @@ extension StringExtension on String {
     if (username.length <= 2) return this;
     return '${username.substring(0, 2)}***@$domain';
   }
+
+  /// 小数位格式化
+  String toFixed({int digits = 2, String def = "0.0"}) {
+    if (isEmpty) return def;
+    return double.parse(this).toStringAsFixed(digits);
+  }
 }

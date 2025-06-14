@@ -37,13 +37,12 @@ class DialogUtil {
   static Future<T?> showAlertDialog<T>({
     Widget? title,
     Widget? content,
-    String? cancelText,
-    String? confirmText,
     Widget? cancel,
     Widget? confirm,
     VoidCallback? onCancel,
     VoidCallback? onConfirm,
     List<CupertinoDialogAction>? actions,
+    EdgeInsets? contentPadding,
     bool showCancel = true,
     bool barrierDismissible = false,
     bool? showIOS,
@@ -63,6 +62,7 @@ class DialogUtil {
             onConfirm: onConfirm,
             actions: actions,
             showCancel: showCancel,
+            contentPadding: contentPadding,
           )
         : _buildMaterialAlertDialog(
             context: context,
@@ -73,6 +73,7 @@ class DialogUtil {
             onCancel: onCancel,
             onConfirm: onConfirm,
             showCancel: showCancel,
+            contentPadding: contentPadding,
           );
 
     return await material.showDialog(
@@ -93,14 +94,13 @@ class DialogUtil {
     VoidCallback? onConfirm,
     List<CupertinoDialogAction>? actions,
     bool showCancel = true,
+    EdgeInsets? contentPadding,
   }) {
     return CupertinoAlertDialog(
-      title: title ??
-          Center(
-            child: Text(ComLocalizations.of(context).warmTips),
-          ),
+      title: title,
       content: Padding(
-        padding: const EdgeInsets.only(top: 12),
+        padding: contentPadding ??
+            EdgeInsets.only(top: 12, bottom: title == null ? 12 : 0),
         child: content,
       ),
       actions: actions ??
@@ -141,12 +141,27 @@ class DialogUtil {
     VoidCallback? onCancel,
     VoidCallback? onConfirm,
     bool showCancel = true,
+    EdgeInsets? contentPadding,
   }) {
+    Widget? titleWidget;
+    Widget? contentWidget;
+    if (title != null) {
+      titleWidget = DefaultTextStyle(
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.titleMedium!,
+        child: title,
+      );
+    }
+    if (content != null) {
+      contentWidget = DefaultTextStyle(
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyMedium!,
+        child: content,
+      );
+    }
     return AlertDialog(
       contentPadding: EdgeInsets.zero,
-      title: Center(
-        child: title ?? Text(ComLocalizations.of(context).warmTips),
-      ),
+      title: titleWidget,
       titleTextStyle: Theme.of(context).textTheme.titleMedium,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -158,8 +173,9 @@ class DialogUtil {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
-            child: content,
+            padding: contentPadding ??
+                EdgeInsets.fromLTRB(24, title == null ? 32 : 12, 24, 20),
+            child: contentWidget,
           ),
           Divider(
             thickness: 0.5,
@@ -316,15 +332,11 @@ class DialogUtil {
     Widget? content,
     Widget? cancel,
     Widget? confirm,
-    String? titleText,
-    String? cancelText,
-    String? confirmText,
     EdgeInsets? titlePadding,
     EdgeInsets? contentPadding,
     EdgeInsets? actionPadding,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
-    bool showTitle = true,
     bool showCancel = true,
     List<Widget>? actions,
     Widget? foot,
@@ -354,11 +366,10 @@ class DialogUtil {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (showTitle) ...[
+                  if (title != null) ...[
                     _buildDialogTitle(
                       context: context,
                       title: title,
-                      titleText: titleText,
                       titlePadding: titlePadding,
                       content: content,
                       dialogTheme: dialogTheme,
@@ -369,7 +380,9 @@ class DialogUtil {
                     _buildDialogContent(
                       context: context,
                       content: content,
-                      contentPadding: contentPadding,
+                      contentPadding: contentPadding ??
+                          EdgeInsets.fromLTRB(
+                              24, title == null ? 32 : 16, 24, 24),
                       dialogTheme: dialogTheme,
                       themeData: themeData,
                     ),
@@ -402,12 +415,19 @@ class DialogUtil {
   static Widget _buildDialogTitle({
     required BuildContext context,
     Widget? title,
-    String? titleText,
     EdgeInsets? titlePadding,
     Widget? content,
     required DialogThemeData dialogTheme,
     required ThemeData themeData,
   }) {
+    Widget? titleWidget;
+    if (title != null) {
+      titleWidget = DefaultTextStyle(
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.titleMedium!,
+        child: title,
+      );
+    }
     return Padding(
       padding: titlePadding ??
           EdgeInsets.only(
@@ -416,12 +436,7 @@ class DialogUtil {
             right: 24.0,
             bottom: content == null ? 20.0 : 0.0,
           ),
-      child: DefaultTextStyle(
-        style: dialogTheme.titleTextStyle ?? themeData.textTheme.titleLarge!,
-        textAlign: TextAlign.center,
-        child:
-            title ?? Text(titleText ?? ComLocalizations.of(context).warmTips),
-      ),
+      child: titleWidget,
     );
   }
 
@@ -429,18 +444,12 @@ class DialogUtil {
   static Widget _buildDialogContent({
     required BuildContext context,
     required Widget content,
-    EdgeInsets? contentPadding,
+    required EdgeInsets contentPadding,
     required DialogThemeData dialogTheme,
     required ThemeData themeData,
   }) {
     return Padding(
-      padding: contentPadding ??
-          const EdgeInsets.only(
-            left: 24.0,
-            top: 16.0,
-            right: 24.0,
-            bottom: 24.0,
-          ),
+      padding: contentPadding,
       child: DefaultTextStyle(
         style: dialogTheme.contentTextStyle ?? themeData.textTheme.bodyMedium!,
         textAlign: TextAlign.center,
@@ -476,20 +485,22 @@ class DialogUtil {
         textDirection: actionTextDirection,
         children: actions ??
             [
-              _buildFooterButton(
-                context: context,
-                isConfirm: true,
-                child: confirm,
-                onPressed: onConfirm,
-              ),
               if (showCancel) ...[
                 _buildFooterButton(
                   context: context,
                   isConfirm: false,
                   child: cancel,
                   onPressed: onCancel,
+                  actionSpacing: actionSpacing,
                 ),
               ],
+              _buildFooterButton(
+                context: context,
+                isConfirm: true,
+                child: confirm,
+                onPressed: onConfirm,
+                actionSpacing: actionSpacing,
+              ),
             ],
       ),
     );
@@ -501,13 +512,13 @@ class DialogUtil {
     required bool isConfirm,
     Widget? child,
     VoidCallback? onPressed,
+    double actionSpacing = _defaultActionSpacing,
   }) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return ComButton(
-          width: constraints.maxWidth,
+          width: (constraints.maxWidth - actionSpacing) / 2,
           plain: !isConfirm,
-          color: isConfirm ? null : Theme.of(context).colorScheme.onSurface,
           child: child ??
               Text(
                 isConfirm
