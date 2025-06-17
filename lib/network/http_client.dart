@@ -96,6 +96,7 @@ class HttpClient {
     HttpMethod method = HttpMethod.get,
     Options? options,
     dynamic data,
+    Map<String, dynamic>? query,
     T Function(dynamic json)? fromJson,
     bool showLoading = false,
     CancelToken? cancelToken,
@@ -106,7 +107,7 @@ class HttpClient {
       options ??= Options();
       options.method = method.name.toUpperCase();
 
-      // 处理 GET 请求参数
+      // 处理 GET 请求参数（向后兼容）
       final isGetMethod = method == HttpMethod.get;
       final queryParams = isGetMethod ? _convertParams(data) : null;
 
@@ -116,7 +117,7 @@ class HttpClient {
       Response response = await _dio.request(
         _buildUrl(path, baseUrl),
         data: data,
-        queryParameters: queryParams,
+        queryParameters: query ?? queryParams,
         options: options,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
@@ -126,7 +127,7 @@ class HttpClient {
         if (response.data is Map<String, dynamic>) {
           return fromJson(response.data);
         } else if (response.data is List) {
-          return data.map((e) => fromJson(e)).toList() as T;
+          return response.data.map((e) => fromJson(e)).toList() as T;
         }
       }
       return response.data;
@@ -159,7 +160,8 @@ class HttpClient {
 
   Future<T?> get<T>(
     String path, {
-    Map<String, dynamic>? data,
+    dynamic data,
+    Map<String, dynamic>? query,
     String? baseUrl,
     Options? options,
     T Function(dynamic json)? fromJson,
@@ -172,6 +174,7 @@ class HttpClient {
       path,
       method: HttpMethod.get,
       data: data,
+      query: query,
       baseUrl: baseUrl,
       options: options,
       fromJson: fromJson,
@@ -185,6 +188,7 @@ class HttpClient {
   Future<T?> post<T>(
     String path, {
     dynamic data,
+    Map<String, dynamic>? query,
     String? baseUrl,
     Options? options,
     T Function(dynamic json)? fromJson,
@@ -197,6 +201,88 @@ class HttpClient {
       path,
       method: HttpMethod.post,
       data: data,
+      query: query,
+      baseUrl: baseUrl,
+      options: options,
+      fromJson: fromJson,
+      showLoading: showLoading,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  Future<T?> put<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? query,
+    String? baseUrl,
+    Options? options,
+    T Function(dynamic json)? fromJson,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    return request<T>(
+      path,
+      method: HttpMethod.put,
+      data: data,
+      query: query,
+      baseUrl: baseUrl,
+      options: options,
+      fromJson: fromJson,
+      showLoading: showLoading,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  Future<T?> patch<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? query,
+    String? baseUrl,
+    Options? options,
+    T Function(dynamic json)? fromJson,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    return request<T>(
+      path,
+      method: HttpMethod.patch,
+      data: data,
+      query: query,
+      baseUrl: baseUrl,
+      options: options,
+      fromJson: fromJson,
+      showLoading: showLoading,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  Future<T?> delete<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? query,
+    String? baseUrl,
+    Options? options,
+    T Function(dynamic json)? fromJson,
+    bool showLoading = false,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    return request<T>(
+      path,
+      method: HttpMethod.delete,
+      data: data,
+      query: query,
       baseUrl: baseUrl,
       options: options,
       fromJson: fromJson,

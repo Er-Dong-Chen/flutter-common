@@ -1,3 +1,7 @@
+## 2.3.0
+
+* TODO: Pref network and docs
+
 ## 2.2.0
 
 * TODO: Pref dialog and added extension

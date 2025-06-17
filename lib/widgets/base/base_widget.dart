@@ -84,7 +84,7 @@ class ComNoNetworkWidget extends StatelessWidget {
           ),
           ComButton(
             onPressed: () => onReconnect?.call(),
-            child: Text(ComLocalizations.of(context).retry),
+            child: Text(ComLocalizations.of(context).networkRetry),
           )
         ],
       ),

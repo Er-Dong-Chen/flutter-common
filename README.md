@@ -1,10 +1,11 @@
 # Flutter Chen Common
 
-[![Pub Version](https://img.shields.io/pub/v/flutter_chen_common)](https://pub.dev/packages/flutter_chen_common)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourname/yourrepo/blob/master/LICENSE)
+[![Pub Version](https://img.shields.io/pub/v/flutter_chen_common)](https://pub.dev/packages/flutter_chen_common)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourname/yourrepo/blob/master/LICENSE)
 
 ## 🌟 简介
 
-本库为Flutter应用开发提供一站式解决方案，包含：
+Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发提供一站式解决方案。
 
 - 可定制的主题系统
 - 完整的国际化支持
@@ -26,10 +27,26 @@
 - 📱 **自适应设计**：完美适配 iOS/Material 设计规范
 - 🔥 **企业级方案**：内置日志/网络/安全等通用模块，提供开箱即用的复杂场景解决方案
 
+## 📚 文档目录
 
-## 🚀 快速接入
+### 核心功能
+- [网络请求](docs/network.md) - 企业级网络请求封装，内置日志打印、网络重试、token刷新等拦截器
+- [日志系统](docs/log.md) - 企业级日志体系，支持文件日志、日志过滤、自定义扩展等
+- [主题系统](docs/theme.md) - 可定制的主题系统，支持亮暗主题切换
+- [国际化](docs/localization.md) - 完整的国际化支持，内置中英文
 
-### 安装依赖
+### UI 组件
+- [Toast](docs/toast.md) - 全局无需Context的Toast提示
+- [智能刷新](docs/refresh.md) - 智能刷新列表解决方案
+- ~~[通用组件](docs/widgets.md) - 高质量常用组件集合（参考demo示例）~~
+
+### 工具类
+- ~~[工具类](docs/utils.md) - 常用开发工具及扩展集合~~
+- ~~[日期时间](docs/date.md) - 日期时间处理工具~~
+
+## 🚀 快速开始
+
+### 安装
 
 在 `pubspec.yaml` 中添加依赖：
 
@@ -43,7 +60,6 @@ dependencies:
 ```bash
 flutter pub get
 ```
-
 ### 初始化配置
 
 ```dart
@@ -130,7 +146,6 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
-
 ### 🌐 网络请求
 
 ```dart
@@ -269,272 +284,6 @@ Log.init(LogConfig(
 | `com_sliver_header.dart`       | SliverPinnedHeader固定Header组件                             |
 
 ---
-
-
-## 智能列表解决方案（SmartRefresh）
-
-```dart
-// 方式一：继承PagingController
-class ListPagingController extends PagingController<dynamic> {
-  @override
-  Future<PagingResponse> loadData() async {
-    final result = {
-      "pages": 3,
-      "records": List.generate(20, (i) => i + (state.pageNum - 1) * 20)
-    };
-    await Future.delayed(1.seconds);
-    return PagingResponse.fromMapJson(result);
-  }
-
-  @override
-  int get pageSize => 20;
-
-  @override
-  bool get shouldInitialRefresh => true;
-}
-
-class ListPage extends StatefulWidget {
-  const ListPage({super.key});
-
-  @override
-  State<ListPage> createState() => _ListPageState();
-}
-
-class _ListPageState extends State<ListPage> {
-  // 一：继承PagingController
-  // final pagingController = ListPagingController();
-  // 二：工厂方法
-  late final PagingController pagingController = PagingController.withLoader(
-    dataLoader: _loadData,
-    pageSize: 20，
-  );
-
-  Future<PagingResponse> _loadData(int pageNum, int pageSize) async {
-    final result = {
-      "pages": 3,
-      "records": List.generate(20, (i) => i + (pageNum - 1) * 20)
-    };
-    await Future.delayed(1.seconds);
-    return PagingResponse.fromMapJson(result);
-  }
-
-  @override
-  void dispose() {
-    pagingController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const ComBack(),
-        title: const Text("Refresh List"),
-      ),
-      body: SmartRefresh(
-        controller: pagingController,
-        // 一：策略形式，默认列表策略
-        // strategy: const ListRefreshStrategy(),
-        // itemBuilder: (_, item, index) => _buildItem(index),
-        // 二：childBuilder自定义
-        childBuilder: (_, state) {
-          if (state.initialRefresh) {
-            return BaseWidget.loadingWidget(context);
-          } else if (state.dataList.isEmpty) {
-            return BaseWidget.emptyWidget(context);
-          }
-          return CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.all(8),
-                sliver: SliverMasonryGrid.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childCount: state.dataList.length,
-                  itemBuilder: (context, index) => _buildItem(index),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-      floatingActionButton: BackTopWidget(pagingController.scrollController),
-    );
-  }
-
-  Widget _buildItem(index) {
-    final height = 150.0 + (index % 5) * 50.0;
-    return Container(
-      color: Colors.primaries[index % Colors.primaries.length],
-      height: height,
-      child: Center(
-        child: Text('Item $index', style: const TextStyle(color: Colors.white)),
-      ),
-    );
-  }
-}
-
-/// 三：自定义实现布局策略，全局复用
-class CustomRefreshStrategy<T> implements IRefreshStrategy<T> {
-  @override
-  Widget buildLayout({
-    required BuildContext context,
-    required IRefreshState<T> state,
-    required Widget Function(BuildContext, T, int) itemBuilder,
-  }) {
-    if (state.initialRefresh) {
-      return BaseWidget.loadingWidget(context);
-    } else if (state.dataList.isEmpty) {
-      return BaseWidget.emptyWidget(context);
-    }
-
-    return ListView.builder(
-      itemCount: state.dataList.length,
-      itemBuilder: (context, index) =>
-          itemBuilder(context, state.dataList[index], index),
-    );
-  }
-}
-```
-
-## 全局无需Context的Toast
-
-### 特性
-
-- 🚀 全局使用，无需传入 `BuildContext`
-- 🎨 简洁的内置样式（成功、错误、警告、信息、加载）
-- 🌈 自动适配主题颜色（背景色、文本色）
-- ⚡ 平滑的淡入淡出动画效果
-- 🎯 灵活的位置配置
-- 📱 支持自定义内容
-- 🔧 完全可配置
-- 🛡️ 智能消息过滤（空消息、重复消息）
-
-### 初始化配置
-
-在 `MaterialApp` 中配置：
-
-```dart
-MaterialApp(
-  builder: ComToastBuilder(),
-  navigatorObservers: [ComToastNavigatorObserver()],
-)
-```
-
-### 基础使用
-
-```dart
-// 普通提示
-ComToast.show('这是一条普通提示');
-
-// 成功提示
-ComToast.success('操作成功');
-
-// 错误提示
-ComToast.error('操作失败');
-
-// 警告提示
-ComToast.warning('请注意');
-
-// 信息提示
-ComToast.info('这是一条信息');
-```
-
-### 自定义配置
-
-```dart
-// 自定义Toast配置
-ComToast.show(
-  '自定义Toast',
-  config: ComToastConfig(
-    duration: const Duration(seconds: 3),
-    position: ComToastPosition.center,
-    backgroundColor: Colors.black87,
-    textColor: Colors.white,
-    fontSize: 16.0,
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-    borderRadius: 8.0,
-    maxWidth: 200.0,
-    showShadow: true,
-  ),
-);
-
-// 自定义Toast内容
-ComToast.custom(
-  builder: (context) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.black87,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.star, color: Colors.yellow),
-        const SizedBox(width: 8),
-        Text('自定义Toast', style: TextStyle(color: Colors.white)),
-      ],
-    ),
-  ),
-);
-```
-
-### Loading使用
-
-```dart
-// 显示Loading
-ComToast.loading(message: '加载中...');
-
-// 隐藏Loading
-ComToast.hideLoading();
-
-// 自动处理Loading的异步操作（自动显示隐藏Loading）
-final result = await ComToast.autoLoading(
-  () => api.getData(),
-  message: '加载数据中...',
-);
-
-// 自定义Loading
-ComToast.customLoading(
-  builder: (context) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.black87,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CircularProgressIndicator(color: Colors.white),
-        const SizedBox(height: 8),
-        Text('自定义Loading', style: TextStyle(color: Colors.white)),
-      ],
-    ),
-  ),
-);
-```
-
-### 其他功能
-
-```dart
-// 初始化全局配置
-ComToast.init(
-  config: ComToastConfig(
-    duration: const Duration(seconds: 2),
-    position: ComToastPosition.bottom,
-  ),
-);
-
-// 设置重复消息过滤时间（毫秒）
-ComToast.setDuplicateFilterDuration(1000);
-
-// 清除消息过滤缓存
-ComToast.clearMessageFilter();
-
-// 关闭当前显示的Toast
-ComToast.dismiss();
-```
 
 ## 🎨 主题系统
 
@@ -681,37 +430,16 @@ void main() {
 }
 ```
 
-## 示例项目
+🤝 贡献指南
 
-查看完整示例：
+我们欢迎各种形式的贡献，包括但不限于：
 
-```bash
-git clone https://github.com/Er-Dong-Chen/flutter-common.git
-cd flutter-common/example
-flutter run
-```
+- 🐛 Bug 报告
+- 💡 功能建议
+- 📚 文档改进
+- 🎨 设计资源
+- 💻 代码提交
 
-## 🤝贡献指南
-
-我们欢迎以下类型的贡献：
-
-🐛 Bug 报告
-
-💡 功能建议
-
-📚 文档改进
-
-🎨 设计资源
-
-💻 代码提交
-
-欢迎提交 PR 或 Issue！贡献前请阅读：
-
-- [代码规范](docs/CODESTYLE.md)
-- [全局主题指南](docs/I18N_GUIDE.md)
-- [国际化指南](docs/THEME_GUIDE.md)
-- [测试要求](docs/TESTING.md)
-
-## 许可证
+## 📄 许可证
 
 MIT License - 详情见 [LICENSE](LICENSE) 文件
