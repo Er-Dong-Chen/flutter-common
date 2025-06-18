@@ -15,7 +15,10 @@
 
 ## 📱 效果预览
 
-![智能刷新效果预览](assets/images/refresh_preview.gif)
+<video width="100%" controls>
+  <source src="../assets/refresh.webm" type="video/webm">
+  您的浏览器不支持 webm 视频格式
+</video>
 
 ## 🚀 快速开始
 

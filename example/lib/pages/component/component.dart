@@ -1,5 +1,6 @@
 import 'package:example/pages/component/image/image_page.dart';
 import 'package:example/pages/component/list/list_page.dart';
+import 'package:example/pages/component/marquee/marquee_page.dart';
 import 'package:example/pages/component/popup_menu/popup_page.dart';
 import 'package:example/pages/component/status/status_page.dart';
 import 'package:example/pages/component/toast/toast_page.dart';
@@ -35,6 +36,12 @@ class ComponentListPage extends StatelessWidget {
         {'title': 'PopupMenu', 'page': () => const PopupMenuPage()},
         {'title': 'Dialog', 'page': () => const DialogPage()},
         {'title': 'Toast', 'page': () => const ToastPage()},
+      ],
+    },
+    {
+      'title': '跑马灯组件',
+      'items': [
+        {'title': 'Marquee', 'page': () => const MarqueePage()},
       ],
     },
   ];

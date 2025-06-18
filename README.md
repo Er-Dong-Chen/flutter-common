@@ -18,7 +18,6 @@ Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发
 - 全局统一各状态布局
 - 全局无需Context的Toast
 
-
 ## 特性
 
 - 🎨 **主题系统**：通过 `ThemeExtension` 全局配置颜色/圆角/间距等样式
@@ -36,13 +35,9 @@ Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发
 - [国际化](docs/localization.md) - 完整的国际化支持，内置中英文
 
 ### UI 组件
-- [Toast](docs/toast.md) - 全局无需Context的Toast提示
 - [智能刷新](docs/refresh.md) - 智能刷新列表解决方案
-- ~~[通用组件](docs/widgets.md) - 高质量常用组件集合（参考demo示例）~~
-
-### 工具类
-- ~~[工具类](docs/utils.md) - 常用开发工具及扩展集合~~
-- ~~[日期时间](docs/date.md) - 日期时间处理工具~~
+- [Toast](docs/toast.md) - 全局无需Context的Toast提示
+- [Marquee](docs/marquee.md) - 支持任意widget，满足所有场景的跑马灯
 
 ## 🚀 快速开始
 
@@ -52,7 +47,7 @@ Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发
 
 ```yaml
 dependencies:
-  flutter_chen_common: 最新版本
+  flutter_chen_common: latest version
 ```
 
 运行命令：
@@ -99,7 +94,7 @@ void main() async {
         return "new_token";
       },
       onRefreshTokenFailed: () async {
-        Log.d("重新登录");
+        Log.d("Log in again");
       },
    ),
   );
@@ -149,7 +144,6 @@ class MyApp extends StatelessWidget {
 ### 🌐 网络请求
 
 ```dart
-// 网络请求使用
 HttpClient.instance.request(
   "/api",
   method: HttpType.post.name,
@@ -158,10 +152,12 @@ HttpClient.instance.request(
 )
 HttpClient.instance.get("/api");
 HttpClient.instance.post("/api");
+HttpClient.instance.put("/api");
+HttpClient.instance.patch("/api");
+HttpClient.instance.delete("/api");
 HttpClient.instance.uploadFile("/api","filePath");
 HttpClient.instance.downloadFile("/api", "savePath");
 
-// HttpConfig，内置日志打印、网络重试拦截器、token无感刷新以及相关操作
 HttpConfig({
     required this.baseUrl,
     this.connectTimeout = const Duration(seconds: 15),
@@ -178,7 +174,7 @@ HttpConfig({
     this.onRefreshTokenFailed,
   });
 
-// 打印样式如下（日志打印完全不会被截断，json格式化方便复制查看数据，在开启日志拦截以及记录日志时会将日志写入文件
+// 打印样式如下
 ┌─────────────────────────────────────────────────────────────────────────────
 │ ✅ [HTTP] 2025-04-05 23:30:29 Request sent [Duration] 88ms
 │ Request: 200 GET http://www.weather.com.cn/data/sk/101010100.html?xxxx=xxxx
@@ -191,21 +187,20 @@ HttpConfig({
 ### 📝日志体系
 
 ```dart
-// 统一调用示例
 Log.d("debug message");
 Log.i("info message");
 Log.w("warning message");
 Log.e("error message");
 Log.console("console message 可完整打印不被截断并且无前缀");
-final Directory dir = await Log.getLogDir(); // 获取日志文件目录
+final Directory dir = await Log.getLogDir();
 
 class LogConfig {
-  final int retentionDays; // 日志保留天数
-  final bool enableFileLog; // 是否启用日志写入
-  final LogLevel logLevel;  // 日志过滤级别，低于该日志级别不打印
-  final LogLevel recordLevel;   // 日志记录级别（Network日志级别分别是Info、Error），低于该日志级别不写入日志文件
-  final List<LogOutput>? output;  // 可自定义扩展LogOutput，如Sentry上报、日志上传服务器、加密脱敏输出等（类似dio拦截器）
-  final Directory? logDirectory; // 日志文件目录，若为null不开启日志写入
+  final int retentionDays;
+  final bool enableFileLog;
+  final LogLevel logLevel;
+  final LogLevel recordLevel;
+  final List<LogOutput>? output;
+  final Directory? logDirectory;
 
   const LogConfig({
     this.retentionDays = 3,
@@ -217,7 +212,6 @@ class LogConfig {
   });
 }
 
-// 自定义输出插件
 class SentryOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
@@ -231,7 +225,6 @@ class SentryOutput extends LogOutput {
   }
 }
 
-// 配置使用
 Log.init(LogConfig(
   output: [SentryOutput()]
 ));
@@ -242,21 +235,20 @@ Log.init(LogConfig(
 
 | 文件名                 | 功能描述                                                     |
 | ---------------------- | ------------------------------------------------------------ |
-| `clipboard_util.dart`  | 剪贴板操作工具（复制/粘贴文本、监听剪贴板内容）              |
-| `clone_util.dart`      | 对象深拷贝/浅拷贝工具（支持复杂对象克隆）                    |
-| `color_util.dart`      | 颜色处理工具（HEX与RGB互转、颜色混合、随机颜色生成）         |
-| `date_util.dart`       | 日期时间工具（格式化、解析、计算时间差）                     |
-| `encrypt_util.dart`    | 加密解密工具（算法封装）                                     |
-| `file_util.dart`       | 文件操作工具（读写文件、目录管理、文件压缩/解压）            |
-| `function_util.dart`   | 通用函数工具（防抖/节流、空安全处理、类型转换）              |
-| `image_util.dart`      | 图片处理工具（压缩、缓存管理、网络图片加载、格式转换）       |
-| `json_util.dart`       | JSON工具（序列化/反序列化、动态解析、数据校验）              |
-| `keyboard_util.dart`   | 键盘工具（控制键盘显隐、监听高度变化）                       |
-| `permission_util.dart` | 权限管理工具（全局权限处理、多权限判断及请求，已移入module_base） |
-| `sp_util.dart`         | 本地存储工具（基于SharedPreferences，支持复杂数据存取）      |
-| `text_util.dart`       | 文本处理工具（字符串校验、截断、正则匹配）                   |
+| `clipboard_util.dart`  | 剪贴板操作工具                                  |
+| `clone_util.dart`      | 对象克隆工具                                         |
+| `color_util.dart`      | 颜色处理工具
+| `date_util.dart`       | 日期时间工具
+| `encrypt_util.dart`    | 加密解密工具（已移入module_base）                                     |
+| `file_util.dart`       | 文件操作工具          |
+| `function_util.dart`   | 防抖/节流函数工具              |
+| `image_util.dart`      | 图片处理工具           |
+| `json_util.dart`       | JSON工具               |
+| `keyboard_util.dart`   | 键盘工具                       |
+| `permission_util.dart` | 权限管理工具（已移入module_base） |
+| `sp_util.dart`         | 本地存储工具             |
+| `text_util.dart`       | 文本处理工具                  |
 | `dialog_util.dart`     | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等） |
-| `toast.dart`          | Toast提示工具（支持普通提示、成功、错误、警告、信息等类型，支持自定义样式和Loading） |
 
 ---
 
@@ -264,7 +256,6 @@ Log.init(LogConfig(
 
 | 文件名                         | 功能描述                                                     |
 | ------------------------------ | ------------------------------------------------------------ |
-| `refresh_widget.dart`          | 智能刷新列表（包含上拉加载、下拉刷新、回至顶部、页面数据状态视图（加载、空数据、列表、网格）等功能），支持自定义视图 |
 | `base_widget.dart`             | 基础组件基类（统一多状态管理，无网络自动切换该状态布局）     |
 | `com_album.dart`               | 图片九宫格组件（已移入到module_base）                        |
 | `com_arrow.dart`               | 方向箭头组件（支持上下左右箭头，常用于列表项导航）           |
@@ -302,33 +293,16 @@ ComTheme(
   // primaryGradient: LinearGradient( //
   //   colors: [
   //     ComColors.lightTheme.shade500,
-  //     ComColors.lightTheme.shade500,
+  //     ComColors.lightTheme.shade600,
   //   ],
   // ),
-  shapes: ComShapes.standard,	// 圆角体系
-  spacing: ComSpacing.standard,	// 间距体系
+  shapes: ComShapes.standard,
+  spacing: ComSpacing.standard,
   success: Colors.green.shade600,
   error: Colors.red.shade600,
   warning: Colors.orange.shade600,
   link: Colors.blue.shade600,
 )
-
-// 色系
-static MaterialColor lightTheme = const MaterialColor(
-  0xFF3783FD,
-  <int, Color>{
-    50: Color(0xfff8f6f9), // surface 背景色
-    100: Color(0xfff8f2fa), // surfaceContainerLow 浅色背景色
-    200: Color(0xfff2ecf4), // surfaceContainer 标准背景色
-    300: Color(0xffece6ee), // surfaceContainerHigh 较深背景色
-    400: Color(0xffe6e0e9), // surfaceContainerHighest 深色背景色
-    500: Color(0xFF3783FD), // primary 主题色
-    600: Color(0xff1d1b20), // onSurface 主要内容色
-    700: Color(0xFF909399), // onSurfaceVariant 次要内容色
-    800: Color(0xffffffff), // surfaceContainerLowest 相同色
-    900: Color(0xff322f35), // inverseSurface 相反色
-  },
-);
 ```
 
 ## 🌍 国际化配置
@@ -359,11 +333,11 @@ MaterialApp(
 // 全局配置或局部配置
 ComConfiguration(
   config: ComConfig.defaults().copyWith(
-    emptyWidget: const ComLoading(), // 定义全局空视图
-    loadingWidget: const ComEmpty(),   // 定义全局加载视图
-    errorWidget: const ComErrorWidget(), // 定义错误加载视图
+    emptyWidget: const ComLoading(),
+    loadingWidget: const ComEmpty(),
+    errorWidget: const ComErrorWidget(),
     noNetworkWidget: (VoidCallback? onReconnect) =>
-                    ComNoNetworkWidget(onReconnect: onReconnect), // // 定义全局网络错误视图
+                    ComNoNetworkWidget(onReconnect: onReconnect),
   ),
   child: child,
 );
@@ -384,16 +358,18 @@ BaseWidget(
 
 // 状态类型说明
 enum LayoutStatus {
-  loading,    // 加载中
-  success,    // 加载成功
-  empty,      // 数据为空
-  error,      // 加载失败
-  noNetwork,  // 无网络连接
+  loading,
+  success,
+  empty,
+  error,
+  noNetwork,
 }
 
 // 全局统一使用
 BaseWidget.loadingWidget(context)
+BaseWidget.emptyWidget(context)
 BaseWidget.errorWidget(context)
+BaseWidget.noNetworkWidget(context)
 ...
 
 // 使用默认库中状态组件项目需要包含以下图片资源才能正常加载显示

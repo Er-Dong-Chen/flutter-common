@@ -13,6 +13,7 @@ export 'base/com_rating.dart';
 export 'base/com_sliver_header.dart';
 export 'base/com_tag.dart';
 export 'base/com_title_bar.dart';
+export 'marquee/com_marquee.dart';
 export 'refresh/back_top_widget.dart';
 export 'refresh/refresh_controller.dart';
 export 'refresh/refresh_interface.dart';

@@ -8,6 +8,7 @@ import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
 import 'package:module_base/module_base.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -69,22 +70,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ComConfiguration(
       config: ComConfig.defaults(),
-      child: GetMaterialApp(
-        navigatorKey: navigatorKey,
-        builder: ComToastBuilder(),
-        navigatorObservers: [ComToastNavigatorObserver()],
-        home: ComponentListPage(),
-        title: 'Flutter Demo',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: AppThemeMode.getLocalThemeModel(),
-        localizationsDelegates: const [
-          ComLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('zh', 'CN'),
-          Locale('en', 'US'),
-        ],
+      child: RefreshConfiguration(
+        hideFooterWhenNotFull: false,
+        headerBuilder: () => const ClassicHeader(),
+        footerBuilder: () => const ClassicFooter(),
+        child: GetMaterialApp(
+          navigatorKey: navigatorKey,
+          builder: ComToastBuilder(),
+          navigatorObservers: [ComToastNavigatorObserver()],
+          home: ComponentListPage(),
+          title: 'Flutter Demo',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: AppThemeMode.getLocalThemeModel(),
+          localizationsDelegates: const [
+            ComLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('zh', 'CN'),
+            Locale('en', 'US'),
+          ],
+        ),
       ),
     );
   }

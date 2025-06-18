@@ -96,7 +96,7 @@ class DialogPage extends StatelessWidget {
               ComButton(
                 child: const Text('显示基础对话框'),
                 onPressed: () => DialogUtil.showDialog(
-                  // title: const Text('温馨提示'),
+                  title: const Text('温馨提示'),
                   content: const Text('这是一个基础的对话框'),
                 ),
               ),
