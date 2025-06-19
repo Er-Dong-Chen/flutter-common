@@ -1,3 +1,7 @@
+## 2.4.1
+
+* TODO: Pref docs
+
 ## 2.4.0
 
 * TODO: Added ComMarquee

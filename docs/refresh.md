@@ -15,10 +15,7 @@
 
 ## 📱 效果预览
 
-<video width="100%" controls>
-  <source src="../assets/refresh.webm" type="video/webm">
-  您的浏览器不支持 webm 视频格式
-</video>
+![ComRefresh 效果预览](https://er-dong-chen.github.io/images/demo/refresh.gif)
 
 ## 🚀 快速开始
 
