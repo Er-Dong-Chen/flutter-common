@@ -34,25 +34,27 @@ class ComButton extends StatelessWidget {
     this.elevation = 0,
     this.width,
     this.height,
-  }) : _minHeight = padding == null ? height ?? 40 : 0;
-
-  final double _minHeight;
+  });
 
   @override
   Widget build(BuildContext context) {
+    final minHeight =
+        (padding == null ? height ?? Theme.of(context).buttonTheme.height : 0)
+            .toDouble();
+
     return gradient != null || elevation > 0
-        ? _buildGradientButton(context)
+        ? _buildGradientButton(context, minHeight)
         : Container(
             height: height,
             width: width,
-            constraints: BoxConstraints(minHeight: _minHeight),
-            child: _buildColoredButton(context),
+            constraints: BoxConstraints(minHeight: minHeight),
+            child: _buildColoredButton(context, minHeight),
           );
   }
 
-  Widget _buildGradientButton(BuildContext context) {
+  Widget _buildGradientButton(BuildContext context, double minHeight) {
     return Container(
-      height: height ?? 40,
+      height: height ?? Theme.of(context).buttonTheme.height,
       width: width,
       padding: padding,
       decoration: BoxDecoration(
@@ -61,14 +63,15 @@ class ComButton extends StatelessWidget {
             radius ?? context.comTheme.shapes.circularRadius),
         boxShadow: _buildButtonShadow(context),
       ),
-      child: _buildButtonContent(context, _getGradientButtonStyle(context)),
+      child: _buildButtonContent(
+          context, _getGradientButtonStyle(context, minHeight)),
     );
   }
 
-  Widget _buildColoredButton(BuildContext context) {
+  Widget _buildColoredButton(BuildContext context, double minHeight) {
     final buttonTheme = plain
-        ? _getOutlinedButtonStyle(context)
-        : _getFilledButtonStyle(context);
+        ? _getOutlinedButtonStyle(context, minHeight)
+        : _getFilledButtonStyle(context, minHeight);
     final effectiveStyle = style?.merge(buttonTheme) ?? buttonTheme;
 
     return _buildButtonContent(context, effectiveStyle);
@@ -97,7 +100,7 @@ class ComButton extends StatelessWidget {
     return luminance > 0.5 ? Colors.black : Colors.white;
   }
 
-  ButtonStyle _getGradientButtonStyle(BuildContext context) {
+  ButtonStyle _getGradientButtonStyle(BuildContext context, double minHeight) {
     final foregroundColor = _getForegroundColor(context, Colors.transparent);
     return ElevatedButton.styleFrom(
       padding: padding,
@@ -109,11 +112,11 @@ class ComButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(
             radius ?? context.comTheme.shapes.circularRadius),
       ),
-      minimumSize: Size(_minHeight, 0),
+      minimumSize: Size(minHeight, 0),
     );
   }
 
-  ButtonStyle _getOutlinedButtonStyle(BuildContext context) {
+  ButtonStyle _getOutlinedButtonStyle(BuildContext context, double minHeight) {
     return OutlinedButton.styleFrom(
       padding: padding,
       foregroundColor:
@@ -127,11 +130,11 @@ class ComButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(
             radius ?? context.comTheme.shapes.circularRadius),
       ),
-      minimumSize: Size(_minHeight, 0),
+      minimumSize: Size(minHeight, 0),
     );
   }
 
-  ButtonStyle _getFilledButtonStyle(BuildContext context) {
+  ButtonStyle _getFilledButtonStyle(BuildContext context, double minHeight) {
     final buttonColor = _getButtonColor(context);
     final foregroundColor = _getForegroundColor(context, buttonColor);
 
@@ -145,7 +148,7 @@ class ComButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(
             radius ?? context.comTheme.shapes.circularRadius),
       ),
-      minimumSize: Size(_minHeight, 0),
+      minimumSize: Size(minHeight, 0),
     );
   }
 

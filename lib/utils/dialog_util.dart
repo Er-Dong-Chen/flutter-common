@@ -174,7 +174,8 @@ class DialogUtil {
         children: [
           Padding(
             padding: contentPadding ??
-                EdgeInsets.fromLTRB(24, title == null ? 32 : 12, 24, 20),
+                EdgeInsets.fromLTRB(
+                    24, title == null ? 36 : 12, 24, title == null ? 28 : 20),
             child: contentWidget,
           ),
           Divider(
@@ -381,8 +382,8 @@ class DialogUtil {
                       context: context,
                       content: content,
                       contentPadding: contentPadding ??
-                          EdgeInsets.fromLTRB(
-                              24, title == null ? 32 : 16, 24, 24),
+                          EdgeInsets.fromLTRB(24, title == null ? 36 : 16, 24,
+                              title == null ? 28 : 24),
                       dialogTheme: dialogTheme,
                       themeData: themeData,
                     ),

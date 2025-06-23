@@ -1,3 +1,7 @@
+## 2.4.2
+
+* TODO: Optimize the default height of ComButton and the padding of dialog
+
 ## 2.4.1
 
 * TODO: Pref docs

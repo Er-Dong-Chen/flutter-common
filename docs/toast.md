@@ -13,7 +13,7 @@
 
 ## 📱 效果预览
 
-![Toast 效果预览](assets/images/toast_preview.gif)
+![ComToast 效果预览](https://er-dong-chen.github.io/images/demo/toast.gif)
 
 ## 🚀 快速开始
 
