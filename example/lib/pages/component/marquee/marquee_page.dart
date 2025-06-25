@@ -25,7 +25,7 @@ class _MarqueePageState extends State<MarqueePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('跑马灯组件演示'),
+        title: const Text('Marquee'),
         backgroundColor: Colors.blue.shade600,
         foregroundColor: Colors.white,
       ),

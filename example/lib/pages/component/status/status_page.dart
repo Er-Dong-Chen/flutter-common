@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/widgets/base/base_widget.dart';
-import 'package:flutter_chen_common/widgets/base/com_arrow.dart';
-import 'package:flutter_chen_common/widgets/base/com_container.dart';
-import 'package:flutter_chen_common/widgets/base/com_popup_menu.dart';
+import 'package:flutter_chen_common/widgets/widgets.dart';
 import 'package:get/get.dart';
 import 'package:module_base/theme/theme.dart';
 

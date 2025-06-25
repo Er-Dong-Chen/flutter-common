@@ -12,7 +12,7 @@ class ButtonPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const ComBack(),
-        title: const Text('按钮组件'),
+        title: const Text('Button'),
       ),
       body: BaseWidget(
         child: SingleChildScrollView(
@@ -78,22 +78,35 @@ class ButtonPage extends StatelessWidget {
             onPressed: () {},
           ),
         ),
-        SizedBox(
-          width: double.infinity,
-          height: AppStyle.buttonHeight,
-          child: ComButton(
-            gradient: LinearGradient(
-                colors: [AppTheme.comTheme.error!, AppTheme.comTheme.warning!]),
-            child: const Text('渐变按钮'),
-            onPressed: () {
-              // Toast.show("111", context: Get.context!);
-              showModalBottomSheet(
-                  context: ComContext.context,
-                  builder: (_) {
-                    return const Text('text');
-                  });
-            },
-          ),
+        Row(
+          children: [
+            ComButton(
+              gradient: LinearGradient(colors: [
+                AppTheme.comTheme.error!,
+                AppTheme.comTheme.warning!
+              ]),
+              child: const Text('渐变按钮'),
+              onPressed: () {
+                // Toast.show("111", context: Get.context!);
+                showModalBottomSheet(
+                    context: ComContext.context,
+                    builder: (_) {
+                      return const Text('text');
+                    });
+              },
+            ),
+            ComButton(
+              child: const Text('渐变按钮'),
+              onPressed: () {
+                // Toast.show("111", context: Get.context!);
+                showModalBottomSheet(
+                    context: ComContext.context,
+                    builder: (_) {
+                      return const Text('text');
+                    });
+              },
+            ),
+          ],
         ),
       ],
     );

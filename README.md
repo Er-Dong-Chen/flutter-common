@@ -38,6 +38,7 @@ Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发
 - [智能刷新](docs/refresh.md) - 智能刷新列表解决方案
 - [Toast](docs/toast.md) - 全局无需Context的Toast提示
 - [Marquee](docs/marquee.md) - 支持任意widget，满足所有场景的跑马灯
+- [PopupMenu](docs/popup_menu.md) - 智能美观的PopupMenu菜单
 
 ## 🚀 快速开始
 
@@ -74,7 +75,7 @@ void main() async {
       logLevel: LogLevel.all,
       recordLevel: LogLevel.info,
       output: const [],
-      logDirectory: Directory('${dir.path}/logs'),
+      logDirectory: kIsWeb ? null : Directory('${dir.path}/logs'),
     ),
   );
   // 网络模块初始化

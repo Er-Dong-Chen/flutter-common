@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:example/network/network_interceptor.dart';
 import 'package:example/pages/component/component.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:module_base/module_base.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,7 +26,7 @@ Future<void> main() async {
       logLevel: LogLevel.all,
       recordLevel: LogLevel.info,
       output: const [],
-      logDirectory: Directory('${dir.path}/logs'),
+      logDirectory: kIsWeb ? null : Directory('${dir.path}/logs'),
     ),
   );
   HttpClient.init(
@@ -55,8 +57,6 @@ Future<void> main() async {
   Log.w("warning message");
   Log.e("error message");
   Log.console("console message 可完整打印不被截断并且无前缀");
-  await Log.getLogDir(); // 获取日志文件目录
-
   HttpClient.instance.request("https://gutendex.com/books",
       data: {"xx": "xx"}, options: Options(extra: {'custom': true}));
 
@@ -83,8 +83,12 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: AppThemeMode.getLocalThemeModel(),
+          locale: const Locale('zh', 'CN'),
           localizationsDelegates: const [
             ComLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: const [
             Locale('zh', 'CN'),
