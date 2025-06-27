@@ -40,6 +40,8 @@ Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发
 - [Marquee](docs/marquee.md) - 支持任意widget，满足所有场景的跑马灯
 - [PopupMenu](docs/popup_menu.md) - 智能美观的PopupMenu菜单
 
+### [Online Demo](https://er-dong-chen.github.io/flutter_chen_common/)
+
 ## 🚀 快速开始
 
 ### 安装
