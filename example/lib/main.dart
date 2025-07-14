@@ -35,7 +35,7 @@ Future<void> main() async {
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
-      commonHeaders: {"language": Get.deviceLocale?.languageCode},
+      commonHeaders: () => {"Authorization": SpUtil.getString('token')},
       interceptors: [NetworkInterceptor()],
       enableLog: true,
       enableToken: true,

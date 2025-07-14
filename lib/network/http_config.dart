@@ -5,7 +5,7 @@ class HttpConfig {
   final Duration connectTimeout;
   final Duration receiveTimeout;
   final Duration sendTimeout;
-  final Map<String, dynamic> commonHeaders;
+  final Map<String, dynamic> Function()? commonHeaders;
   final List<Interceptor> interceptors;
   final bool enableLog;
   final bool enableToken;
@@ -21,7 +21,7 @@ class HttpConfig {
     this.connectTimeout = const Duration(seconds: 15),
     this.receiveTimeout = const Duration(seconds: 15),
     this.sendTimeout = const Duration(seconds: 15),
-    this.commonHeaders = const {},
+    this.commonHeaders,
     this.interceptors = const [],
     this.enableLog = true,
     this.enableToken = true,
@@ -32,4 +32,7 @@ class HttpConfig {
     this.onRefreshToken,
     this.onRefreshTokenFailed,
   });
+
+  /// 获取当前通用请求头
+  Map<String, dynamic> get getCommonHeaders => commonHeaders?.call() ?? {};
 }

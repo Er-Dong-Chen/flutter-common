@@ -38,7 +38,6 @@ class HttpClient {
       connectTimeout: config.connectTimeout,
       receiveTimeout: config.receiveTimeout,
       sendTimeout: config.sendTimeout,
-      headers: config.commonHeaders,
     ));
 
     // 添加内置拦截器
@@ -106,6 +105,12 @@ class HttpClient {
     try {
       options ??= Options();
       options.method = method.name.toUpperCase();
+
+      // 动态设置请求头
+      final commonHeaders = config.getCommonHeaders;
+      if (commonHeaders.isNotEmpty) {
+        options.headers = {...?options.headers, ...commonHeaders};
+      }
 
       // 处理 GET 请求参数（向后兼容）
       final isGetMethod = method == HttpMethod.get;

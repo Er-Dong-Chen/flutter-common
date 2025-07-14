@@ -1,3 +1,7 @@
+## 2.6.0
+
+* TODO: Support dynamics commonHeaders
+
 ## 2.5.0
 
 * TODO: Added PopupMenu

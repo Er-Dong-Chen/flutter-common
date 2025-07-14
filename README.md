@@ -87,7 +87,7 @@ void main() async {
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
-      commonHeaders: {},
+      commonHeaders: () => {"Authorization": SpUtil.getString('token')},
       interceptors: [CustomInterceptor()]
       enableLog: true,
       enableToken: true,
@@ -122,7 +122,7 @@ class MyApp extends StatelessWidget {
         loadingWidget: CustomLoading(),
       ),
       child: MaterialApp(
-		    navigatorKey: navigatorKey,
+		navigatorKey: navigatorKey,
         builder: ComToastBuilder(),
         navigatorObservers: [ComToastNavigatorObserver()],
         theme: ThemeData.light().copyWith(
