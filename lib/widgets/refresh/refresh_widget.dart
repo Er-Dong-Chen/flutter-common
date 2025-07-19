@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/widgets/refresh/refresh_strategy.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_chen_refresh/flutter_chen_refresh.dart';
 
 import 'refresh_controller.dart';
 import 'refresh_interface.dart';

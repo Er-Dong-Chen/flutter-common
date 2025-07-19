@@ -148,7 +148,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.3.0"
+    version: "2.7.0"
+  flutter_chen_refresh:
+    dependency: "direct main"
+    description:
+      name: flutter_chen_refresh
+      sha256: "504c03aa97eb58babfa64b3227c5185c020f5493c3853632bc60cd9ccc7f1171"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -427,14 +435,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  pull_to_refresh:
-    dependency: "direct main"
-    description:
-      name: pull_to_refresh
-      sha256: bbadd5a931837b57739cf08736bea63167e284e71fb23b218c8c9a6e042aad12
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   rxdart:
     dependency: transitive
     description:

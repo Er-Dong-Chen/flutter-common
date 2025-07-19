@@ -1,3 +1,7 @@
+## 2.7.0
+
+* TODO: Replace the refresh library with flutter_chen_refresh
+
 ## 2.6.0
 
 * TODO: Support dynamics commonHeaders

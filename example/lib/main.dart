@@ -6,11 +6,11 @@ import 'package:example/pages/component/component.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_chen_refresh/flutter_chen_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:module_base/module_base.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
