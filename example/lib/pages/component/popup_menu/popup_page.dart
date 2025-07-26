@@ -86,7 +86,7 @@ class _PopupMenuPageState extends State<PopupMenuPage> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: Colors.blue),
+                  const Icon(Icons.info_outline, color: Colors.blue),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -385,10 +385,10 @@ class _PopupMenuPageState extends State<PopupMenuPage> {
                 });
               }
             },
-            child: Icon(Icons.smart_button, color: Colors.red, size: 24),
+            child: const Icon(Icons.smart_button, color: Colors.red, size: 24),
           ),
           const SizedBox(height: 4),
-          Text(
+          const Text(
             '控制器操作',
             style: TextStyle(
               color: Colors.red,

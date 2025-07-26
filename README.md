@@ -77,6 +77,7 @@ void main() async {
       logLevel: LogLevel.all,
       recordLevel: LogLevel.info,
       output: const [],
+      printer: PrettyPrinter(dateTimeFormat: DateTimeFormat.dateAndTime),
       logDirectory: kIsWeb ? null : Directory('${dir.path}/logs'),
     ),
   );

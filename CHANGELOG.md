@@ -1,3 +1,7 @@
+## 2.8.0
+
+* TODO: The optimization Log supports customization
+
 ## 2.7.0
 
 * TODO: Replace the refresh library with flutter_chen_refresh

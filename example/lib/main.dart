@@ -9,6 +9,7 @@ import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:flutter_chen_refresh/flutter_chen_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:module_base/module_base.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -26,6 +27,7 @@ Future<void> main() async {
       logLevel: LogLevel.all,
       recordLevel: LogLevel.info,
       output: const [],
+      printer: PrettyPrinter(dateTimeFormat: DateTimeFormat.dateAndTime),
       logDirectory: kIsWeb ? null : Directory('${dir.path}/logs'),
     ),
   );

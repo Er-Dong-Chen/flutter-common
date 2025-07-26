@@ -31,8 +31,9 @@ class Log {
     }
 
     _logger = Logger(
-      filter: ComLogFilter(LevelAdapter.toLevel(config.logLevel)),
-      printer: PrettyPrinter(),
+      filter:
+          config.filter ?? ComLogFilter(LevelAdapter.toLevel(config.logLevel)),
+      printer: config.printer ?? PrettyPrinter(),
       output: MultiOutput(outputs),
     );
   }
