@@ -1,3 +1,7 @@
+## 2.8.4
+
+* TODO: Support all platforms
+
 ## 2.8.3
 
 * TODO: Update yaml
