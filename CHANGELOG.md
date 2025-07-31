@@ -1,3 +1,7 @@
+## 2.9.0
+
+* TODO: Added platforms util
+
 ## 2.8.4
 
 * TODO: Support all platforms

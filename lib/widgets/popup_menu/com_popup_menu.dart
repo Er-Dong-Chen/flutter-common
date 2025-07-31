@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 enum PressType {
   longPress,
@@ -232,7 +231,7 @@ class ComPopupMenuState extends State<ComPopupMenu> {
         },
       ),
     );
-    if (!kIsWeb && Platform.isIOS) {
+    if (PlatformUtil.isIOS) {
       return child;
     } else {
       return PopScope(
