@@ -50,7 +50,8 @@ extension ListExtension<T> on List<T> {
   /// 获取列表中的随机元素
   T? get random {
     if (isEmpty) return null;
-    return this[DateTime.now().millisecondsSinceEpoch % length];
+    final random = DateTime.now().microsecondsSinceEpoch;
+    return this[random % length];
   }
 
   /// 将列表分割成指定大小的子列表
@@ -65,9 +66,37 @@ extension ListExtension<T> on List<T> {
 
   /// 对列表进行分页
   List<T> paginate(int pageNum, int pageSize) {
+    if (pageNum < 1 || pageSize <= 0) return [];
     final start = (pageNum - 1) * pageSize;
     if (start >= length) return [];
     final end = start + pageSize > length ? length : start + pageSize;
     return sublist(start, end);
   }
+
+  /// 安全的元素替换
+  List<T> safeReplace(int index, T newElement) {
+    if (index < 0 || index >= length) return List.from(this);
+    final newList = List<T>.from(this);
+    newList[index] = newElement;
+    return newList;
+  }
+
+  /// 查找元素的所有索引
+  List<int> indexesOf(T element) {
+    final indexes = <int>[];
+    for (int i = 0; i < length; i++) {
+      if (this[i] == element) {
+        indexes.add(i);
+      }
+    }
+    return indexes;
+  }
+
+  /// 移除空元素（针对可空类型）
+  List<T> whereNotNull() {
+    return where((element) => element != null).toList();
+  }
+
+  /// 安全的列表操作，避免并发修改异常
+  List<T> get safeCopy => List<T>.from(this);
 }

@@ -1,7 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material show showDialog;
 import 'package:flutter/material.dart' hide showDialog;
-import 'package:flutter_chen_common/flutter_chen_common.dart';
+
+import '../config/com_context.dart';
+import '../extension/context_extension.dart';
+import '../localization/com_localizations.dart';
+import '../toast/src/toast.dart';
+import '../widgets/base/com_button.dart';
+import '../widgets/base/com_title_bar.dart';
 
 /// 弹窗工具类
 class DialogUtil {
@@ -14,17 +20,20 @@ class DialogUtil {
 
   /// 显示Toast提示
   static void showToast(String text) {
-    ComToast.show(text);
+    if (text.trim().isNotEmpty) {
+      ComToast.show(text.trim());
+    }
   }
 
   /// 显示Loading
   static void showLoading(
       {String? text, Widget Function(BuildContext)? builder}) {
     hideLoading();
+
     if (builder != null) {
       ComToast.customLoading(builder: builder);
     } else {
-      ComToast.loading(message: text);
+      ComToast.loading(message: text?.trim());
     }
   }
 

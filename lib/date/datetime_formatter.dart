@@ -30,7 +30,7 @@ class DateTimeFormatter {
   }
 
   static String getTimeAgoForChat(DateTime? date, {Locale? locale}) {
-    return _delegate.timeAgo(
+    return _delegate.timeAgoForChat(
       date,
       locale: locale,
     );

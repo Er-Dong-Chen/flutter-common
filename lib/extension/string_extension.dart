@@ -57,6 +57,53 @@ extension StringExtension on String {
   /// 小数位格式化
   String toFixed({int digits = 2, String def = "0.0"}) {
     if (isEmpty) return def;
-    return double.parse(this).toStringAsFixed(digits);
+    return double.tryParse(this)?.toStringAsFixed(digits) ?? def;
+  }
+
+  /// 首字母大写
+  String get capitalize {
+    if (isEmpty) return this;
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  }
+
+  /// 驼峰命名转换
+  String get toCamelCase {
+    return split(' ')
+        .asMap()
+        .map((i, word) =>
+            MapEntry(i, i == 0 ? word.toLowerCase() : word.capitalize))
+        .values
+        .join();
+  }
+
+  /// 检查是否包含表情符号
+  bool get containsEmoji {
+    return RegExp(
+            r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])')
+        .hasMatch(this);
+  }
+
+  /// 移除所有空白字符
+  String get removeWhitespace {
+    return replaceAll(RegExp(r'\s+'), '');
+  }
+
+  /// 安全的子字符串提取
+  String safeSubstring(int start, [int? end]) {
+    if (isEmpty || start >= length) return '';
+    final safeStart = start.clamp(0, length);
+    final safeEnd = end?.clamp(safeStart, length) ?? length;
+    return substring(safeStart, safeEnd);
+  }
+
+  /// 反转字符串
+  String get reversed {
+    return split('').reversed.join();
+  }
+
+  /// 检查是否为回文
+  bool get isPalindrome {
+    final cleaned = toLowerCase().removeWhitespace;
+    return cleaned == cleaned.reversed;
   }
 }

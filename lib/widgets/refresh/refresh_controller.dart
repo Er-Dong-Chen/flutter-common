@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:flutter_chen_refresh/flutter_chen_refresh.dart';
+
+import 'refresh_interface.dart';
+import 'refresh_state.dart';
 
 abstract class PagingController<T> extends ChangeNotifier
     implements IRefreshController<T> {

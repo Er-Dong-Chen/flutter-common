@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
+
+import '../../config/com_configuration.dart';
+import '../../localization/com_localizations.dart';
+import 'com_button.dart';
+import 'com_empty.dart';
 
 enum LayoutStatus { loading, empty, noNetwork, success, error }
 
@@ -46,9 +50,12 @@ class BaseWidget extends StatelessWidget {
   }
 
   Widget buildContent(BuildContext context) {
-    switch (!isConnected && status == LayoutStatus.loading
+    // 确定实际状态
+    final actualStatus = (!isConnected && status == LayoutStatus.loading)
         ? LayoutStatus.noNetwork
-        : status) {
+        : (status ?? LayoutStatus.success);
+
+    switch (actualStatus) {
       case LayoutStatus.loading:
         return loading ?? loadingWidget(context);
       case LayoutStatus.empty:
@@ -58,7 +65,6 @@ class BaseWidget extends StatelessWidget {
       case LayoutStatus.error:
         return error ?? errorWidget(context);
       case LayoutStatus.success:
-      default:
         return child;
     }
   }
@@ -71,21 +77,35 @@ class ComNoNetworkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = ComLocalizations.of(context);
+
     return ComEmpty(
-      image: Image.asset("assets/images/no_network.png"),
+      image: Image.asset(
+        "assets/images/no_network.png",
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(
+            Icons.wifi_off,
+            size: 64,
+            color: theme.colorScheme.outline,
+          );
+        },
+      ),
       message: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            ComLocalizations.of(context).networkError,
-            style: Theme.of(context).textTheme.bodySmall,
+            localizations.networkError,
+            style: theme.textTheme.bodySmall,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(
-            height: 12,
-          ),
-          ComButton(
-            onPressed: () => onReconnect?.call(),
-            child: Text(ComLocalizations.of(context).networkRetry),
-          )
+          const SizedBox(height: 12),
+          if (onReconnect != null) ...[
+            ComButton(
+              onPressed: onReconnect,
+              child: Text(localizations.networkRetry),
+            ),
+          ],
         ],
       ),
     );
@@ -93,15 +113,44 @@ class ComNoNetworkWidget extends StatelessWidget {
 }
 
 class ComErrorWidget extends StatelessWidget {
-  const ComErrorWidget({super.key});
+  final String? message;
+  final VoidCallback? onRetry;
+
+  const ComErrorWidget({super.key, this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = ComLocalizations.of(context);
+
     return ComEmpty(
-      image: Image.asset("assets/images/error.png"),
-      message: Text(
-        ComLocalizations.of(context).loadingFailed,
-        style: Theme.of(context).textTheme.bodySmall,
+      image: Image.asset(
+        "assets/images/error.png",
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(
+            Icons.error_outline,
+            size: 64,
+            color: theme.colorScheme.error,
+          );
+        },
+      ),
+      message: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            message ?? localizations.loadingFailed,
+            style: theme.textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+          if (onRetry != null) ...[
+            const SizedBox(height: 12),
+            ComButton(
+              onPressed: onRetry,
+              plain: true,
+              child: Text(localizations.networkRetry),
+            ),
+          ],
+        ],
       ),
     );
   }

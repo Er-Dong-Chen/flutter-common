@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
+
+import '../widgets/base/base_widget.dart';
+import '../widgets/base/com_empty.dart';
+import '../widgets/base/com_loading.dart';
 
 class ComConfig {
   final Widget loadingWidget;

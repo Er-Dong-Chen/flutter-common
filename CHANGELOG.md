@@ -1,3 +1,11 @@
+## 2.10.0
+
+* TODO: Optimize and improve the code
+
+## 2.9.1
+
+* TODO: Update READEME
+
 ## 2.9.0
 
 * TODO: Added platforms util

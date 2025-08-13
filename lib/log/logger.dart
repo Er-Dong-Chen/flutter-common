@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:logger/logger.dart';
 
 import 'filter/log_filter.dart';
+import 'log_config.dart';
+import 'log_level.dart';
 import 'output/isolate_file_output.dart';
 import 'output/silent_file_output.dart';
 
@@ -87,7 +88,7 @@ class Log {
             message,
             error: error,
             stackTrace: stackTrace,
-            time: time,
+            time: time ?? DateTime.now(),
           ),
           [message.toString()],
         );

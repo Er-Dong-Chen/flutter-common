@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
+
+import '../../widgets/base/com_loading.dart';
+import 'toast_config.dart';
 
 /// Loading专用组件
 class ComLoadingWidget extends StatefulWidget {
@@ -72,10 +74,8 @@ class ComLoadingWidgetState extends State<ComLoadingWidget>
         color: Colors.black54,
         child: GestureDetector(
           onTap: widget.barrierDismissible ? widget.onDismiss : null,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.transparent,
+          behavior: HitTestBehavior.opaque,
+          child: SizedBox.expand(
             child: Center(
               child: FadeTransition(
                 opacity: _fadeAnimation,
