@@ -1,3 +1,7 @@
+## 2.11.0
+
+* TODO: Optimize and improve the ComMarquee
+
 ## 2.10.0
 
 * TODO: Optimize and improve the code

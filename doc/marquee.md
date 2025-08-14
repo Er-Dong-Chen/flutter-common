@@ -79,6 +79,7 @@ Container(
     itemSpacing: 12,
     pauseDuration: 2000,
     itemHeight: 60,
+    pauseOnHover: true, // 支持鼠标悬停暂停
     children: [
       _buildNewsItem('🔥', '重大突破！flutter_chen_common 2.0 正式发布', '2小时前'),
       _buildNewsItem('📢', '系统维护通知：今晚12点开始', '4小时前'),
@@ -231,6 +232,9 @@ Container(
 | `autoStart` | `bool` | `true` | 是否自动开始滚动 |
 | `pauseDuration` | `int` | `0` | 每轮滚动间隔（毫秒） |
 | `pauseOnHover` | `bool` | `false` | 鼠标悬停时是否暂停 |
+| `controller` | `MarqueeController?` | `null` | 控制器，用于编程控制滚动 |
+| `minScrollDistance` | `double` | `0.0` | 最小滚动距离 |
+| `scrollOnlyWhenOverflow` | `bool` | `false` | 是否只在内容超出容器时才滚动 |
 | `onComplete` | `VoidCallback?` | `null` | 滚动完成回调 |
 
 ### 📋 ComMarqueeList
@@ -251,6 +255,24 @@ Container(
 | `pauseDuration` | `int` | `0` | 每轮完成后停留时间（毫秒） |
 | `itemHeight` | `double` | `60.0` | 项目高度（垂直滚动时） |
 | `itemWidth` | `double` | `120.0` | 项目宽度（水平滚动时） |
+| `controller` | `MarqueeController?` | `null` | 控制器，用于编程控制滚动 |
+| `pauseOnHover` | `bool` | `false` | 鼠标悬停时是否暂停 |
+| `onComplete` | `VoidCallback?` | `null` | 滚动完成回调 |
+
+### 🎮 MarqueeController
+
+跑马灯控制器，用于编程控制滚动状态。
+
+#### 方法说明
+
+| 方法 | 返回类型 | 描述 |
+|------|--------|------|
+| `start()` | `void` | 开始滚动 |
+| `pause()` | `void` | 暂停滚动 |
+| `resume()` | `void` | 恢复滚动 |
+| `reset()` | `void` | 重置滚动到初始状态 |
+| `isScrolling` | `bool` | 获取是否正在滚动 |
+| `isPaused` | `bool` | 获取是否已暂停 |
 
 ### 🧭 MarqueeDirection
 
@@ -271,51 +293,206 @@ enum MarqueeDirection {
 
 ### 🎮 编程控制
 
-通过GlobalKey控制跑马灯的播放状态：
+通过MarqueeController控制跑马灯的播放状态：
 
 ```dart
-class MarqueeController extends StatefulWidget {
+class MarqueeControlPage extends StatefulWidget {
   @override
-  _MarqueeControllerState createState() => _MarqueeControllerState();
+  _MarqueeControlPageState createState() => _MarqueeControlPageState();
 }
 
-class _MarqueeControllerState extends State<MarqueeController> {
-  final GlobalKey<_ComMarqueeState> _marqueeKey = GlobalKey();
+class _MarqueeControlPageState extends State<MarqueeControlPage> {
+  final MarqueeController _controller = MarqueeController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // 跑马灯组件
-        ComMarquee(
-          key: _marqueeKey,
-          autoStart: false,
-          child: Text('可控制的跑马灯'),
+        // 基础跑马灯控制
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.blue.shade200),
+          ),
+          child: ComMarquee(
+            controller: _controller,
+            autoStart: false,
+            direction: MarqueeDirection.left,
+            speed: 50,
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                '这是一个可以编程控制的跑马灯组件 🎮',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue.shade700,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
         ),
         
-        // 控制按钮
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        SizedBox(height: 16),
+        
+        // 控制按钮组
+        Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () => _marqueeKey.currentState?.start(),
-              child: Text('开始'),
+            ElevatedButton.icon(
+              onPressed: () => _controller.start(),
+              icon: Icon(Icons.play_arrow),
+              label: Text('开始'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
             ),
-            ElevatedButton(
-              onPressed: () => _marqueeKey.currentState?.pause(),
-              child: Text('暂停'),
+            ElevatedButton.icon(
+              onPressed: () => _controller.pause(),
+              icon: Icon(Icons.pause),
+              label: Text('暂停'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
+              ),
             ),
-            ElevatedButton(
-              onPressed: () => _marqueeKey.currentState?.resume(),
-              child: Text('继续'),
+            ElevatedButton.icon(
+              onPressed: () => _controller.resume(),
+              icon: Icon(Icons.play_arrow),
+              label: Text('继续'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
             ),
-            ElevatedButton(
-              onPressed: () => _marqueeKey.currentState?.reset(),
-              child: Text('重置'),
+            ElevatedButton.icon(
+              onPressed: () => _controller.reset(),
+              icon: Icon(Icons.refresh),
+              label: Text('重置'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        
+        SizedBox(height: 16),
+        
+        // 状态显示
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _controller.isScrolling ? Icons.play_circle : Icons.pause_circle,
+              color: _controller.isScrolling ? Colors.green : Colors.orange,
+            ),
+            SizedBox(width: 8),
+            Text(
+              _controller.isScrolling ? '正在滚动' : 
+              _controller.isPaused ? '已暂停' : '已停止',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: _controller.isScrolling ? Colors.green : Colors.orange,
+              ),
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+// 列表跑马灯控制示例
+class MarqueeListControlExample extends StatefulWidget {
+  @override
+  _MarqueeListControlExampleState createState() => _MarqueeListControlExampleState();
+}
+
+class _MarqueeListControlExampleState extends State<MarqueeListControlExample> {
+  final MarqueeController _listController = MarqueeController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.purple.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.purple.shade200),
+      ),
+      child: Column(
+        children: [
+          // 列表跑马灯
+          Expanded(
+            child: ComMarqueeList(
+              controller: _listController,
+              direction: MarqueeDirection.up,
+              speed: 30,
+              visibleItemCount: 2,
+              itemHeight: 50,
+              autoStart: false,
+              children: [
+                '📱 移动应用开发',
+                '🌐 Web前端开发', 
+                '⚙️ 后端服务开发',
+                '🎨 UI/UX设计',
+                '📊 数据分析',
+              ].map((text) => Container(
+                padding: EdgeInsets.all(12),
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.purple.shade200),
+                ),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.purple.shade700,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )).toList(),
+            ),
+          ),
+          
+          // 控制区域
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () => _listController.start(),
+                  icon: Icon(Icons.play_arrow, color: Colors.green),
+                  tooltip: '开始',
+                ),
+                IconButton(
+                  onPressed: () => _listController.pause(),
+                  icon: Icon(Icons.pause, color: Colors.orange),
+                  tooltip: '暂停',
+                ),
+                IconButton(
+                  onPressed: () => _listController.resume(),
+                  icon: Icon(Icons.play_arrow, color: Colors.blue),
+                  tooltip: '继续',
+                ),
+                IconButton(
+                  onPressed: () => _listController.reset(),
+                  icon: Icon(Icons.refresh, color: Colors.grey),
+                  tooltip: '重置',
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
