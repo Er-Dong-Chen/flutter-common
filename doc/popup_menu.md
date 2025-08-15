@@ -47,6 +47,57 @@ ComPopupMenu(
 )
 ```
 
+### 🎯 便利构造函数
+
+#### 快速文本菜单
+
+```dart
+ComPopupMenu.text(
+  text: '这是一个简单的文本提示\\n支持多行显示',
+  textStyle: TextStyle(fontSize: 14, color: Colors.black87),
+  backgroundColor: Colors.white,
+  padding: EdgeInsets.all(16),
+  borderRadius: BorderRadius.circular(8),
+  child: ElevatedButton(
+    onPressed: () {},
+    child: Text('显示文本菜单'),
+  ),
+)
+```
+
+#### 快速选项菜单
+
+```dart
+ComPopupMenu.options(
+  options: [
+    PopupMenuOption(
+      text: '收藏',
+      icon: Icons.star,
+      iconColor: Colors.amber,
+      onTap: () => print('点击了收藏'),
+    ),
+    PopupMenuOption(
+      text: '分享',
+      icon: Icons.share,
+      iconColor: Colors.blue,
+      onTap: () => print('点击了分享'),
+    ),
+    PopupMenuOption(
+      text: '删除',
+      icon: Icons.delete,
+      iconColor: Colors.red,
+      textStyle: TextStyle(color: Colors.red),
+      onTap: () => print('点击了删除'),
+    ),
+  ],
+  backgroundColor: Colors.white,
+  child: IconButton(
+    icon: Icon(Icons.more_vert),
+    onPressed: () {},
+  ),
+)
+```
+
 ### 长按触发
 
 ```dart
@@ -369,6 +420,113 @@ Widget _buildThemedMenu(BuildContext context) {
 }
 ```
 
+### 4. 宽度控制最佳实践
+
+```dart
+// 推荐：为便利构造函数设置合理的宽度限制
+ComPopupMenu.text(
+  text: '很长的文本内容可能会导致菜单过宽',
+  maxWidth: 300, // 限制最大宽度
+  child: ElevatedButton(
+    child: Text('文本菜单'),
+    onPressed: () {},
+  ),
+)
+
+// 推荐：选项菜单设置最小和最大宽度
+ComPopupMenu.options(
+  options: [...],
+  minWidth: 120, // 确保菜单有足够宽度
+  maxWidth: 250, // 防止菜单过宽
+  child: IconButton(
+    icon: Icon(Icons.more_vert),
+    onPressed: () {},
+  ),
+)
+
+// 不推荐：让菜单宽度不受限制
+ComPopupMenu.options(
+  options: [...],
+  // 没有设置宽度限制，可能导致菜单过宽
+  child: IconButton(icon: Icon(Icons.more_vert)),
+)
+```
+
+### 5. 错误处理
+
+```dart
+class SafePopupMenuExample extends StatefulWidget {
+  @override
+  _SafePopupMenuExampleState createState() => _SafePopupMenuExampleState();
+}
+
+class _SafePopupMenuExampleState extends State<SafePopupMenuExample> {
+  final ComPopupMenuController _controller = ComPopupMenuController();
+  
+  @override
+  void dispose() {
+    // 确保控制器被正确释放
+    _controller.dispose();
+    super.dispose();
+  }
+  
+  void _safeMenuAction() {
+    try {
+      // 安全的菜单操作
+      if (mounted && !_controller.menuIsShowing) {
+        _controller.showMenu();
+      }
+    } catch (e) {
+      // 处理可能的错误
+      debugPrint('Menu action failed: $e');
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return ComPopupMenu(
+      controller: _controller,
+      menuOnChange: (isShowing) {
+        // 安全的状态更新
+        if (mounted) {
+          setState(() {
+            // 更新UI状态
+          });
+        }
+      },
+      menuBuilder: _buildSafeMenu(),
+      child: ElevatedButton(
+        onPressed: _safeMenuAction,
+        child: Text('安全菜单'),
+      ),
+    );
+  }
+  
+  Widget _buildSafeMenu() {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: Icon(Icons.check),
+            title: Text('安全操作'),
+            onTap: () {
+              // 确保在mounted状态下操作
+              if (mounted) {
+                _controller.hideMenu();
+                // 执行安全的业务逻辑
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
 ## 📚 API 参考
 
 ### ComPopupMenu
@@ -388,6 +546,52 @@ Widget _buildThemedMenu(BuildContext context) {
 | position | PreferredPosition? | null | 首选位置 |
 | menuOnChange | void Function(bool)? | null | 菜单状态变化回调 |
 | enablePassEvent | bool | true | 是否启用点击穿透 |
+| semanticLabel | String? | null | 语义化标签 |
+| excludeFromSemantics | bool | false | 是否从语义树中排除 |
+
+### PopupMenuOption
+
+| 参数 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| text | String | 必需 | 选项文本 |
+| onTap | VoidCallback | 必需 | 点击回调 |
+| icon | IconData? | null | 选项图标 |
+| iconColor | Color? | null | 图标颜色 |
+| textStyle | TextStyle? | null | 文本样式 |
+
+### 便利构造函数
+
+#### ComPopupMenu.text()
+
+| 参数 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| child | Widget | 必需 | 触发菜单的子组件 |
+| text | String | 必需 | 显示的文本内容 |
+| textStyle | TextStyle? | null | 文本样式 |
+| padding | EdgeInsets? | EdgeInsets.symmetric(horizontal: 16, vertical: 12) | 内边距 |
+| backgroundColor | Color? | Colors.white | 背景颜色 |
+| borderRadius | BorderRadius? | BorderRadius.circular(8) | 圆角半径 |
+| pressType | PressType | singleClick | 触发方式 |
+| controller | ComPopupMenuController? | null | 菜单控制器 |
+| position | PreferredPosition? | null | 首选位置 |
+| showArrow | bool | true | 是否显示箭头 |
+| arrowColor | Color? | null | 箭头颜色 |
+| onMenuChanged | void Function(bool)? | null | 菜单状态变化回调 |
+
+#### ComPopupMenu.options()
+
+| 参数 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| child | Widget | 必需 | 触发菜单的子组件 |
+| options | List\<PopupMenuOption\> | 必需 | 选项列表 |
+| backgroundColor | Color? | Colors.white | 背景颜色 |
+| borderRadius | BorderRadius? | BorderRadius.circular(8) | 圆角半径 |
+| pressType | PressType | singleClick | 触发方式 |
+| controller | ComPopupMenuController? | null | 菜单控制器 |
+| position | PreferredPosition? | null | 首选位置 |
+| showArrow | bool | true | 是否显示箭头 |
+| arrowColor | Color? | null | 箭头颜色 |
+| onMenuChanged | void Function(bool)? | null | 菜单状态变化回调 |
 
 ### PressType
 
@@ -405,12 +609,44 @@ Widget _buildThemedMenu(BuildContext context) {
 
 ### ComPopupMenuController
 
-| 方法 | 描述 |
-|------|------|
-| showMenu() | 显示菜单 |
-| hideMenu() | 隐藏菜单 |
-| toggleMenu() | 切换菜单显示状态 |
-| menuIsShowing | 获取当前菜单是否显示 |
+| 方法/属性 | 类型 | 描述 |
+|------|------|------|
+| showMenu() | void | 显示菜单 |
+| hideMenu() | void | 隐藏菜单 |
+| toggleMenu() | void | 切换菜单显示状态 |
+| menuIsShowing | bool | 获取当前菜单是否显示（只读属性） |
+| dispose() | void | 释放控制器资源 |
+
+## ♿ 无障碍支持
+
+### 语义化标签
+
+```dart
+ComPopupMenu(
+  semanticLabel: '操作菜单', // 为屏幕阅读器提供描述
+  excludeFromSemantics: false, // 包含在语义树中
+  menuBuilder: _buildMenu(),
+  child: IconButton(
+    icon: Icon(Icons.more_vert),
+    onPressed: () {},
+  ),
+)
+```
+
+### 触觉反馈
+
+组件在菜单操作时会自动提供适当的触觉反馈（仅在支持的平台上）：
+
+```dart
+// 组件内部会自动调用
+if (!PlatformUtil.isWeb) {
+  HapticFeedback.lightImpact();
+}
+```
+
+### 键盘导航
+
+组件支持标准的Flutter键盘导航模式，可以通过Tab键访问和操作。
 
 ## 🎭 样式定制
 
@@ -452,13 +688,31 @@ Widget _buildAnimatedMenu() {
 ## 🐛 常见问题
 
 ### Q: 菜单位置不正确？
-A: 确保触发组件有明确的尺寸，避免使用 `Flexible` 或 `Expanded` 包装触发组件。
+A: 确保触发组件有明确的尺寸，避免使用 `Flexible` 或 `Expanded` 包装触发组件。新版本已经改进了位置计算算法，支持更好的边界检测。
 
 ### Q: 点击菜单外部无法关闭？
 A: 检查 `barrierColor` 是否为透明色，如果是透明色需要设置 `enablePassEvent: false`。
 
 ### Q: 在某些情况下菜单不显示？
-A: 确保在 `WidgetsBinding.instance.addPostFrameCallback` 之后调用显示方法。
+A: 确保在 `WidgetsBinding.instance.addPostFrameCallback` 之后调用显示方法。新版本增强了错误处理，会在控制台输出调试信息。
 
 ### Q: 如何在菜单中添加复杂交互？
-A: 在 `menuBuilder` 中可以添加任何 Flutter 组件，包括按钮、输入框、列表等。
+A: 在 `menuBuilder` 中可以添加任何 Flutter 组件，包括按钮、输入框、列表等。推荐使用新的便利构造函数 `ComPopupMenu.options()` 来简化常见的选项菜单。
+
+### Q: 控制器使用后出现内存泄漏？
+A: 确保在 `dispose()` 方法中调用 `controller.dispose()`。新版本改进了控制器生命周期管理，只有自创建的控制器才会被自动释放。
+
+### Q: 菜单在屏幕边缘被截断？
+A: 新版本已经优化了边界检测算法，会自动调整菜单位置避免溢出。如果仍有问题，可以调整 `horizontalMargin` 和 `verticalMargin` 参数。
+
+### Q: 如何快速创建简单的文本提示菜单？
+A: 使用新的便利构造函数：
+```dart
+ComPopupMenu.text(
+  text: '提示内容',
+  child: YourTriggerWidget(),
+)
+```
+
+### Q: 语义化支持如何配置？
+A: 使用 `semanticLabel` 参数为屏幕阅读器提供描述，使用 `excludeFromSemantics` 控制是否包含在语义树中。

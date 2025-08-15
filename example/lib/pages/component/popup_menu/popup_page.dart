@@ -228,6 +228,9 @@ class _PopupMenuPageState extends State<PopupMenuPage> {
                   () => _buildBasicMenu(),
                 ),
 
+                // 快速文本菜单
+                _buildTextMenuExample(),
+
                 // 图标菜单
                 _buildExampleItem(
                   '图标菜单',
@@ -235,6 +238,9 @@ class _PopupMenuPageState extends State<PopupMenuPage> {
                   Colors.green,
                   () => _buildIconMenu(),
                 ),
+
+                // 选项菜单
+                _buildOptionsMenuExample(),
 
                 // 长按触发
                 _buildExampleItemLongPress(
@@ -362,6 +368,126 @@ class _PopupMenuPageState extends State<PopupMenuPage> {
     );
   }
 
+  /// 快速文本菜单示例
+  Widget _buildTextMenuExample() {
+    return ComPopupMenu.text(
+      text: '这是一个快速创建的文本菜单示例\\n使用 ComPopupMenu.text() 便利构造函数',
+      textStyle: TextStyle(
+        fontSize: 14,
+        color: _isDarkTheme ? Colors.white : Colors.black87,
+      ),
+      backgroundColor: _menuBackgroundColor,
+      pressType: PressType.singleClick,
+      position: _preferredPosition,
+      showArrow: _enableArrow,
+      arrowColor: _menuBackgroundColor,
+      onMenuChanged: (show) {
+        if (show) {
+          setState(() {
+            _selectedAction = '打开了快速文本菜单';
+          });
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.cyan.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.cyan.withOpacity(0.3)),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.text_fields, color: Colors.cyan, size: 24),
+            SizedBox(height: 4),
+            Text(
+              '文本菜单',
+              style: TextStyle(
+                color: Colors.cyan,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 选项菜单示例
+  Widget _buildOptionsMenuExample() {
+    return ComPopupMenu.options(
+      options: [
+        PopupMenuOption(
+          text: '收藏',
+          icon: Icons.star,
+          iconColor: Colors.amber,
+          onTap: () {
+            setState(() {
+              _selectedAction = '点击了收藏选项';
+            });
+          },
+        ),
+        PopupMenuOption(
+          text: '分享',
+          icon: Icons.share,
+          iconColor: Colors.blue,
+          onTap: () {
+            setState(() {
+              _selectedAction = '点击了分享选项';
+            });
+          },
+        ),
+        PopupMenuOption(
+          text: '删除',
+          icon: Icons.delete,
+          iconColor: Colors.red,
+          textStyle: const TextStyle(color: Colors.red),
+          onTap: () {
+            setState(() {
+              _selectedAction = '点击了删除选项';
+            });
+          },
+        ),
+      ],
+      backgroundColor: _menuBackgroundColor,
+      pressType: PressType.singleClick,
+      position: _preferredPosition,
+      showArrow: _enableArrow,
+      arrowColor: _menuBackgroundColor,
+      onMenuChanged: (show) {
+        if (show) {
+          setState(() {
+            _selectedAction = '打开了选项菜单';
+          });
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.indigo.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.indigo.withOpacity(0.3)),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.list, color: Colors.indigo, size: 24),
+            SizedBox(height: 4),
+            Text(
+              '选项菜单',
+              style: TextStyle(
+                color: Colors.indigo,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildControllerExample() {
     return Container(
       decoration: BoxDecoration(
@@ -377,6 +503,7 @@ class _PopupMenuPageState extends State<PopupMenuPage> {
             showArrow: _enableArrow,
             arrowColor: _menuBackgroundColor,
             position: _preferredPosition,
+            semanticLabel: '控制器操作菜单',
             menuBuilder: _buildControllerMenu(),
             menuOnChange: (show) {
               if (show) {

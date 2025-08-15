@@ -1,3 +1,7 @@
+## 2.12.0
+
+* TODO: Optimize and improve the ComPopupMenu
+
 ## 2.11.0
 
 * TODO: Optimize and improve the ComMarquee

@@ -412,7 +412,8 @@ class _ComMarqueeState extends State<ComMarquee>
             }
 
             return OverflowBox(
-              alignment: isHorizontal ? Alignment.centerLeft : Alignment.topCenter,
+              alignment:
+                  isHorizontal ? Alignment.centerLeft : Alignment.topCenter,
               minWidth: isHorizontal ? contentWidth : null,
               maxWidth: isHorizontal ? contentWidth : null,
               minHeight: !isHorizontal ? contentHeight : null,
