@@ -37,10 +37,10 @@ class ComToastNavigatorObserver extends NavigatorObserver {
   }
 
   /// 统一处理路由变化
-  void _handleRouteChange() {
+  void _handleRouteChange() async {
     // 页面变化时立即关闭Loading（不使用动画，因为用户已经离开页面）
     if (_loadingManager.isLoadingShowing) {
-      _loadingManager.hideLoadingImmediately();
+      await _loadingManager.hideLoadingImmediately();
     }
 
     // 可选：页面变化时也可以关闭Toast（根据需求配置）

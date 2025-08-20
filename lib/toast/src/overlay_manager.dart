@@ -87,13 +87,8 @@ class ComOverlayManager {
     _isLoadingShowing = false;
 
     try {
-      // 如果是Loading组件，先执行动画
-      final loadingWidget =
-          _loadingEntry!.builder(ComContext.context) as Widget?;
-      if (loadingWidget != null) {
-        // 等待动画完成（可选）
-        await Future.delayed(const Duration(milliseconds: 200));
-      }
+      // 等待动画完成（可选）
+      await Future.delayed(const Duration(milliseconds: 200));
 
       if (_loadingEntry!.mounted) {
         _loadingEntry!.remove();

@@ -1,3 +1,7 @@
+## 2.13.0
+
+* TODO: Optimize and improve the ComToast
+
 ## 2.12.0
 
 * TODO: Optimize and improve the ComPopupMenu

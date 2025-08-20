@@ -92,8 +92,10 @@ class ComToastWidgetState extends State<ComToastWidget>
   }
 
   double _getTopPosition() {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final statusBarHeight = MediaQuery.of(context).padding.top;
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final statusBarHeight = mediaQuery.padding.top;
+    final bottomPadding = mediaQuery.padding.bottom;
 
     switch (widget.config.position) {
       case ComToastPosition.top:
@@ -101,7 +103,7 @@ class ComToastWidgetState extends State<ComToastWidget>
       case ComToastPosition.center:
         return screenHeight * 0.45;
       case ComToastPosition.bottom:
-        return screenHeight * 0.8;
+        return screenHeight - bottomPadding - 100;
     }
   }
 
@@ -171,7 +173,7 @@ class ComToastWidgetState extends State<ComToastWidget>
                             constraints: BoxConstraints(
                               maxWidth: MediaQuery.of(context).size.width *
                                   widget.config.maxWidth,
-                              minHeight: 52,
+                              minHeight: 48,
                             ),
                             child: _buildContent(),
                           ),
