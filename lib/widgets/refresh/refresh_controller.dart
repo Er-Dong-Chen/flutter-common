@@ -32,6 +32,7 @@ abstract class PagingController<T> extends ChangeNotifier
   @override
   Future<void> refresh() async {
     _state.updateState(isRefreshing: true, pageNum: 1);
+    _state.clearError();
     notifyListeners();
     try {
       final response = await loadData();
@@ -48,6 +49,7 @@ abstract class PagingController<T> extends ChangeNotifier
       _state.updateState(
         hasMore: false,
         isRefreshing: false,
+        error: e.toString(),
       );
       refreshController.refreshFailed();
     } finally {
@@ -60,6 +62,7 @@ abstract class PagingController<T> extends ChangeNotifier
     if (!_state.hasMore) return;
 
     _state.updateState(isLoadingMore: true);
+    _state.clearError();
     notifyListeners();
     try {
       final response = await loadData();
@@ -71,7 +74,10 @@ abstract class PagingController<T> extends ChangeNotifier
       );
       refreshController.loadComplete();
     } catch (e) {
-      _state.updateState(isLoadingMore: false);
+      _state.updateState(
+        isLoadingMore: false,
+        error: e.toString(),
+      );
       refreshController.loadFailed();
     } finally {
       notifyListeners();
@@ -101,23 +107,26 @@ abstract class PagingController<T> extends ChangeNotifier
 
   /// 判断是否还有更多数据
   bool _hasMoreData(PagingResponse<T> response) {
+    // 如果当前页数据为空，肯定没有更多数据
+    if (response.data.isEmpty) {
+      return false;
+    }
+
     // 如果总页数大于0，优先使用总页数判断
     if (response.pages > 0) {
-      return _state.pageNum < response.pages;
+      return _state.pageNum <= response.pages;
     }
 
     // 如果总条数大于0，使用总条数判断
     if (response.total > 0) {
-      return (_state.pageNum - 1) * _state.pageSize + _state.dataList.length <
-          response.total;
+      final currentTotal =
+          (_state.pageNum - 1) * _state.pageSize + response.data.length;
+      return currentTotal < response.total;
     }
 
-    // 如果总页数和总条数都为0，且是数据不为空，则根据当前页数据量判断
-    if (response.data.isNotEmpty) {
-      return response.data.length >= _state.pageSize;
-    }
-
-    return false;
+    // 如果总页数和总条数都为0，根据当前页数据量判断
+    // 当前页数据量小于页大小，说明是最后一页
+    return response.data.length >= _state.pageSize;
   }
 }
 

@@ -1,3 +1,7 @@
+## 2.14.0
+
+* TODO: Optimize and improve the Refresh
+
 ## 2.13.0
 
 * TODO: Optimize and improve the ComToast

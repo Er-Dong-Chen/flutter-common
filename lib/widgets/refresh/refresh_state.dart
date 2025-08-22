@@ -10,6 +10,7 @@ class RefreshState<T> implements IRefreshState<T> {
   bool _initialRefresh = true;
   bool _isRefreshing = false;
   bool _isLoadingMore = false;
+  String? _error;
 
   @override
   bool get hasMore => _hasMore;
@@ -32,6 +33,12 @@ class RefreshState<T> implements IRefreshState<T> {
   @override
   bool get isLoadingMore => _isLoadingMore;
 
+  @override
+  String? get error => _error;
+
+  @override
+  bool get hasError => _error != null;
+
   void updateState({
     int? pageNum,
     int? pageSize,
@@ -40,6 +47,7 @@ class RefreshState<T> implements IRefreshState<T> {
     bool? initialRefresh,
     bool? isRefreshing,
     bool? isLoadingMore,
+    String? error,
   }) {
     if (pageNum != null) _pageNum = pageNum;
     if (pageSize != null) _pageSize = pageSize;
@@ -48,6 +56,11 @@ class RefreshState<T> implements IRefreshState<T> {
     if (initialRefresh != null) _initialRefresh = initialRefresh;
     if (isRefreshing != null) _isRefreshing = isRefreshing;
     if (isLoadingMore != null) _isLoadingMore = isLoadingMore;
+    if (error != null) _error = error;
+  }
+
+  void clearError() {
+    _error = null;
   }
 
   void addData(List<T> newData) {
@@ -56,8 +69,8 @@ class RefreshState<T> implements IRefreshState<T> {
 
   void clear() {
     _dataList.clear();
-    _pageNum = 1;
     _hasMore = true;
+    _error = null;
   }
 }
 

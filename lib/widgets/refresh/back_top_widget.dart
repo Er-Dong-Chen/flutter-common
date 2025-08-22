@@ -13,20 +13,35 @@ class BackTopWidget extends StatefulWidget {
 
 class BackTopState extends State<BackTopWidget> {
   bool _showBackTop = false;
+  double _threshold = 0;
 
   @override
   void initState() {
     super.initState();
+    widget.scrollController.addListener(_onScroll);
+  }
 
-    widget.scrollController.addListener(() {
-      if (widget.scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        isShow(false);
-      } else {
-        isShow(widget.scrollController.position.pixels >
-            MediaQuery.of(context).size.height);
-      }
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _threshold = MediaQuery.of(context).size.height;
+  }
+
+  void _onScroll() {
+    if (!mounted) return;
+
+    final position = widget.scrollController.position;
+    if (position.userScrollDirection == ScrollDirection.reverse) {
+      isShow(false);
+    } else {
+      isShow(position.pixels > _threshold);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_onScroll);
+    super.dispose();
   }
 
   @override

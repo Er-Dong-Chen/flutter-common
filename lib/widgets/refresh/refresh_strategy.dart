@@ -40,6 +40,8 @@ class ListRefreshStrategy<T> implements IRefreshStrategy<T> {
   }) {
     if (state.initialRefresh) {
       return BaseWidget.loadingWidget(context);
+    } else if (state.hasError && state.dataList.isEmpty) {
+      return BaseWidget.errorWidget(context);
     } else if (state.dataList.isEmpty) {
       return BaseWidget.emptyWidget(context);
     }
@@ -83,6 +85,8 @@ class GridRefreshStrategy<T> implements IRefreshStrategy<T> {
   }) {
     if (state.initialRefresh) {
       return BaseWidget.loadingWidget(context);
+    } else if (state.hasError && state.dataList.isEmpty) {
+      return BaseWidget.errorWidget(context);
     } else if (state.dataList.isEmpty) {
       return BaseWidget.emptyWidget(context);
     }

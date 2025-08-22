@@ -9,6 +9,8 @@ abstract class IRefreshState<T> {
   bool get initialRefresh;
   bool get isRefreshing;
   bool get isLoadingMore;
+  String? get error;
+  bool get hasError;
 }
 
 /// 刷新控制器接口
