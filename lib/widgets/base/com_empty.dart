@@ -34,6 +34,13 @@ class ComEmpty extends StatelessWidget {
       "assets/images/empty.png",
       width: imageSize,
       height: imageSize,
+      errorBuilder: (context, error, stackTrace) {
+        return Icon(
+          Icons.inbox_outlined,
+          size: imageSize,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        );
+      },
     );
   }
 

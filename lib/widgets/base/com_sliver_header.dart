@@ -16,7 +16,9 @@ class ComSliverPinnedHeader extends StatelessWidget {
     return SliverPersistentHeader(
       pinned: true,
       delegate: _ComSliverPinnedHeaderDelegate(
-          child: child, color: color ?? Colors.white),
+        child: child,
+        color: color ?? Theme.of(context).colorScheme.surface,
+      ),
     );
   }
 }
@@ -34,9 +36,19 @@ class _ComSliverPinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => (child is PreferredSizeWidget)
-      ? (child as PreferredSizeWidget).preferredSize.height
-      : kToolbarHeight; // 默认高度
+  double get maxExtent {
+    if (child is PreferredSizeWidget) {
+      return (child as PreferredSizeWidget).preferredSize.height;
+    }
+    // 尝试从 child 获取约束高度
+    if (child is Container) {
+      final container = child as Container;
+      if (container.constraints?.maxHeight != null) {
+        return container.constraints!.maxHeight;
+      }
+    }
+    return kToolbarHeight; // 默认高度
+  }
 
   @override
   double get minExtent => maxExtent;

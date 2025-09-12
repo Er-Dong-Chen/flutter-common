@@ -1,3 +1,7 @@
+## 2.15.0
+
+* TODO: Optimize and improve the Widget
+
 ## 2.14.0
 
 * TODO: Optimize and improve the Refresh

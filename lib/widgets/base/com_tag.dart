@@ -20,20 +20,33 @@ class ComTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundColor = color ?? Theme.of(context).colorScheme.primary;
+    final foregroundColor = _getForegroundColor(backgroundColor);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
-          color: color ?? Theme.of(context).colorScheme.primary,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: DefaultTextStyle(
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: foregroundColor,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
           child: child,
         ),
       ),
     );
+  }
+
+  Color _getForegroundColor(Color backgroundColor) {
+    // 根据背景色亮度自动选择前景色
+    final luminance = backgroundColor.computeLuminance();
+    return luminance > 0.5 ? Colors.black87 : Colors.white;
   }
 }

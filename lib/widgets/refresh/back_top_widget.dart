@@ -24,7 +24,7 @@ class BackTopState extends State<BackTopWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _threshold = MediaQuery.of(context).size.height;
+    _threshold = MediaQuery.of(context).size.height * 0.5;
   }
 
   void _onScroll() {

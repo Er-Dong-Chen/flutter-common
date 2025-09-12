@@ -1,3 +1,4 @@
+import 'package:example/pages/component/basic/basic_page.dart';
 import 'package:example/pages/component/image/image_page.dart';
 import 'package:example/pages/component/list/list_page.dart';
 import 'package:example/pages/component/marquee/marquee_page.dart';
@@ -19,29 +20,67 @@ class ComponentListPage extends StatelessWidget {
     {
       'title': '基础组件',
       'items': [
-        {'title': 'Button', 'page': () => const ButtonPage()},
-        {'title': 'Image', 'page': () => const ImagePage()},
+        {
+          'title': 'Basic Components',
+          'subtitle': '箭头、容器、分割线等基础组件',
+          'page': () => const BasicComponentsPage()
+        },
+        {
+          'title': 'Button',
+          'subtitle': '按钮组件演示',
+          'page': () => const ButtonPage()
+        },
+        {
+          'title': 'Image',
+          'subtitle': '图片组件演示',
+          'page': () => const ImagePage()
+        },
       ],
     },
     {
-      'title': '视图组件',
+      'title': '布局组件',
       'items': [
-        {'title': 'Refresh List', 'page': () => const ListPage()},
-        {'title': 'Layout Status', 'page': () => StatusPage()},
+        // {'title': 'Sliver Header', 'subtitle': '固定和浮动标题栏', 'page': () => const SliverPage()},
+        {
+          'title': 'Refresh List',
+          'subtitle': '下拉刷新列表组件',
+          'page': () => const ListPage()
+        },
+        {
+          'title': 'Layout Status',
+          'subtitle': '页面状态布局',
+          'page': () => StatusPage()
+        },
       ],
     },
     {
-      'title': '反馈组件',
+      'title': '交互组件',
       'items': [
-        {'title': 'PopupMenu', 'page': () => const PopupMenuPage()},
-        {'title': 'Dialog', 'page': () => const DialogPage()},
-        {'title': 'Toast', 'page': () => const ToastPage()},
+        {
+          'title': 'PopupMenu',
+          'subtitle': '弹出菜单组件',
+          'page': () => const PopupMenuPage()
+        },
+        {
+          'title': 'Dialog',
+          'subtitle': '对话框组件',
+          'page': () => const DialogPage()
+        },
+        {
+          'title': 'Toast',
+          'subtitle': '消息提示组件',
+          'page': () => const ToastPage()
+        },
       ],
     },
     {
-      'title': '跑马灯组件',
+      'title': '动画组件',
       'items': [
-        {'title': 'Marquee', 'page': () => const MarqueePage()},
+        {
+          'title': 'Marquee',
+          'subtitle': '跑马灯滚动组件',
+          'page': () => const MarqueePage()
+        },
       ],
     },
   ];
@@ -66,6 +105,9 @@ class ComponentListPage extends StatelessWidget {
                     final item = section['items'][itemIndex];
                     return CupertinoListTile(
                       title: Text(item['title']),
+                      subtitle: item['subtitle'] != null
+                          ? Text(item['subtitle'])
+                          : null,
                       trailing: const ComArrow(),
                       onTap: () => Get.to(item['page']),
                     );

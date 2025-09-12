@@ -53,19 +53,28 @@ class ComRatingState extends State<ComRating> {
   void _updateRating(Offset position) {
     if (widget.onRatingChanged == null) return;
 
-    final RenderBox box = context.findRenderObject() as RenderBox;
+    final RenderBox? box = context.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+
     final Offset localPosition = box.globalToLocal(position);
     final double width = box.size.width;
-    final double starWidth = (width + widget.spacing) / widget.starCount;
 
-    double newRating =
-        (localPosition.dx / starWidth).clamp(0.0, widget.starCount.toDouble());
+    // 修正星星宽度计算，考虑间距
+    final double totalSpacing = widget.spacing * (widget.starCount - 1);
+    final double starWidth = (width - totalSpacing) / widget.starCount;
+    final double starAndSpacingWidth = starWidth + widget.spacing;
+
+    double newRating = (localPosition.dx / starAndSpacingWidth)
+        .clamp(0.0, widget.starCount.toDouble());
 
     if (widget.allowHalfStar) {
       newRating = (newRating * 2).round() / 2;
     } else {
       newRating = newRating.roundToDouble();
     }
+
+    // 确保评分不超过星星数量
+    newRating = newRating.clamp(0.0, widget.starCount.toDouble());
 
     if (newRating != _currentRating) {
       setState(() {
@@ -92,16 +101,21 @@ class ComRatingState extends State<ComRating> {
         mainAxisSize: MainAxisSize.min,
         children: List.generate(widget.starCount, (index) {
           Widget star;
-          if (index < _currentRating &&
-              index + 1 > _currentRating &&
-              widget.allowHalfStar) {
+          final double rating = _currentRating;
+
+          if (widget.allowHalfStar &&
+              index < rating &&
+              index + 1 > rating &&
+              (rating - index) >= 0.3 &&
+              (rating - index) <= 0.7) {
+            // 半星显示逻辑优化
             star = widget.halfFilledIcon ??
                 Icon(
                   Icons.star_half,
                   size: widget.starSize,
                   color: widget.filledColor,
                 );
-          } else if (index < _currentRating) {
+          } else if (index < rating) {
             star = widget.filledIcon ??
                 Icon(
                   Icons.star,
@@ -118,7 +132,9 @@ class ComRatingState extends State<ComRating> {
           }
 
           return Padding(
-            padding: EdgeInsets.only(right: widget.spacing),
+            padding: EdgeInsets.only(
+              right: index < widget.starCount - 1 ? widget.spacing : 0,
+            ),
             child: star,
           );
         }),

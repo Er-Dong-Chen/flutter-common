@@ -63,22 +63,24 @@ class _SpinKitPouringHourGlassRefinedState
   late Animation<double> _pouringAnimation;
   late Animation<double> _rotationAnimation;
 
+  void _onAnimationUpdate() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
     _controller = (widget.controller ??
         AnimationController(vsync: this, duration: widget.duration))
-      ..addListener(() {
-        if (mounted) {
-          setState(() {});
-        }
-      })
+      ..addListener(_onAnimationUpdate)
       ..repeat();
     _pouringAnimation = CurvedAnimation(
       parent: _controller,
       curve: const Interval(0.0, 0.9),
-    )..addListener(() => setState(() {}));
+    )..addListener(_onAnimationUpdate);
     _rotationAnimation = Tween(begin: 0.0, end: 0.5).animate(
       CurvedAnimation(
         parent: _controller,
@@ -89,6 +91,8 @@ class _SpinKitPouringHourGlassRefinedState
 
   @override
   void dispose() {
+    _controller.removeListener(_onAnimationUpdate);
+    _pouringAnimation.removeListener(_onAnimationUpdate);
     if (widget.controller == null) {
       _controller.dispose();
     }

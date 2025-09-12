@@ -17,6 +17,9 @@ class ListRefreshStrategy<T> implements IRefreshStrategy<T> {
   final int? semanticChildCount;
   final String? restorationId;
   final Clip clipBehavior;
+  final Widget Function(BuildContext)? loadingBuilder;
+  final Widget Function(BuildContext)? errorBuilder;
+  final Widget Function(BuildContext)? emptyBuilder;
 
   ListRefreshStrategy({
     this.scrollController,
@@ -30,6 +33,9 @@ class ListRefreshStrategy<T> implements IRefreshStrategy<T> {
     this.semanticChildCount,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
+    this.loadingBuilder,
+    this.errorBuilder,
+    this.emptyBuilder,
   });
 
   @override
@@ -39,11 +45,11 @@ class ListRefreshStrategy<T> implements IRefreshStrategy<T> {
     required Widget Function(BuildContext, T, int) itemBuilder,
   }) {
     if (state.initialRefresh) {
-      return BaseWidget.loadingWidget(context);
+      return loadingBuilder?.call(context) ?? BaseWidget.loadingWidget(context);
     } else if (state.hasError && state.dataList.isEmpty) {
-      return BaseWidget.errorWidget(context);
+      return errorBuilder?.call(context) ?? BaseWidget.errorWidget(context);
     } else if (state.dataList.isEmpty) {
-      return BaseWidget.emptyWidget(context);
+      return emptyBuilder?.call(context) ?? BaseWidget.emptyWidget(context);
     }
 
     return ListView.builder(
@@ -70,11 +76,17 @@ class GridRefreshStrategy<T> implements IRefreshStrategy<T> {
   final int crossAxisCount;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
+  final Widget Function(BuildContext)? loadingBuilder;
+  final Widget Function(BuildContext)? errorBuilder;
+  final Widget Function(BuildContext)? emptyBuilder;
 
   const GridRefreshStrategy({
     this.crossAxisCount = 2,
     this.mainAxisSpacing = 12,
     this.crossAxisSpacing = 12,
+    this.loadingBuilder,
+    this.errorBuilder,
+    this.emptyBuilder,
   });
 
   @override
@@ -84,11 +96,11 @@ class GridRefreshStrategy<T> implements IRefreshStrategy<T> {
     required Widget Function(BuildContext, T, int) itemBuilder,
   }) {
     if (state.initialRefresh) {
-      return BaseWidget.loadingWidget(context);
+      return loadingBuilder?.call(context) ?? BaseWidget.loadingWidget(context);
     } else if (state.hasError && state.dataList.isEmpty) {
-      return BaseWidget.errorWidget(context);
+      return errorBuilder?.call(context) ?? BaseWidget.errorWidget(context);
     } else if (state.dataList.isEmpty) {
-      return BaseWidget.emptyWidget(context);
+      return emptyBuilder?.call(context) ?? BaseWidget.emptyWidget(context);
     }
 
     return GridView.builder(

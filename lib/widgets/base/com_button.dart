@@ -9,6 +9,9 @@ class ComButton extends StatelessWidget {
   final bool plain;
   final bool disabled;
   final Gradient? gradient;
+  final BorderRadius? borderRadius;
+  @Deprecated(
+      'Use borderRadius instead. This will be removed in a future version.')
   final double? radius;
   final double elevation;
   final Color? shadowColor;
@@ -26,6 +29,9 @@ class ComButton extends StatelessWidget {
     this.style,
     this.plain = false,
     this.disabled = false,
+    this.borderRadius,
+    @Deprecated(
+        'Use borderRadius instead. This will be removed in a future version.')
     this.radius,
     this.color,
     this.padding,
@@ -59,8 +65,9 @@ class ComButton extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(
-            radius ?? context.comTheme.shapes.circularRadius),
+        borderRadius: borderRadius ??
+            BorderRadius.circular(
+                radius ?? context.comTheme.shapes.circularRadius),
         boxShadow: _buildButtonShadow(context),
       ),
       child: _buildButtonContent(
@@ -109,8 +116,9 @@ class ComButton extends StatelessWidget {
       disabledBackgroundColor: Colors.transparent,
       disabledForegroundColor: foregroundColor.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            radius ?? context.comTheme.shapes.circularRadius),
+        borderRadius: borderRadius ??
+            BorderRadius.circular(
+                radius ?? context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(minHeight, 0),
     );
@@ -127,8 +135,9 @@ class ComButton extends StatelessWidget {
             .withValues(alpha: loading || disabled ? 0.5 : 1),
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            radius ?? context.comTheme.shapes.circularRadius),
+        borderRadius: borderRadius ??
+            BorderRadius.circular(
+                radius ?? context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(minHeight, 0),
     );
@@ -145,8 +154,9 @@ class ComButton extends StatelessWidget {
       disabledBackgroundColor: buttonColor.withValues(alpha: 0.5),
       disabledForegroundColor: foregroundColor.withValues(alpha: 0.8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            radius ?? context.comTheme.shapes.circularRadius),
+        borderRadius: borderRadius ??
+            BorderRadius.circular(
+                radius ?? context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(minHeight, 0),
     );

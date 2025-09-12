@@ -18,18 +18,16 @@ class StatusPage extends StatelessWidget {
         title: const Text('Status'),
         actions: [
           ComPopupMenu(
-            verticalMargin: 0,
             menuBuilder: ComContainer(
-              width: 100,
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              // padding: EdgeInsets.zero,
-              radius: AppTheme.comTheme.shapes.smallRadius,
+              color: Colors.white,
+              width: 200,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: logic.statusArr
                     .map((e) => GestureDetector(
                           onTap: () => logic.changeStatus(e),
-                          child: ComContainer(
-                            padding: const EdgeInsets.all(4),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
                             width: double.infinity,
                             alignment: Alignment.center,
                             child: Text(
