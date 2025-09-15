@@ -1,10 +1,14 @@
+## 3.0.1
+
+* TODO: Optimize dialog
+
 ## 3.0.0
 
 * TODO: Optimize performance security
 * TODO: Optimize and improve the Widget
 * TODO: Optimize and improve the Refresh
 * TODO: Optimize and improve the ComToast
-* TODO: Optimize and improve the
+* TODO: Optimize and improve the ComPopupMenu
 * TODO: Optimize and improve the ComMarquee
 
 ## 2.10.0

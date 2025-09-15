@@ -588,6 +588,7 @@ class DialogUtil {
     bool showTitle = true,
     bool isScrollControlled = true,
     bool useSafeArea = true,
+    Color? backgroundColor,
   }) async {
     final context = ComContext.context;
     final boxConstraints =
@@ -598,7 +599,7 @@ class DialogUtil {
       isScrollControlled: isScrollControlled,
       useSafeArea: useSafeArea,
       constraints: boxConstraints,
-      backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
+      backgroundColor: backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
