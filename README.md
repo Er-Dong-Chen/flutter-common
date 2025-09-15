@@ -237,46 +237,67 @@ Log.init(LogConfig(
 
 ## 📦 工具类（Utils）
 
-| 文件名                 | 功能描述                                                     |
-| ---------------------- | ------------------------------------------------------------ |
-| `clipboard_util.dart`  | 剪贴板操作工具                                  |
-| `clone_util.dart`      | 对象克隆工具                                         |
-| `color_util.dart`      | 颜色处理工具
-| `date_util.dart`       | 日期时间工具
-| `encrypt_util.dart`    | 加密解密工具（已移入module_base）                                     |
-| `file_util.dart`       | 文件操作工具          |
-| `function_util.dart`   | 防抖/节流函数工具              |
-| `image_util.dart`      | 图片处理工具           |
-| `json_util.dart`       | JSON工具               |
-| `keyboard_util.dart`   | 键盘工具                       |
-| `permission_util.dart` | 权限管理工具（已移入module_base） |
-| `sp_util.dart`         | 本地存储工具             |
-| `text_util.dart`       | 文本处理工具                  |
-| `dialog_util.dart`     | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等） |
+| 文件名                  | 功能描述                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| `clipboard_util.dart`   | 剪贴板操作工具                                               |
+| `clone_util.dart`       | 对象克隆工具                                                 |
+| `color_util.dart`       | 颜色处理工具                                                 |
+| `date_util.dart`        | 日期时间工具                                                 |
+| `dialog_util.dart`      | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等） |
+| `file_util.dart`        | 文件操作工具                                                 |
+| `function_util.dart`    | 防抖/节流函数工具                                           |
+| `image_util.dart`       | 图片处理工具                                                 |
+| `json_util.dart`        | JSON工具                                                     |
+| `keyboard_util.dart`    | 键盘工具                                                     |
+| `platform_util.dart`    | 平台判断工具                                                 |
+| `platform_util_web.dart`| Web平台专用工具                                             |
+| `sp_util.dart`          | 本地存储工具                                                 |
+| `text_util.dart`        | 文本处理工具                                                 |
+| `validation_util.dart`  | 数据验证工具                                                 |
+| `encrypt_util.dart`     | 加密解密工具（已移入module_base）
+| `permission_util.dart`  | 权限管理工具（已移入module_base）      |
 
 ---
 
 ## 🎨 通用组件（Widgets）
+
+### 基础组件
 
 | 文件名                         | 功能描述                                                     |
 | ------------------------------ | ------------------------------------------------------------ |
 | `base_widget.dart`             | 基础组件基类（统一多状态管理，无网络自动切换该状态布局）     |
 | `com_album.dart`               | 图片九宫格组件（已移入到module_base）                        |
 | `com_arrow.dart`               | 方向箭头组件（支持上下左右箭头，常用于列表项导航）           |
-| `com_avatar.dart`              | 头像组件（已移入到module_base中）                            |
 | `com_button.dart`              | 按钮组件（主按钮、线性按钮、禁用状态、渐变色、自定义样式）   |
 | `com_checkbox.dart`            | 复选框组件（支持radio效果）                                  |
-| `com_checkbox_list_title.dart` | 列表复选框组件（支持radio效果）                              |
+| `com_checkbox_list_tile.dart`  | 列表复选框组件（支持radio效果）                              |
+| `com_container.dart`           | 容器组件（带边框、阴影、圆角等功能的容器）                   |
+| `com_divider.dart`             | 下划线组件（CustomPainter实现的Divider,支持负数）            |
 | `com_empty.dart`               | 空状态组件（数据为空时展示占位图或提示文字）                 |
-| `com_image.dart`               | 图片组件（占位图、加载失败兜底）（已移入module_base）        |
 | `com_list_group.dart`          | 分组列表组件（下划线分隔的列表项布局，自定义下划线）         |
 | `com_loading.dart`             | 加载组件（全局Loading，可自定义）                            |
-| `com_popup_menu.dart`          | 弹出菜单组件（自定义菜单项、位置调整）                       |
 | `com_rating.dart`              | 评分组件（星级评分、支持半星、自定义图标）                   |
+| `com_sliver_header.dart`       | SliverPinnedHeader固定Header组件                             |
 | `com_tag.dart`                 | 标签组件（多颜色/尺寸、圆角样式）                            |
 | `com_title_bar.dart`           | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）       |
-| `com_divider.dart`             | 下划线组件（CustomPainter实现的Divider,支持负数）            |
-| `com_sliver_header.dart`       | SliverPinnedHeader固定Header组件                             |
+
+### 功能组件
+
+| 文件名                         | 功能描述                                                     |
+| ------------------------------ | ------------------------------------------------------------ |
+| `com_marquee.dart`             | 跑马灯组件（支持任意widget，满足所有场景的跑马灯）           |
+| `com_popup_menu.dart`          | 弹出菜单组件（自定义菜单项、位置调整）                       |
+
+### 刷新组件
+
+| 文件名                         | 功能描述                                                     |
+| ------------------------------ | ------------------------------------------------------------ |
+| `back_top_widget.dart`         | 回到顶部组件                                                 |
+| `refresh_controller.dart`      | 刷新控制器                                                   |
+| `refresh_interface.dart`       | 刷新接口定义                                                 |
+| `refresh_state.dart`           | 刷新状态管理                                                 |
+| `refresh_strategy.dart`        | 刷新策略                                                     |
+| `refresh_widget.dart`          | 智能刷新组件                                                 |
 
 ---
 

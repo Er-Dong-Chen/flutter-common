@@ -1,21 +1,10 @@
-## 2.15.0
+## 3.0.0
 
+* TODO: Optimize performance security
 * TODO: Optimize and improve the Widget
-
-## 2.14.0
-
 * TODO: Optimize and improve the Refresh
-
-## 2.13.0
-
 * TODO: Optimize and improve the ComToast
-
-## 2.12.0
-
 * TODO: Optimize and improve the ComPopupMenu
-
-## 2.11.0
-
 * TODO: Optimize and improve the ComMarquee
 
 ## 2.10.0
