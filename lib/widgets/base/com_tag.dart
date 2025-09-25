@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class ComTag extends StatelessWidget {
   final Widget child;
   final Color? color;
-  final double radius;
+  final BorderRadius? borderRadius;
+  @Deprecated(
+      'Use borderRadius instead. This will be removed in a future version.')
+  final double? radius;
   final EdgeInsets padding;
   final EdgeInsets? margin;
   final VoidCallback? onTap;
@@ -12,7 +15,10 @@ class ComTag extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
-    this.radius = 6,
+    this.borderRadius,
+    @Deprecated(
+        'Use borderRadius instead. This will be removed in a future version.')
+    this.radius,
     this.margin,
     this.padding = const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
     this.onTap,
@@ -30,7 +36,7 @@ class ComTag extends StatelessWidget {
         margin: margin,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: borderRadius ?? BorderRadius.circular(radius ?? 6),
         ),
         child: DefaultTextStyle(
           style: TextStyle(
