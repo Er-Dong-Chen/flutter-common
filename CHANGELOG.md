@@ -1,3 +1,7 @@
+## 3.1.0
+
+* TODO: Optimize ComToast
+
 ## 3.0.2
 
 * TODO: Optimize ComTag

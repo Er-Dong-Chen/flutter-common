@@ -148,7 +148,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.9.0"
+    version: "3.1.0"
   flutter_chen_refresh:
     dependency: "direct main"
     description:

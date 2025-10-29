@@ -599,7 +599,8 @@ class DialogUtil {
       isScrollControlled: isScrollControlled,
       useSafeArea: useSafeArea,
       constraints: boxConstraints,
-      backgroundColor: backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
