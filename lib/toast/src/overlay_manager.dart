@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../config/com_context.dart';
-import '../../log/logger.dart';
+import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 /// Overlay管理器基类
 /// 提供Toast和Loading的共用Overlay管理功能
@@ -20,14 +18,8 @@ class ComOverlayManager {
 
   /// 获取可用的OverlayState
   OverlayState? _getOverlay() {
-    try {
-      final context = ComContext.context;
-      if (!context.mounted) return null;
-      return Overlay.maybeOf(context, rootOverlay: true);
-    } catch (e) {
-      Log.console('获取Overlay失败: $e');
-      return null;
-    }
+    final context = ComContext.context;
+    return Overlay.maybeOf(context, rootOverlay: true);
   }
 
   /// 显示Toast Entry
@@ -50,18 +42,15 @@ class ComOverlayManager {
 
   /// 隐藏Toast Entry
   void hideToastEntry() {
-    if (!_isToastShowing || _toastEntry == null) return;
+    if (!_isToastShowing) return;
 
     _isToastShowing = false;
     try {
-      if (_toastEntry!.mounted) {
-        _toastEntry!.remove();
-      }
+      _toastEntry?.remove();
     } catch (e) {
-      Log.console('Toast移除失败: $e');
-    } finally {
-      _toastEntry = null;
+      // 忽略移除失败的错误
     }
+    _toastEntry = null;
   }
 
   /// 显示Loading Entry
@@ -81,23 +70,16 @@ class ComOverlayManager {
   }
 
   /// 隐藏Loading Entry
-  Future<void> hideLoadingEntry() async {
-    if (!_isLoadingShowing || _loadingEntry == null) return;
+  void hideLoadingEntry() {
+    if (!_isLoadingShowing) return;
 
     _isLoadingShowing = false;
-
     try {
-      // 等待动画完成（可选）
-      await Future.delayed(const Duration(milliseconds: 200));
-
-      if (_loadingEntry!.mounted) {
-        _loadingEntry!.remove();
-      }
+      _loadingEntry?.remove();
     } catch (e) {
-      Log.console('Loading移除失败: $e');
-    } finally {
-      _loadingEntry = null;
+      // 忽略移除失败的错误
     }
+    _loadingEntry = null;
   }
 
   /// 获取Toast状态
@@ -107,27 +89,8 @@ class ComOverlayManager {
   bool get isLoadingShowing => _isLoadingShowing;
 
   /// 清理所有Overlay
-  Future<void> clearAll() async {
+  void clearAll() {
     hideToastEntry();
-    await hideLoadingEntry();
-  }
-
-  /// 检查是否有任何Overlay显示
-  bool get hasAnyOverlay => _isToastShowing || _isLoadingShowing;
-
-  /// 强制清理（用于应用退出时）
-  void forceCleanup() {
-    _isToastShowing = false;
-    _isLoadingShowing = false;
-
-    try {
-      _toastEntry?.remove();
-      _loadingEntry?.remove();
-    } catch (e) {
-      // 忽略清理错误
-    } finally {
-      _toastEntry = null;
-      _loadingEntry = null;
-    }
+    hideLoadingEntry();
   }
 }

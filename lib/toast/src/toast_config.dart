@@ -85,15 +85,14 @@ class ComToastConfig {
     this.clickThrough = true,
     this.showShadow = true,
     this.shadowColor = const Color(0x1A000000),
-    this.shadowOffset = const Offset(0, 2),
+    this.shadowOffset = const Offset(0, 4),
     this.shadowBlurRadius = 8.0,
     this.icon,
     this.iconSize = 20.0,
     this.iconColor,
     this.iconSpacing = 8.0,
     this.builder,
-  }) : assert(duration >= -1,
-            'Duration must be >= -1 (where -1 means persistent)');
+  });
 
   ComToastConfig copyWith({
     ComToastType? type,

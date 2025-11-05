@@ -86,15 +86,15 @@ class ComLoadingManager {
       await Future.delayed(const Duration(milliseconds: 200));
     } catch (e) {
       // 如果动画失败，直接关闭
-    } finally {
-      await _overlayManager.hideLoadingEntry();
-      _currentLoadingKey = null;
     }
+
+    _overlayManager.hideLoadingEntry();
+    _currentLoadingKey = null;
   }
 
   /// 立即隐藏loading（无动画）
-  Future<void> hideLoadingImmediately() async {
-    await _overlayManager.hideLoadingEntry();
+  void hideLoadingImmediately() {
+    _overlayManager.hideLoadingEntry();
     _currentLoadingKey = null;
   }
 

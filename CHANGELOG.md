@@ -1,3 +1,7 @@
+## 3.1.1
+
+* TODO: Fix ComToast
+
 ## 3.1.0
 
 * TODO: Optimize ComToast

@@ -18,7 +18,7 @@ TransitionBuilder ComToastBuilder() {
 }
 
 /// Simple StatelessWidget which holds the child
-/// Toast will use the existing Overlay from MaterialApp/CupertinoApp via ComOverlayManager
+/// and creates an [Overlay] to display the toast
 class _ComToastHolder extends StatelessWidget {
   const _ComToastHolder({required this.child});
 
@@ -26,9 +26,15 @@ class _ComToastHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 直接返回 child，不创建新的 Overlay
-    // Toast 通过 ComOverlayManager 使用应用现有的 Overlay
-    return child;
+    return Overlay(
+      initialEntries: <OverlayEntry>[
+        OverlayEntry(
+          builder: (BuildContext ctx) {
+            return child;
+          },
+        ),
+      ],
+    );
   }
 }
 
