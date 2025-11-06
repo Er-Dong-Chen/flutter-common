@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chen_common/extension/context_extension.dart';
 
 class ComTag extends StatelessWidget {
   final Widget child;
   final Color? color;
   final BorderRadius? borderRadius;
-  @Deprecated(
-      'Use borderRadius instead. This will be removed in a future version.')
-  final double? radius;
   final EdgeInsets padding;
   final EdgeInsets? margin;
   final VoidCallback? onTap;
@@ -16,11 +14,8 @@ class ComTag extends StatelessWidget {
     required this.child,
     this.color,
     this.borderRadius,
-    @Deprecated(
-        'Use borderRadius instead. This will be removed in a future version.')
-    this.radius,
     this.margin,
-    this.padding = const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
     this.onTap,
   });
 
@@ -36,7 +31,8 @@ class ComTag extends StatelessWidget {
         margin: margin,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: borderRadius ?? BorderRadius.circular(radius ?? 6),
+          borderRadius: borderRadius ??
+              BorderRadius.circular(context.comTheme.shapes.smallRadius),
         ),
         child: DefaultTextStyle(
           style: TextStyle(

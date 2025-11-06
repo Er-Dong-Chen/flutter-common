@@ -66,7 +66,8 @@ class ButtonPage extends StatelessWidget {
               AppTheme.comTheme.success!,
               AppTheme.comTheme.warning!
             ]),
-            radius: AppTheme.comTheme.shapes.smallRadius,
+            borderRadius:
+                BorderRadius.circular(AppTheme.comTheme.shapes.smallRadius),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

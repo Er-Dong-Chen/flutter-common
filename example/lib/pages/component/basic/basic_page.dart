@@ -264,10 +264,10 @@ class _BasicComponentsPageState extends State<BasicComponentsPage> {
               color: Colors.blue,
               child: Text('蓝色标签'),
             ),
-            const ComTag(
+            ComTag(
               color: Colors.green,
-              radius: 12,
-              child: Text('圆角标签'),
+              borderRadius: BorderRadius.circular(6),
+              child: const Text('圆角标签'),
             ),
             const ComTag(
               color: Colors.orange,

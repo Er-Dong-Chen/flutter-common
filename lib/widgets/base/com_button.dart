@@ -10,9 +10,6 @@ class ComButton extends StatelessWidget {
   final bool disabled;
   final Gradient? gradient;
   final BorderRadius? borderRadius;
-  @Deprecated(
-      'Use borderRadius instead. This will be removed in a future version.')
-  final double? radius;
   final double elevation;
   final Color? shadowColor;
   final Color? color;
@@ -30,9 +27,6 @@ class ComButton extends StatelessWidget {
     this.plain = false,
     this.disabled = false,
     this.borderRadius,
-    @Deprecated(
-        'Use borderRadius instead. This will be removed in a future version.')
-    this.radius,
     this.color,
     this.padding,
     this.loading = false,
@@ -66,8 +60,7 @@ class ComButton extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: borderRadius ??
-            BorderRadius.circular(
-                radius ?? context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.circularRadius),
         boxShadow: _buildButtonShadow(context),
       ),
       child: _buildButtonContent(
@@ -117,8 +110,7 @@ class ComButton extends StatelessWidget {
       disabledForegroundColor: foregroundColor.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ??
-            BorderRadius.circular(
-                radius ?? context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(minHeight, 0),
     );
@@ -136,8 +128,7 @@ class ComButton extends StatelessWidget {
       ),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ??
-            BorderRadius.circular(
-                radius ?? context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(minHeight, 0),
     );
@@ -155,8 +146,7 @@ class ComButton extends StatelessWidget {
       disabledForegroundColor: foregroundColor.withValues(alpha: 0.8),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ??
-            BorderRadius.circular(
-                radius ?? context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.circularRadius),
       ),
       minimumSize: Size(minHeight, 0),
     );

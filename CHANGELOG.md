@@ -1,3 +1,7 @@
+## 3.2.0
+
+* TODO: Fix code and Optimize PlatformUtil
+
 ## 3.1.1
 
 * TODO: Fix ComToast
