@@ -53,19 +53,24 @@ class ComButton extends StatelessWidget {
   }
 
   Widget _buildGradientButton(BuildContext context, double minHeight) {
-    return Container(
-      height: height ?? Theme.of(context).buttonTheme.height,
+    final themeHeight = Theme.of(context).buttonTheme.height;
+    final containerHeight = height ?? (padding == null ? themeHeight : null);
+
+    final gradientButton = Container(
+      height: containerHeight,
       width: width,
-      padding: padding,
+      constraints: BoxConstraints(minHeight: minHeight),
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: borderRadius ??
-            BorderRadius.circular(context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.resolvedButtonRadius),
         boxShadow: _buildButtonShadow(context),
       ),
       child: _buildButtonContent(
           context, _getGradientButtonStyle(context, minHeight)),
     );
+
+    return _wrapWithStateOpacity(gradientButton);
   }
 
   Widget _buildColoredButton(BuildContext context, double minHeight) {
@@ -110,9 +115,10 @@ class ComButton extends StatelessWidget {
       disabledForegroundColor: foregroundColor.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ??
-            BorderRadius.circular(context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.resolvedButtonRadius),
       ),
-      minimumSize: Size(minHeight, 0),
+      minimumSize: padding != null ? Size.zero : null,
+      tapTargetSize: padding != null ? MaterialTapTargetSize.shrinkWrap : null,
     );
   }
 
@@ -128,9 +134,10 @@ class ComButton extends StatelessWidget {
       ),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ??
-            BorderRadius.circular(context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.resolvedButtonRadius),
       ),
-      minimumSize: Size(minHeight, 0),
+      minimumSize: padding != null ? Size.zero : null,
+      tapTargetSize: padding != null ? MaterialTapTargetSize.shrinkWrap : null,
     );
   }
 
@@ -146,9 +153,10 @@ class ComButton extends StatelessWidget {
       disabledForegroundColor: foregroundColor.withValues(alpha: 0.8),
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ??
-            BorderRadius.circular(context.comTheme.shapes.circularRadius),
+            BorderRadius.circular(context.comTheme.shapes.resolvedButtonRadius),
       ),
-      minimumSize: Size(minHeight, 0),
+      minimumSize: padding != null ? Size.zero : null,
+      tapTargetSize: padding != null ? MaterialTapTargetSize.shrinkWrap : null,
     );
   }
 
@@ -166,5 +174,12 @@ class ComButton extends StatelessWidget {
 
   VoidCallback? _getOnPressed() {
     return disabled || loading ? null : onPressed?.throttle();
+  }
+
+  Widget _wrapWithStateOpacity(Widget child) {
+    if (loading || disabled) {
+      return Opacity(opacity: 0.5, child: child);
+    }
+    return child;
   }
 }

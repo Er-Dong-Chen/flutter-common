@@ -75,7 +75,7 @@ class ComShapes {
   //-------------------
 
   /// 解析按钮圆角（优先使用组件级配置）
-  double get resolvedButtonRadius => buttonRadius ?? mediumRadius;
+  double get resolvedButtonRadius => buttonRadius ?? circularRadius;
 
   /// 解析卡片圆角（优先使用组件级配置）
   double get resolvedCardRadius => cardRadius ?? mediumRadius;
