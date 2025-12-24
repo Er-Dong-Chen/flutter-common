@@ -72,8 +72,8 @@ class IsolateFileOutput extends LogOutput {
       }
     });
 
-    flushTimer =
-        Timer.periodic(initData.config.periodicFlushInterval, (_) => worker.flush());
+    flushTimer = Timer.periodic(
+        initData.config.periodicFlushInterval, (_) => worker.flush());
   }
 
   @override
@@ -174,8 +174,10 @@ class _IsolateWorker {
       if (await latest.exists()) {
         try {
           final lines = await latest.readAsLines();
-          final meta = lines.isNotEmpty ? _parseMetaLine(lines.first) : (null, null);
-          final prevStart = meta.$2 ?? (await latest.lastModified()).millisecondsSinceEpoch;
+          final meta =
+              lines.isNotEmpty ? _parseMetaLine(lines.first) : (null, null);
+          final prevStart =
+              meta.$2 ?? (await latest.lastModified()).millisecondsSinceEpoch;
           final end = DateTime.now().millisecondsSinceEpoch;
           final rotated = File('${_logDir!.path}/${_id}_${prevStart}_$end.log');
           try {
@@ -190,7 +192,9 @@ class _IsolateWorker {
       _sessionId = _config.id ?? _generateSessionId();
       _currentStartMillis = DateTime.now().millisecondsSinceEpoch;
       await latest.create(recursive: true);
-      await latest.writeAsString('session=$_sessionId;start=$_currentStartMillis\n', mode: FileMode.write);
+      await latest.writeAsString(
+          'session=$_sessionId;start=$_currentStartMillis\n',
+          mode: FileMode.write);
       _currentFile = latest;
     }
 
@@ -224,7 +228,7 @@ class _IsolateWorker {
       if (stat.size >= _config.rotateSizeBytes) {
         final end = DateTime.now().millisecondsSinceEpoch;
         final start = _currentStartMillis ?? end;
-        final rotated = File('${_logDir!.path}/${_id}_${start}_${end}.log');
+        final rotated = File('${_logDir!.path}/${_id}_${start}_$end.log');
         try {
           await latest.rename(rotated.path);
         } catch (e) {
@@ -233,7 +237,8 @@ class _IsolateWorker {
         _currentStartMillis = end;
         await latest.create(recursive: true);
         final sid = _config.id ?? _sessionId ?? _generateSessionId();
-        await latest.writeAsString('session=$sid;start=$_currentStartMillis\n', mode: FileMode.write);
+        await latest.writeAsString('session=$sid;start=$_currentStartMillis\n',
+            mode: FileMode.write);
         _currentFile = latest;
         _sessionId = sid;
       }
@@ -250,7 +255,8 @@ class _IsolateWorker {
 
   (String?, int?) _parseMetaLine(String line) {
     try {
-      final parts = line.split(RegExp(r'[;\s,]')).where((e) => e.isNotEmpty).toList();
+      final parts =
+          line.split(RegExp(r'[;\s,]')).where((e) => e.isNotEmpty).toList();
       String? sid;
       int? start;
       for (final p in parts) {
@@ -270,9 +276,11 @@ class _IsolateWorker {
   }
 
   String _generateSessionId() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     final rnd = Random.secure();
-    final codeUnits = List<int>.generate(8, (_) => chars.codeUnitAt(rnd.nextInt(chars.length)));
+    final codeUnits = List<int>.generate(
+        8, (_) => chars.codeUnitAt(rnd.nextInt(chars.length)));
     return String.fromCharCodes(codeUnits);
   }
 }

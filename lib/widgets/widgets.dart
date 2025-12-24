@@ -8,7 +8,6 @@ export 'base/com_divider.dart';
 export 'base/com_empty.dart';
 export 'base/com_list_group.dart';
 export 'base/com_loading.dart';
-export 'base/com_rating.dart';
 export 'base/com_sliver_header.dart';
 export 'base/com_tag.dart';
 export 'base/com_title_bar.dart';

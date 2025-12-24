@@ -52,7 +52,8 @@ class Log {
   static Future<List<String>> readLatestLogs() async {
     if (!_config.canWriteToFile) return [];
     if (_config.logDirectory == null) return [];
-    final file = File('${_config.logDirectory!.path}/${_config.latestFileName}');
+    final file =
+        File('${_config.logDirectory!.path}/${_config.latestFileName}');
     if (await file.exists()) return await file.readAsLines();
     return [];
   }
@@ -104,13 +105,14 @@ class Log {
     }
     return ok;
   }
+
   static void console(
     String message, {
-      DateTime? time,
-      int level = 500,
-      String name = '',
-      Object? error,
-      StackTrace? stackTrace,
+    DateTime? time,
+    int level = 500,
+    String name = '',
+    Object? error,
+    StackTrace? stackTrace,
   }) {
     final logLevel = _developerLevelToLoggerLevel(level);
 
@@ -159,26 +161,30 @@ class Log {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
-  }) => _logger?.d(message, time: time, error: error, stackTrace: stackTrace);
+  }) =>
+      _logger?.d(message, time: time, error: error, stackTrace: stackTrace);
 
   static void i(
     dynamic message, {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
-  }) => _logger?.i(message, time: time, error: error, stackTrace: stackTrace);
+  }) =>
+      _logger?.i(message, time: time, error: error, stackTrace: stackTrace);
 
   static void w(
     dynamic message, {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
-  }) => _logger?.w(message, time: time, error: error, stackTrace: stackTrace);
+  }) =>
+      _logger?.w(message, time: time, error: error, stackTrace: stackTrace);
 
   static void e(
     dynamic message, {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
-  }) => _logger?.e(message, time: time, error: error, stackTrace: stackTrace);
+  }) =>
+      _logger?.e(message, time: time, error: error, stackTrace: stackTrace);
 }

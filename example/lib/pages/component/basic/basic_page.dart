@@ -11,7 +11,7 @@ class BasicComponentsPage extends StatefulWidget {
 class _BasicComponentsPageState extends State<BasicComponentsPage> {
   bool _isChecked = false;
   bool? _triStateChecked = false;
-  double _rating = 3.5;
+  final double _rating = 3.5;
   final _controller = MarqueeController();
 
   @override
@@ -26,15 +26,12 @@ class _BasicComponentsPageState extends State<BasicComponentsPage> {
         children: [
           _buildArrowSection(),
           const SizedBox(height: 24),
-          _buildContainerSection(),
           const SizedBox(height: 24),
           _buildDividerSection(),
           const SizedBox(height: 24),
           _buildEmptySection(),
           const SizedBox(height: 24),
           _buildLoadingSection(),
-          const SizedBox(height: 24),
-          _buildRatingSection(),
           const SizedBox(height: 24),
           _buildTagSection(),
           const SizedBox(height: 24),
@@ -98,40 +95,6 @@ class _BasicComponentsPageState extends State<BasicComponentsPage> {
             ComArrow(color: Colors.green),
             ComArrow(color: Colors.orange),
           ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContainerSection() {
-    return _buildSection(
-      title: 'ComContainer 容器组件',
-      children: [
-        Row(
-          children: [
-            const Expanded(
-              child: ComContainer(
-                height: 80,
-                child: Center(child: Text('默认容器')),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: ComContainer(
-                height: 80,
-                color: Colors.blue.shade50,
-                radius: 16,
-                child: const Center(child: Text('圆角容器')),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        const ComContainer(
-          elevation: 8,
-          radius: 12,
-          padding: EdgeInsets.all(20),
-          child: Text('带阴影的容器，展示卡片效果'),
         ),
       ],
     );
@@ -211,41 +174,6 @@ class _BasicComponentsPageState extends State<BasicComponentsPage> {
             color: Colors.blue,
             message: '请稍等',
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRatingSection() {
-    return _buildSection(
-      title: 'ComRating 评分组件',
-      children: [
-        const Text('只读评分：'),
-        const SizedBox(height: 8),
-        const ComRating(rating: 4.5),
-        const SizedBox(height: 16),
-        const Text('可交互评分：'),
-        const SizedBox(height: 8),
-        ComRating(
-          rating: _rating,
-          onRatingChanged: (rating) {
-            setState(() {
-              _rating = rating;
-            });
-          },
-        ),
-        const SizedBox(height: 8),
-        Text('当前评分：$_rating'),
-        const SizedBox(height: 16),
-        const Text('自定义样式：'),
-        const SizedBox(height: 8),
-        const ComRating(
-          rating: 3,
-          starCount: 5,
-          starSize: 30,
-          filledColor: Colors.red,
-          unfilledColor: Colors.black38,
-          allowHalfStar: false,
         ),
       ],
     );

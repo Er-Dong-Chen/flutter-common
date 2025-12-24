@@ -45,7 +45,6 @@ class AppTheme {
       colorScheme: colorScheme,
       extensions: [comTheme],
       scaffoldBackgroundColor: colorScheme.surface,
-      dialogBackgroundColor: colorScheme.surfaceContainerLowest,
       dividerTheme:
           const DividerThemeData().copyWith(space: 0, thickness: 0.25),
       textTheme: const TextTheme().copyWith(
@@ -98,7 +97,7 @@ class AppTheme {
           vertical: comTheme.spacing.small,
           horizontal: comTheme.spacing.medium,
         ),
-      ),
+      ), dialogTheme: DialogThemeData(backgroundColor: colorScheme.surfaceContainerLowest),
     );
   }
 }
