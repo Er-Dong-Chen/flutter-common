@@ -9,18 +9,35 @@
 - 🔧 支持自定义输出
 - 📱 支持日志上报
 - 🛡️ 支持日志加密
-- ⚡ 支持性能监控
 
 ## 🔥 核心特性解析
 
-### 四层日志架构
+### 文件结构与轮转
 
-| 层级           | 技术实现         | 性能指标       |
-| -------------- | ---------------- | -------------- |
-| **内存缓冲层** | 环形缓冲区设计   | 百万级日志/秒  |
-| **隔离处理层** | Dart Isolate     | 零主线程阻塞   |
-| **持久化层**   | 按日期分文件存储 | 自动滚动归档   |
-| **传输层**     | 加密压缩传输     | TLS1.3+ AES256 |
+- 当前活动文件名：`latest.log`
+- 轮转归档文件名：`{id}_{startMillis}_{endMillis}.log`
+- 文件首行元信息：`session={id};start={startMillis}`
+- 轮转阈值：默认 `5 MB`（`rotateSizeBytes`）
+- 保留策略：默认保留 `3 天`（按文件最近修改时间）
+- 写入策略：
+  - 缓冲批量写入，默认缓冲 `bufferMaxEvents=256` 条
+  - 延迟刷盘：`bufferFlushDelay=300ms`
+  - 周期刷盘：`periodicFlushInterval=2s`
+- 轮转时序：
+  1. 检测到 `latest.log` 超过阈值
+  2. 将 `latest.log` 重命名为 `{id}_{start}_{end}.log`
+  3. 创建新的 `latest.log` 并写入首行 `session=...;start=...`
+
+### 上传与加密
+
+- 扫描目录下所有 `.log` 文件，跳过 `latest.log`
+- 归档日志的时间由文件名解析：`{id}_{start}_{end}.log`
+- 上传文件名：`{id}_{start}_{end}.log`
+- 加密模式：
+  - 压缩：`GZip`
+  - 对称加密：`AES-CBC`（随机 32 字节密钥 + 16 字节 IV）
+  - 非对称加密：`RSA`（公钥加密 AES 密钥与 IV）
+- 明文模式（调试）：`LogPlainUploader.plainMode = kDebugMode`，在调试环境可输出明文
 
 ## 🚀 快速开始
 
@@ -33,12 +50,18 @@ Directory dir = await getApplicationDocumentsDirectory();
 // 初始化日志系统
 await Log.init(
   LogConfig(
+    id: "UID",                // 用户ID/会话ID（可选，默认 "0"）
     retentionDays: 3,           // 日志保留天数
     enableFileLog: true,        // 启用文件日志
     logLevel: LogLevel.all,     // 日志过滤级别
     recordLevel: LogLevel.info, // 日志记录级别
     output: const [],           // 自定义输出
     logDirectory: Directory('${dir.path}/logs'), // 日志目录
+    rotateSizeBytes: 5 * 1024 * 1024,           // 轮转阈值
+    bufferMaxEvents: 256,                        // 缓冲事件条数
+    bufferFlushDelay: const Duration(milliseconds: 300), // 延迟刷盘
+    periodicFlushInterval: const Duration(seconds: 2),   // 周期刷盘
+    latestFileName: 'latest.log',                // 活动文件名
   ),
 );
 ```
@@ -90,6 +113,25 @@ LogConfig(
 )
 ```
 
+### 配置字段详解
+
+| 参数 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `retentionDays` | `int` | `3` | 归档日志保留天数 |
+| `enableFileLog` | `bool` | `true` | 是否启用文件写入 |
+| `logLevel` | `LogLevel` | `LogLevel.all` | 控制打印到控制台的级别 |
+| `recordLevel` | `LogLevel` | `LogLevel.info` | 控制写入文件的最低级别 |
+| `logDirectory` | `Directory?` | `null` | 日志目录，非 Web 环境生效 |
+| `output` | `List<LogOutput>?` | `null` | 自定义输出（如上报、掩码等） |
+| `printer` | `LogPrinter?` | `PrettyPrinter()` | 控制台打印样式 |
+| `filter` | `LogFilter?` | `ComLogFilter(...)` | 自定义过滤器 |
+| `composeOutputs` | `List<LogOutput> Function(List<LogOutput>)?` | `null` | 输出组合器 |
+| `rotateSizeBytes` | `int` | `5MB` | 轮转阈值 |
+| `bufferMaxEvents` | `int` | `256` | 缓冲最大事件数 |
+| `bufferFlushDelay` | `Duration` | `300ms` | 缓冲延迟刷盘 |
+| `periodicFlushInterval` | `Duration` | `2s` | 周期刷盘间隔 |
+| `latestFileName` | `String` | `latest.log` | 活动文件名 |
+
 ## ⚡ 高级功能
 
 ### 自定义输出
@@ -115,43 +157,25 @@ Log.init(LogConfig(
 ));
 ```
 
-### 日志加密
 
-```dart
-// 自定义加密输出
-class EncryptedOutput extends LogOutput {
-  @override
-  void output(OutputEvent event) {
-    final encrypted = encrypt(event.message);
-    // 处理加密后的日志
-  }
-}
+## 🧩 实现细节
 
-// 配置使用
-Log.init(LogConfig(
-  output: [EncryptedOutput()]
-));
-```
-
-### 性能监控
-
-```dart
-// 开始性能监控
-final stopwatch = Stopwatch()..start();
-
-// 执行操作
-await someOperation();
-
-// 记录性能日志
-Log.i(
-  "Operation completed",
-  tag: "Performance",
-  extra: {
-    "duration": stopwatch.elapsedMilliseconds,
-    "operation": "someOperation",
-  },
-);
-```
+- 写入在独立 `Isolate` 中进行，避免阻塞 UI 线程
+- 每次批量写入：
+  - 将事件格式化并追加到 `latest.log`
+  - 检查并触发轮转
+  - 清理超期归档文件
+- 首行元信息包含 `session` 和 `start`，示例：
+  ```
+  session=10086;start=1734500000000
+  <日志内容...>
+  ```
+- 文件命名约定：
+  - 活动：`latest.log`
+  - 归档：`{id}_{start}_{end}.log`
+- 上传命名约定：
+  - `LogUploader`: `{id}_{start}_{end}.log`
+  - `LogPlainUploader`: 同上（在调试环境可明文）
 
 ## 📚 API 参考
 
@@ -165,17 +189,26 @@ Log.i(
 | e() | 错误日志 |
 | console() | 控制台日志 |
 | getLogDir() | 获取日志目录 |
+| readLatestLogs() | 读取当前活动日志 `latest.log` 的内容 |
+| getLogDirectorySize() | 获取日志目录内所有 `.log` 文件总大小（字节） |
+| clearLogDirectoryLogs() | 清空日志目录所有 `.log` 文件并重建空的 `latest.log` |
+
+#### 维护与清理示例
+
+```dart
+// 读取最新日志内容
+final lines = await Log.readLatestLogs();
+
+// 统计日志目录大小
+final sizeBytes = await Log.getLogDirectorySize();
+
+// 清空日志目录内所有日志文件，并重建 latest.log
+final cleared = await Log.clearLogDirectoryLogs();
+```
 
 ### LogConfig
 
-| 参数 | 类型 | 描述 |
-|------|------|------|
-| retentionDays | int | 日志保留天数 |
-| enableFileLog | bool | 是否启用文件日志 |
-| logLevel | LogLevel | 日志过滤级别 |
-| recordLevel | LogLevel | 日志记录级别 |
-| output | List | 自定义输出列表 |
-| logDirectory | Directory | 日志目录 |
+参见上文“配置字段详解”表格。
 
 ### LogOutput
 
@@ -226,14 +259,3 @@ Log.i(
 │ Response: {"weatherinfo":{"city":"北京","cityid":"101010100","WD":"东南风"}}
 └────────────────────────────────────────────────────────────────────────────────────────
 ```
-
-## 🔧 最佳实践
-
-1. 合理使用日志级别
-2. 避免敏感信息泄露
-3. 定期清理日志文件
-4. 使用标签分类日志
-5. 添加上下文信息
-6. 监控日志文件大小
-7. 实现日志轮转
-8. 配置日志上报 

@@ -35,6 +35,9 @@ class HttpClient {
     return _instance!;
   }
 
+  /// 暴露内部 Dio，便于与需要 Dio 的库（如 retrofit）集成
+  Dio get dio => _dio;
+
   void _initDio() {
     _dio = Dio(BaseOptions(
       baseUrl: config.baseUrl,
@@ -92,19 +95,40 @@ class HttpClient {
     _dio.interceptors.addAll(interceptors);
   }
 
-  Future<T?> request<T>(
-    String path, {
+  /// 更新基础配置中的 baseUrl/timeout 等，不重建单例
+  void updateBaseOptions({
     String? baseUrl,
-    HttpMethod method = HttpMethod.get,
-    Options? options,
-    dynamic data,
-    Map<String, dynamic>? query,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
-    void Function(int, int)? onReceiveProgress,
-  }) async {
+    Duration? connectTimeout,
+    Duration? receiveTimeout,
+    Duration? sendTimeout,
+  }) {
+    if (baseUrl != null) {
+      _dio.options.baseUrl = baseUrl;
+    }
+    if (connectTimeout != null) {
+      _dio.options.connectTimeout = connectTimeout;
+    }
+    if (receiveTimeout != null) {
+      _dio.options.receiveTimeout = receiveTimeout;
+    }
+    if (sendTimeout != null) {
+      _dio.options.sendTimeout = sendTimeout;
+    }
+  }
+
+  Future<T?> request<T>(
+      String path, {
+        String? baseUrl,
+        HttpMethod method = HttpMethod.get,
+        Options? options,
+        dynamic data,
+        Map<String, dynamic>? query,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        void Function(int, int)? onSendProgress,
+        void Function(int, int)? onReceiveProgress,
+      }) async {
     try {
       options ??= Options();
       options.method = method.name.toUpperCase();
@@ -169,17 +193,17 @@ class HttpClient {
   // 便捷请求方法 --------------------------------------------------------------
 
   Future<T?> get<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? query,
-    String? baseUrl,
-    Options? options,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
-    void Function(int, int)? onReceiveProgress,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? query,
+        String? baseUrl,
+        Options? options,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        void Function(int, int)? onSendProgress,
+        void Function(int, int)? onReceiveProgress,
+      }) async {
     return request<T>(
       path,
       method: HttpMethod.get,
@@ -196,17 +220,17 @@ class HttpClient {
   }
 
   Future<T?> post<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? query,
-    String? baseUrl,
-    Options? options,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
-    void Function(int, int)? onReceiveProgress,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? query,
+        String? baseUrl,
+        Options? options,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        void Function(int, int)? onSendProgress,
+        void Function(int, int)? onReceiveProgress,
+      }) async {
     return request<T>(
       path,
       method: HttpMethod.post,
@@ -223,17 +247,17 @@ class HttpClient {
   }
 
   Future<T?> put<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? query,
-    String? baseUrl,
-    Options? options,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
-    void Function(int, int)? onReceiveProgress,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? query,
+        String? baseUrl,
+        Options? options,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        void Function(int, int)? onSendProgress,
+        void Function(int, int)? onReceiveProgress,
+      }) async {
     return request<T>(
       path,
       method: HttpMethod.put,
@@ -250,17 +274,17 @@ class HttpClient {
   }
 
   Future<T?> patch<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? query,
-    String? baseUrl,
-    Options? options,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
-    void Function(int, int)? onReceiveProgress,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? query,
+        String? baseUrl,
+        Options? options,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        void Function(int, int)? onSendProgress,
+        void Function(int, int)? onReceiveProgress,
+      }) async {
     return request<T>(
       path,
       method: HttpMethod.patch,
@@ -277,17 +301,17 @@ class HttpClient {
   }
 
   Future<T?> delete<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? query,
-    String? baseUrl,
-    Options? options,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    void Function(int, int)? onSendProgress,
-    void Function(int, int)? onReceiveProgress,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? query,
+        String? baseUrl,
+        Options? options,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        void Function(int, int)? onSendProgress,
+        void Function(int, int)? onReceiveProgress,
+      }) async {
     return request<T>(
       path,
       method: HttpMethod.delete,
@@ -304,18 +328,18 @@ class HttpClient {
   }
 
   Future<T?> uploadFile<T>(
-    String path,
-    String filePath, {
-    String? baseUrl,
-    HttpMethod method = HttpMethod.post,
-    Options? options,
-    Map<String, dynamic>? extraFields,
-    T Function(dynamic json)? fromJson,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) async {
+      String path,
+      String filePath, {
+        String? baseUrl,
+        HttpMethod method = HttpMethod.post,
+        Options? options,
+        Map<String, dynamic>? extraFields,
+        T Function(dynamic json)? fromJson,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        ProgressCallback? onSendProgress,
+        ProgressCallback? onReceiveProgress,
+      }) async {
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath),
       ...?extraFields,
@@ -336,15 +360,15 @@ class HttpClient {
   }
 
   Future<File> downloadFile(
-    String path,
-    String savePath, {
-    String? baseUrl,
-    Options? options,
-    bool showLoading = false,
-    CancelToken? cancelToken,
-    ProgressCallback? onReceiveProgress,
-    ProgressCallback? onSendProgress,
-  }) async {
+      String path,
+      String savePath, {
+        String? baseUrl,
+        Options? options,
+        bool showLoading = false,
+        CancelToken? cancelToken,
+        ProgressCallback? onReceiveProgress,
+        ProgressCallback? onSendProgress,
+      }) async {
     try {
       if (showLoading) DialogUtil.showLoading();
 

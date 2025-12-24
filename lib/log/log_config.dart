@@ -15,6 +15,13 @@ class LogConfig {
   final LogPrinter? printer; // LogPrinter
   final List<LogOutput>? output; // LogOutput
   final LogFilter? filter; // LogFilter
+  final List<LogOutput> Function(List<LogOutput>)? composeOutputs; // 自定义输出组合
+  final int rotateSizeBytes; // 轮转阈值字节数
+  final int bufferMaxEvents; // 缓冲最大事件数
+  final Duration bufferFlushDelay; // 缓冲最大发刷延时
+  final Duration periodicFlushInterval; // 周期刷盘间隔
+  final String latestFileName; // 最新日志文件名
+  final String? id; // 统一ID（用于文件命名与会话）
 
   const LogConfig({
     this.retentionDays = 3,
@@ -25,6 +32,13 @@ class LogConfig {
     this.output,
     this.printer,
     this.filter,
+    this.composeOutputs,
+    this.rotateSizeBytes = 5 * 1024 * 1024,
+    this.bufferMaxEvents = 256,
+    this.bufferFlushDelay = const Duration(milliseconds: 300),
+    this.periodicFlushInterval = const Duration(seconds: 2),
+    this.latestFileName = 'latest.log',
+    this.id,
   });
 
   /// 检查是否支持文件日志

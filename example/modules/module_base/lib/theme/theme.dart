@@ -71,7 +71,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(4.0),
         ),
       ),
-      tabBarTheme: const TabBarTheme().copyWith(
+      tabBarTheme: const TabBarThemeData().copyWith(
         dividerColor: Colors.transparent,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

@@ -1,3 +1,7 @@
+## 3.4.0
+
+* TODO: Optimize Log
+* 
 ## 3.3.0
 
 * TODO: Optimize ComButton

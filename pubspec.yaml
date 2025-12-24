@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^5.7.0                           # 网络请求
-  shared_preferences: ^2.3.0            # 本地缓存
-  logger: ^2.4.0                        # 日志打印
+  shared_preferences: ^2.0.0            # 本地缓存
+  logger: ^2.0.0                        # 日志打印
   flutter_chen_refresh: ^3.0.0          # 刷新列表
 
 dev_dependencies:

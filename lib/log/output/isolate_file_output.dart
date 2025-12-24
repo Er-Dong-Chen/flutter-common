@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -72,7 +73,7 @@ class IsolateFileOutput extends LogOutput {
     });
 
     flushTimer =
-        Timer.periodic(const Duration(seconds: 5), (_) => worker.flush());
+        Timer.periodic(initData.config.periodicFlushInterval, (_) => worker.flush());
   }
 
   @override
@@ -115,21 +116,26 @@ class _IsolateWorker {
   final LogConfig _config;
   final List<OutputEvent> _buffer = [];
   File? _currentFile;
-  DateTime? _currentDate;
+  String? _sessionId;
+  int? _currentStartMillis;
   Timer? _flushTimer;
+  Directory? _logDir;
+  late String _id;
 
-  _IsolateWorker(this._config);
+  _IsolateWorker(this._config) {
+    _id = _config.id ?? '0';
+  }
 
   void addEvent(OutputEvent event) {
     _buffer.add(event);
-    if (_buffer.length >= 50) {
+    if (_buffer.length >= _config.bufferMaxEvents) {
       _scheduleFlush();
     }
   }
 
   void _scheduleFlush() {
     if (_flushTimer?.isActive ?? false) return;
-    _flushTimer = Timer(const Duration(milliseconds: 100), () => flush());
+    _flushTimer = Timer(_config.bufferFlushDelay, () => flush());
   }
 
   Future<void> flush() async {
@@ -142,6 +148,7 @@ class _IsolateWorker {
       final lines =
           events.expand((e) => e.lines.map(_removeAnsiCodes)).join('\n');
       await file.writeAsString('$lines\n', mode: FileMode.append);
+      await _maybeRotate(file);
       await _cleanOldLogs();
     } catch (e, s) {
       debugPrint('Log write failed: $e\n$s');
@@ -149,28 +156,42 @@ class _IsolateWorker {
   }
 
   Future<File> _getCurrentFile() async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    if (_currentDate != today) {
-      if (_config.logDirectory == null) {
-        throw Exception('日志目录未配置');
+    if (_config.logDirectory == null) {
+      throw Exception('日志目录未配置');
+    }
+    _logDir ??= _config.logDirectory!;
+    if (!await _logDir!.exists()) {
+      try {
+        await _logDir!.create(recursive: true);
+      } catch (e) {
+        debugPrint('创建日志目录失败: $e');
+        throw Exception('无法创建日志目录');
       }
+    }
 
-      final logDir = _config.logDirectory!;
-      if (!await logDir.exists()) {
+    if (_currentFile == null) {
+      final latest = File('${_logDir!.path}/${_config.latestFileName}');
+      if (await latest.exists()) {
         try {
-          await logDir.create(recursive: true);
+          final lines = await latest.readAsLines();
+          final meta = lines.isNotEmpty ? _parseMetaLine(lines.first) : (null, null);
+          final prevStart = meta.$2 ?? (await latest.lastModified()).millisecondsSinceEpoch;
+          final end = DateTime.now().millisecondsSinceEpoch;
+          final rotated = File('${_logDir!.path}/${_id}_${prevStart}_$end.log');
+          try {
+            await latest.rename(rotated.path);
+          } catch (e) {
+            debugPrint('日志文件重命名失败: $e');
+          }
         } catch (e) {
-          debugPrint('创建日志目录失败: $e');
-          throw Exception('无法创建日志目录');
+          // 读取失败也尽量保留原文件，不进行覆盖
         }
       }
-
-      final dateStr = "${now.year}-${now.month.toString().padLeft(2, '0')}"
-          "-${now.day.toString().padLeft(2, '0')}";
-      _currentFile = File('${logDir.path}/log_$dateStr.log');
-      _currentDate = today;
+      _sessionId = _config.id ?? _generateSessionId();
+      _currentStartMillis = DateTime.now().millisecondsSinceEpoch;
+      await latest.create(recursive: true);
+      await latest.writeAsString('session=$_sessionId;start=$_currentStartMillis\n', mode: FileMode.write);
+      _currentFile = latest;
     }
 
     return _currentFile!;
@@ -197,12 +218,62 @@ class _IsolateWorker {
     }
   }
 
+  Future<void> _maybeRotate(File latest) async {
+    try {
+      final stat = await latest.stat();
+      if (stat.size >= _config.rotateSizeBytes) {
+        final end = DateTime.now().millisecondsSinceEpoch;
+        final start = _currentStartMillis ?? end;
+        final rotated = File('${_logDir!.path}/${_id}_${start}_${end}.log');
+        try {
+          await latest.rename(rotated.path);
+        } catch (e) {
+          debugPrint('日志轮转重命名失败: $e');
+        }
+        _currentStartMillis = end;
+        await latest.create(recursive: true);
+        final sid = _config.id ?? _sessionId ?? _generateSessionId();
+        await latest.writeAsString('session=$sid;start=$_currentStartMillis\n', mode: FileMode.write);
+        _currentFile = latest;
+        _sessionId = sid;
+      }
+    } catch (_) {}
+  }
+
   // 过滤方法
   String _removeAnsiCodes(String input) {
     return input.replaceAll(
       RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'),
       '',
     );
+  }
+
+  (String?, int?) _parseMetaLine(String line) {
+    try {
+      final parts = line.split(RegExp(r'[;\s,]')).where((e) => e.isNotEmpty).toList();
+      String? sid;
+      int? start;
+      for (final p in parts) {
+        final kv = p.split('=');
+        if (kv.length == 2) {
+          if (kv[0] == 'session') sid = kv[1];
+          if (kv[0] == 'start') start = int.tryParse(kv[1]);
+        } else if (kv.length == 1) {
+          final v = int.tryParse(kv[0]);
+          if (v != null) start = v;
+        }
+      }
+      return (sid, start);
+    } catch (_) {
+      return (null, null);
+    }
+  }
+
+  String _generateSessionId() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    final rnd = Random.secure();
+    final codeUnits = List<int>.generate(8, (_) => chars.codeUnitAt(rnd.nextInt(chars.length)));
+    return String.fromCharCodes(codeUnits);
   }
 }
 
