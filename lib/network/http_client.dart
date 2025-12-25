@@ -148,7 +148,7 @@ class HttpClient {
       }
       Response response = await _dio.request(
         _buildUrl(path, baseUrl),
-        data: data,
+        data: isGetMethod ? null : data,
         queryParameters: query ?? queryParams,
         options: options,
         cancelToken: cancelToken,
@@ -176,9 +176,9 @@ class HttpClient {
 
   /// 动态构建完整请求地址
   String _buildUrl(String path, String? baseUrl) {
-    if (baseUrl != null) return baseUrl + path;
+    if (baseUrl != null) return _joinUrl(baseUrl, path);
     if (path.startsWith(RegExp(r'https?://'))) return path;
-    return config.baseUrl + path;
+    return _joinUrl(config.baseUrl, path);
   }
 
   /// 转换请求参数
@@ -188,6 +188,12 @@ class HttpClient {
     } else {
       return null;
     }
+  }
+
+  String _joinUrl(String base, String path) {
+    final b = base.endsWith('/') ? base.substring(0, base.length - 1) : base;
+    final p = path.startsWith('/') ? path.substring(1) : path;
+    return '$b/$p';
   }
 
   // 便捷请求方法 --------------------------------------------------------------

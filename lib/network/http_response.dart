@@ -22,8 +22,16 @@ class HttpResponse<T> {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'code': code,
+      'message': message,
+      'data': data,
+    };
+  }
+
   @override
   String toString() {
-    return jsonEncode(this);
+    return jsonEncode(toJson());
   }
 }

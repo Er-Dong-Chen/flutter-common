@@ -7,7 +7,7 @@ class TokenInterceptor extends Interceptor {
   final Future<void> Function()? onRefreshTokenFailed;
 
   bool _isRefreshing = false;
-  final List<RequestOptions> _pendingRequests = [];
+  final List<_PendingRequest> _pendingRequests = [];
 
   TokenInterceptor({
     required this.dio,
@@ -37,7 +37,7 @@ class TokenInterceptor extends Interceptor {
       }
 
       // 加入待处理队列
-      _pendingRequests.add(requestOptions);
+      _pendingRequests.add(_PendingRequest(requestOptions, handler));
 
       if (!_isRefreshing) {
         _isRefreshing = true;
@@ -47,35 +47,35 @@ class TokenInterceptor extends Interceptor {
           dio.options.headers['Authorization'] = 'Bearer $newToken';
 
           // 重试所有 pending 的请求
-          for (var options in _pendingRequests) {
+          for (var pending in _pendingRequests) {
             try {
-              final response = await _retryRequest(options);
+              final response = await _retryRequest(pending.options);
 
               // 如果是原始请求则返回结果
-              if (options == requestOptions) {
-                handler.resolve(response);
-              }
+              pending.handler.resolve(response);
             } catch (e) {
               // 单个请求重试失败
-              if (options == requestOptions) {
-                handler.reject(DioException(requestOptions: options, error: e));
-              }
+              pending.handler.reject(
+                DioException(requestOptions: pending.options, error: e),
+              );
             }
           }
         } catch (e) {
           await onRefreshTokenFailed?.call();
           // 刷新失败，全部请求失败
-          handler.reject(DioException(
-            requestOptions: requestOptions,
-            error: 'Token refresh failed: $e',
-          ));
+          for (var pending in _pendingRequests) {
+            pending.handler.reject(DioException(
+              requestOptions: pending.options,
+              error: 'Token refresh failed: $e',
+            ));
+          }
         } finally {
           _isRefreshing = false;
           _pendingRequests.clear();
         }
       } else {
         // 已经在刷新 token，等待完成
-        handler.next(err);
+        return;
       }
     } else {
       handler.next(err);
@@ -89,4 +89,10 @@ class TokenInterceptor extends Interceptor {
     );
     return dio.fetch(newOptions);
   }
+}
+
+class _PendingRequest {
+  final RequestOptions options;
+  final ErrorInterceptorHandler handler;
+  _PendingRequest(this.options, this.handler);
 }

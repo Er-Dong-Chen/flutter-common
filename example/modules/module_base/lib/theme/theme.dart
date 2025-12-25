@@ -97,7 +97,9 @@ class AppTheme {
           vertical: comTheme.spacing.small,
           horizontal: comTheme.spacing.medium,
         ),
-      ), dialogTheme: DialogThemeData(backgroundColor: colorScheme.surfaceContainerLowest),
+      ),
+      dialogTheme:
+          DialogThemeData(backgroundColor: colorScheme.surfaceContainerLowest),
     );
   }
 }
