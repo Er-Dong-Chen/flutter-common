@@ -29,8 +29,6 @@ class _BasicComponentsPageState extends State<BasicComponentsPage> {
           const SizedBox(height: 24),
           _buildDividerSection(),
           const SizedBox(height: 24),
-          _buildEmptySection(),
-          const SizedBox(height: 24),
           _buildLoadingSection(),
           const SizedBox(height: 24),
           _buildTagSection(),
@@ -134,24 +132,6 @@ class _BasicComponentsPageState extends State<BasicComponentsPage> {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildEmptySection() {
-    return _buildSection(
-      title: 'ComEmpty 空状态组件',
-      children: [
-        const ComEmpty(
-          message: Text('暂无数据'),
-        ),
-        const SizedBox(height: 24),
-        const ComEmpty(
-          imageSize: 60,
-          image: Icon(Icons.search, size: 60, color: Colors.grey),
-          message: Text('没有找到相关内容'),
-        ),
-        const SizedBox(height: 24),
       ],
     );
   }

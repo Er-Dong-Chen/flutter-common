@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/base/base_widget.dart';
-import '../widgets/base/com_empty.dart';
 import '../widgets/base/com_loading.dart';
 
 class ComConfig {
   final Widget loadingWidget;
   final Widget emptyWidget;
   final Widget errorWidget;
-  final Widget Function(VoidCallback? onReconnect) noNetworkWidget;
+  final Widget noNetworkWidget;
 
   const ComConfig({
     required this.loadingWidget,
@@ -21,7 +19,7 @@ class ComConfig {
     Widget? loadingWidget,
     Widget? emptyWidget,
     Widget? errorWidget,
-    Widget Function(VoidCallback? onReconnect)? noNetworkWidget,
+    Widget? noNetworkWidget,
   }) {
     return ComConfig(
       loadingWidget: loadingWidget ?? this.loadingWidget,
@@ -31,11 +29,10 @@ class ComConfig {
     );
   }
 
-  factory ComConfig.defaults() => ComConfig(
-        loadingWidget: const ComLoading(),
-        emptyWidget: const ComEmpty(),
-        errorWidget: const ComErrorWidget(),
-        noNetworkWidget: (VoidCallback? onReconnect) =>
-            ComNoNetworkWidget(onReconnect: onReconnect),
+  factory ComConfig.defaults() => const ComConfig(
+        loadingWidget: ComLoading(),
+        emptyWidget: SizedBox(),
+        errorWidget: SizedBox(),
+        noNetworkWidget: SizedBox(),
       );
 }
