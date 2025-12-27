@@ -10,6 +10,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
   final Color? success;
   final Color? error;
   final Color? warning;
+  final Color? info;
   final Color? link;
 
   const ComTheme({
@@ -18,6 +19,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
     required this.success,
     required this.error,
     required this.warning,
+    required this.info,
     required this.link,
   });
 
@@ -28,6 +30,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
         success: Colors.green.shade600,
         error: Colors.red.shade600,
         warning: Colors.orange.shade600,
+        info: Colors.grey.shade600,
         link: Colors.blue.shade600,
       );
 
@@ -37,6 +40,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
         success: Colors.green.shade500,
         error: Colors.red.shade400,
         warning: Colors.orange.shade400,
+        info: Colors.grey.shade400, 
         link: Colors.blue.shade300,
       );
 
@@ -49,6 +53,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
     Color? success,
     Color? error,
     Color? warning,
+    Color? info,
     Color? link,
   }) {
     return ComTheme(
@@ -57,6 +62,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
       success: success ?? this.success,
       error: error ?? this.error,
       warning: warning ?? this.warning,
+      info: info ?? this.info,
       link: link ?? this.link,
     );
   }
@@ -71,6 +77,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
       success: Color.lerp(success, other.success, t) ?? success,
       error: Color.lerp(error, other.error, t) ?? error,
       warning: Color.lerp(warning, other.warning, t) ?? warning,
+      info: Color.lerp(info, other.info, t) ?? info,
       link: Color.lerp(link, other.link, t) ?? link,
     );
   }
