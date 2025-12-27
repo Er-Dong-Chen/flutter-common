@@ -163,10 +163,6 @@ class HttpClient {
         }
       }
       return response.data;
-    } on DioException catch (e) {
-      throw _handleDioException(e);
-    } catch (e) {
-      throw 'Unexpected error: ${e.toString()}';
     } finally {
       if (showLoading) {
         DialogUtil.hideLoading();
@@ -387,34 +383,9 @@ class HttpClient {
       );
 
       return File(savePath);
-    } on DioException catch (e) {
-      throw _handleDioException(e);
     } finally {
       if (showLoading) DialogUtil.hideLoading();
     }
   }
 
-  /// Handle Dio exceptions with detailed error messages
-  String _handleDioException(DioException e) {
-    switch (e.type) {
-      case DioExceptionType.connectionTimeout:
-        return 'Connection timeout. Please check your internet connection.';
-      case DioExceptionType.sendTimeout:
-        return 'Send timeout. The request took too long to send.';
-      case DioExceptionType.receiveTimeout:
-        return 'Receive timeout. The server took too long to respond.';
-      case DioExceptionType.badResponse:
-        final statusCode = e.response?.statusCode;
-        final message = e.response?.data?['message'] ?? 'Server error';
-        return 'HTTP $statusCode: $message';
-      case DioExceptionType.cancel:
-        return 'Request was cancelled.';
-      case DioExceptionType.connectionError:
-        return 'Connection failed. Please check your internet connection.';
-      case DioExceptionType.badCertificate:
-        return 'Certificate verification failed.';
-      case DioExceptionType.unknown:
-        return 'Network error: ${e.message ?? "Unknown error"}';
-    }
-  }
 }
