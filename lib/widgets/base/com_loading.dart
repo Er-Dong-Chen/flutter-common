@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/extension/extension.dart';
-import 'package:flutter_chen_common/localization/com_localizations.dart';
 
 class ComLoading extends StatelessWidget {
   final double size;
@@ -24,7 +23,7 @@ class ComLoading extends StatelessWidget {
           ),
           SizedBox(height: context.comTheme.spacing.medium),
           Text(
-            message ?? ComLocalizations.of(context).loading,
+            message ?? 'loading...',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: color ??
                     Theme.of(context).colorScheme.surfaceContainerHighest),

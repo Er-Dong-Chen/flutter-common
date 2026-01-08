@@ -87,7 +87,6 @@ class MyApp extends StatelessWidget {
           themeMode: AppThemeMode.getLocalThemeModel(),
           locale: const Locale('zh', 'CN'),
           localizationsDelegates: const [
-            ComLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

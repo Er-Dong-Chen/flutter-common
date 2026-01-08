@@ -1,5 +1,3 @@
-import 'package:example/pages/component/basic/basic_page.dart';
-import 'package:example/pages/component/image/image_page.dart';
 import 'package:example/pages/component/list/list_page.dart';
 import 'package:example/pages/component/marquee/marquee_page.dart';
 import 'package:example/pages/component/popup_menu/popup_page.dart';
@@ -7,36 +5,33 @@ import 'package:example/pages/component/status/status_page.dart';
 import 'package:example/pages/component/toast/toast_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chen_common/flutter_chen_common.dart';
 import 'package:get/get.dart';
-
-import 'button/button_page.dart';
-import 'dialog/dialog_page.dart';
+import 'package:module_base/widgets/base/com_arrow.dart';
 
 class ComponentListPage extends StatelessWidget {
   ComponentListPage({super.key});
 
   final List<Map<String, dynamic>> _sections = [
-    {
-      'title': '基础组件',
-      'items': [
-        {
-          'title': 'Basic Components',
-          'subtitle': '箭头、容器、分割线等基础组件',
-          'page': () => const BasicComponentsPage()
-        },
-        {
-          'title': 'Button',
-          'subtitle': '按钮组件演示',
-          'page': () => const ButtonPage()
-        },
-        {
-          'title': 'Image',
-          'subtitle': '图片组件演示',
-          'page': () => const ImagePage()
-        },
-      ],
-    },
+    // {
+    //   'title': '基础组件',
+    //   'items': [
+    //     {
+    //       'title': 'Basic Components',
+    //       'subtitle': '箭头、容器、分割线等基础组件',
+    //       'page': () => const BasicComponentsPage()
+    //     },
+    //     {
+    //       'title': 'Button',
+    //       'subtitle': '按钮组件演示',
+    //       'page': () => const ButtonPage()
+    //     },
+    //     {
+    //       'title': 'Image',
+    //       'subtitle': '图片组件演示',
+    //       'page': () => const ImagePage()
+    //     },
+    //   ],
+    // },
     {
       'title': '布局组件',
       'items': [
@@ -60,11 +55,6 @@ class ComponentListPage extends StatelessWidget {
           'title': 'PopupMenu',
           'subtitle': '弹出菜单组件',
           'page': () => const PopupMenuPage()
-        },
-        {
-          'title': 'Dialog',
-          'subtitle': '对话框组件',
-          'page': () => const DialogPage()
         },
         {
           'title': 'Toast',

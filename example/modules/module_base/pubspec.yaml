@@ -18,6 +18,7 @@ dependencies:
   package_info_plus: ^8.0.0
   crypto: ^3.0.0
   cached_network_image: ^3.3.0
+  flutter_screenutil: ^5.9.3        # 屏幕适应
 
 dev_dependencies:
   flutter_test:

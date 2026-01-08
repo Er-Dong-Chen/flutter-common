@@ -40,7 +40,7 @@ class ComTheme extends ThemeExtension<ComTheme> {
         success: Colors.green.shade500,
         error: Colors.red.shade400,
         warning: Colors.orange.shade400,
-        info: Colors.grey.shade400, 
+        info: Colors.grey.shade400,
         link: Colors.blue.shade300,
       );
 

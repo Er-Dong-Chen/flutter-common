@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
 
 import 'keep_alive_wrapper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommonListView<T> extends StatelessWidget {
-  final int? itemCount;
-  final Widget Function(BuildContext, int) itemBuilder;
+  final List<T> dataList;
+  final Widget Function(BuildContext, T, int) itemBuilder;
   final LayoutStatus status;
   final Widget? emptyBuilder;
   final Widget? loadingBuilder;
@@ -18,7 +19,7 @@ class CommonListView<T> extends StatelessWidget {
 
   const CommonListView({
     super.key,
-    required this.itemCount,
+    required this.dataList,
     required this.itemBuilder,
     this.status = LayoutStatus.success,
     this.emptyBuilder,
@@ -26,16 +27,16 @@ class CommonListView<T> extends StatelessWidget {
     this.errorBuilder,
     this.controller,
     this.physics,
-    this.keepAlive = false,
+    this.keepAlive = true,
     this.pageStorageKey,
     this.padding,
-  }) : assert(itemCount == null || itemCount >= 0);
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (status == LayoutStatus.success && (itemCount ?? 0) > 0) {
+    if (status == LayoutStatus.success && dataList.isNotEmpty) {
       return _buildDataList(context);
-    } else if (itemCount == 0) {
+    } else if (dataList.isEmpty) {
       return _buildStatus(context, LayoutStatus.empty);
     }
     return _buildStatus(context, status);
@@ -49,14 +50,14 @@ class CommonListView<T> extends StatelessWidget {
       controller: controller,
       physics: physics,
       padding: padding,
-      itemCount: itemCount,
+      itemCount: dataList.length,
       itemBuilder: (context, index) {
         if (keepAlive) {
           return KeepAliveWrapper(
-            child: itemBuilder(context, index),
+            child: itemBuilder(context, dataList[index], index),
           );
         }
-        return itemBuilder(context, index);
+        return itemBuilder(context, dataList[index], index);
       },
     );
   }
@@ -64,7 +65,7 @@ class CommonListView<T> extends StatelessWidget {
   Widget _buildStatus(BuildContext context, LayoutStatus status) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50),
+        padding: EdgeInsets.symmetric(vertical: 50.h),
         child: BaseWidget(
           status: status,
           loading: loadingBuilder,

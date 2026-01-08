@@ -29,7 +29,7 @@ class NetworkInterceptor extends Interceptor {
       response.data = apiResponse.data;
       handler.next(response);
     } else if (apiResponse.code != 401) {
-      DialogUtil.showToast(apiResponse.message.toString());
+      ComToast.show(apiResponse.message.toString());
       handler.reject(
         DioException(
             requestOptions: response.requestOptions,
@@ -49,7 +49,7 @@ class NetworkInterceptor extends Interceptor {
       return handler.next(err);
     }
     final message = DioErrorHandle.handleError(err);
-    DialogUtil.showToast(message);
+    ComToast.show(message);
     return handler.next(err);
   }
 }

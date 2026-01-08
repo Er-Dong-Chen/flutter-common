@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/flutter_chen_common.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'keep_alive_wrapper.dart';
 
@@ -62,7 +63,7 @@ class CommonSliverList<T> extends StatelessWidget {
     return SliverFillRemaining(
       hasScrollBody: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50),
+        padding: EdgeInsets.symmetric(vertical: 50.h),
         child: BaseWidget(
           status: status,
           loading: loadingBuilder,

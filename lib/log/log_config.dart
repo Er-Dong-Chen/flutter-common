@@ -24,7 +24,7 @@ class LogConfig {
   final String? id; // 统一ID（用于文件命名与会话）
 
   const LogConfig({
-    this.retentionDays = 3,
+    this.retentionDays = 7,
     this.enableFileLog = true,
     this.logLevel = LogLevel.all,
     this.recordLevel = LogLevel.info,

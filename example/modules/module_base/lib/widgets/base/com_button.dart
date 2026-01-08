@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/extension/extension.dart';
-import 'package:flutter_chen_common/utils/function_util.dart';
+import 'package:module_base/utils/function_util.dart';
 
 class ComButton extends StatelessWidget {
   final Widget child;

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/extension/extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ComAvatar extends StatelessWidget {
   final String src;
@@ -86,7 +87,7 @@ class ComAvatarGroup extends StatelessWidget {
     for (var i = 0; i < data.length; ++i) {
       if (i < displayCount) {
         widgets.add(Positioned(
-          top: 0,
+          top: 0.h,
           left: i * (spacing ?? (size * 0.5)),
           child: ComAvatar(
             data[i],
@@ -100,7 +101,7 @@ class ComAvatarGroup extends StatelessWidget {
 
     if (data.length > displayCount) {
       widgets.add(Positioned(
-        top: 0,
+        top: 0.h,
         left: (displayCount - 1) * (spacing ?? (size * 0.5)),
         child: ComAvatar(
           '',

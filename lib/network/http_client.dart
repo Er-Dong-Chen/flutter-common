@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_chen_common/toast/toast.dart';
 
-import '../utils/dialog_util.dart';
 import '../utils/sp_util.dart';
 import 'http_config.dart';
 import 'interceptors/log_interceptor.dart';
@@ -144,7 +144,7 @@ class HttpClient {
       final queryParams = isGetMethod ? _convertParams(data) : null;
 
       if (showLoading) {
-        DialogUtil.showLoading();
+        ComToast.loading();
       }
       Response response = await _dio.request(
         _buildUrl(path, baseUrl),
@@ -165,7 +165,7 @@ class HttpClient {
       return response.data;
     } finally {
       if (showLoading) {
-        DialogUtil.hideLoading();
+        ComToast.hideLoading();
       }
     }
   }
@@ -372,7 +372,7 @@ class HttpClient {
     ProgressCallback? onSendProgress,
   }) async {
     try {
-      if (showLoading) DialogUtil.showLoading();
+      if (showLoading) ComToast.loading();
 
       await _dio.download(
         _buildUrl(path, baseUrl),
@@ -384,8 +384,7 @@ class HttpClient {
 
       return File(savePath);
     } finally {
-      if (showLoading) DialogUtil.hideLoading();
+      if (showLoading) ComToast.hideLoading();
     }
   }
-
 }

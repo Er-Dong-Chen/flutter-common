@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/toast/src/toast.dart';
 import 'package:flutter_chen_common/toast/src/toast_config.dart';
-import 'package:flutter_chen_common/widgets/base/com_button.dart';
+import 'package:module_base/widgets/base/com_button.dart';
 
 /// ComToast 完整使用示例
 ///
