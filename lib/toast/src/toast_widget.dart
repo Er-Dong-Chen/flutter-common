@@ -93,7 +93,6 @@ class ComToastWidgetState extends State<ComToastWidget>
     );
   }
 
-
   /// 获取背景颜色（与主题形成反差对比）
   Color _getBackgroundColor() {
     // 如果用户明确配置了背景色，优先使用用户配置
@@ -136,40 +135,39 @@ class ComToastWidgetState extends State<ComToastWidget>
                       ? EdgeInsets.only(bottom: widget.config.bottomMargin)
                       : EdgeInsets.zero,
               child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: widget.config.type == ComToastType.custom
-                          ? widget.config.builder!(context)
-                          : Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                              padding: widget.config.padding,
-                              decoration: BoxDecoration(
-                                color: _getBackgroundColor(),
-                                borderRadius: BorderRadius.circular(
-                                    widget.config.borderRadius),
-                                boxShadow: widget.config.showShadow
-                                    ? [
-                                        BoxShadow(
-                                          color: widget.config.shadowColor,
-                                          offset: widget.config.shadowOffset,
-                                          blurRadius: widget.config.shadowBlurRadius,
-                                          spreadRadius: 1,
-                                        ),
-                                      ]
-                                    : null,
-                                border: Border.all(
-                                  color: Colors.black.withValues(alpha: 0.05),
-                                  width: 0.5,
-                                ),
-                              ),
-                              constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width *
-                                    widget.config.maxWidth,
-                                minHeight: 52,
-                              ),
-                              child: _buildContent(),
-                            ),
-                    ),
+                opacity: _fadeAnimation,
+                child: widget.config.type == ComToastType.custom
+                    ? widget.config.builder!(context)
+                    : Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: widget.config.padding,
+                        decoration: BoxDecoration(
+                          color: _getBackgroundColor(),
+                          borderRadius:
+                              BorderRadius.circular(widget.config.borderRadius),
+                          boxShadow: widget.config.showShadow
+                              ? [
+                                  BoxShadow(
+                                    color: widget.config.shadowColor,
+                                    offset: widget.config.shadowOffset,
+                                    blurRadius: widget.config.shadowBlurRadius,
+                                    spreadRadius: 1,
+                                  ),
+                                ]
+                              : null,
+                          border: Border.all(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            width: 0.5,
+                          ),
+                        ),
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width *
+                              widget.config.maxWidth,
+                          minHeight: 52,
+                        ),
+                        child: _buildContent(),
+                      ),
+              ),
             ),
           ),
         ),

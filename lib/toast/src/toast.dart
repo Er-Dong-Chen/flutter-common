@@ -143,7 +143,8 @@ class ComToast {
     bool barrierDismissible = false,
     ComToastConfig? config,
   }) {
-    final themedConfig = config ?? _toastManager.getDefaultForType(ComToastType.loading);
+    final themedConfig =
+        config ?? _toastManager.getDefaultForType(ComToastType.loading);
     _loadingManager.showLoading(
       message: message,
       barrierDismissible: barrierDismissible,

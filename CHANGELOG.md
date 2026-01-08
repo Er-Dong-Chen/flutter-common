@@ -1,3 +1,8 @@
+## 4.0.0
+
+* Refactor: Remove non-generic features, retaining only commonly used core utilities.
+* Optimize and improve functional modules.
+
 ## 3.5.0
 
 * TODO: Optimize Network
@@ -5,7 +10,7 @@
 ## 3.4.0
 
 * TODO: Optimize Log
-* 
+
 ## 3.3.0
 
 * TODO: Optimize ComButton
