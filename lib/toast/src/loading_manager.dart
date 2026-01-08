@@ -20,13 +20,30 @@ class ComLoadingManager {
   void showLoading({
     String? message,
     bool barrierDismissible = false,
+    ComToastConfig? config,
   }) {
     if (_overlayManager.isLoadingShowing) return;
 
-    final loadingConfig =
+    final baseConfig =
         ComToastConfig.getDefaultConfig(ComToastType.loading).copyWith(
-      clickThrough: !barrierDismissible, // 如果可以外部点击关闭，则不穿透
+      clickThrough: !barrierDismissible,
     );
+    final loadingConfig = config != null
+        ? baseConfig.copyWith(
+            builder: config.builder,
+            backgroundColor: config.backgroundColor,
+            textColor: config.textColor,
+            fontSize: config.fontSize,
+            padding: config.padding,
+            borderRadius: config.borderRadius,
+            maxWidth: config.maxWidth,
+            animationDuration: config.animationDuration,
+            showShadow: config.showShadow,
+            shadowColor: config.shadowColor,
+            shadowOffset: config.shadowOffset,
+            shadowBlurRadius: config.shadowBlurRadius,
+          )
+        : baseConfig;
 
     _currentLoadingKey = GlobalKey<ComLoadingWidgetState>();
 
@@ -37,6 +54,7 @@ class ComLoadingManager {
         config: loadingConfig,
         barrierDismissible: barrierDismissible,
         onDismiss: barrierDismissible ? () => hideLoading() : null,
+        isCustom: loadingConfig.builder != null,
       ),
     );
 

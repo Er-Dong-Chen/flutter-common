@@ -59,6 +59,9 @@ class ComToastConfig {
   /// Toast 图标
   final IconData? icon;
 
+  /// Toast 自定义图标组件
+  final Widget? iconWidget;
+
   /// Toast 图标大小
   final double iconSize;
 
@@ -88,6 +91,7 @@ class ComToastConfig {
     this.shadowOffset = const Offset(0, 4),
     this.shadowBlurRadius = 8.0,
     this.icon,
+    this.iconWidget,
     this.iconSize = 20.0,
     this.iconColor,
     this.iconSpacing = 8.0,
@@ -111,6 +115,7 @@ class ComToastConfig {
     Offset? shadowOffset,
     double? shadowBlurRadius,
     IconData? icon,
+    Widget? iconWidget,
     double? iconSize,
     Color? iconColor,
     double? iconSpacing,
@@ -133,6 +138,7 @@ class ComToastConfig {
       shadowOffset: shadowOffset ?? this.shadowOffset,
       shadowBlurRadius: shadowBlurRadius ?? this.shadowBlurRadius,
       icon: icon ?? this.icon,
+      iconWidget: iconWidget ?? this.iconWidget,
       iconSize: iconSize ?? this.iconSize,
       iconColor: iconColor ?? this.iconColor,
       iconSpacing: iconSpacing ?? this.iconSpacing,
@@ -183,4 +189,37 @@ enum ComToastPosition {
   top,
   center,
   bottom,
+}
+
+class ComToastTheme {
+  final ComToastConfig? success;
+  final ComToastConfig? error;
+  final ComToastConfig? warning;
+  final ComToastConfig? info;
+  final ComToastConfig? loading;
+
+  const ComToastTheme({
+    this.success,
+    this.error,
+    this.warning,
+    this.info,
+    this.loading,
+  });
+
+  ComToastConfig getFor(ComToastType type) {
+    switch (type) {
+      case ComToastType.success:
+        return success ?? ComToastConfig.getDefaultConfig(ComToastType.success);
+      case ComToastType.error:
+        return error ?? ComToastConfig.getDefaultConfig(ComToastType.error);
+      case ComToastType.warning:
+        return warning ?? ComToastConfig.getDefaultConfig(ComToastType.warning);
+      case ComToastType.info:
+        return info ?? ComToastConfig.getDefaultConfig(ComToastType.info);
+      case ComToastType.loading:
+        return loading ?? ComToastConfig.getDefaultConfig(ComToastType.loading);
+      default:
+        return const ComToastConfig();
+    }
+  }
 }

@@ -11,31 +11,8 @@ final ComLoadingManager _loadingManager = ComLoadingManager();
 // ignore: non_constant_identifier_names
 TransitionBuilder ComToastBuilder() {
   return (context, child) {
-    return _ComToastHolder(
-      child: child!,
-    );
+    return child!;
   };
-}
-
-/// Simple StatelessWidget which holds the child
-/// and creates an [Overlay] to display the toast
-class _ComToastHolder extends StatelessWidget {
-  const _ComToastHolder({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Overlay(
-      initialEntries: <OverlayEntry>[
-        OverlayEntry(
-          builder: (BuildContext ctx) {
-            return child;
-          },
-        ),
-      ],
-    );
-  }
 }
 
 class ComToast {
@@ -70,6 +47,11 @@ class ComToast {
     _toastManager.init(config: config);
   }
 
+  /// 初始化各状态的默认配置主题
+  static void initTheme({ComToastTheme? theme}) {
+    _toastManager.initTheme(theme: theme);
+  }
+
   /// 设置重复消息过滤时间（毫秒）
   static void setDuplicateFilterDuration(int milliseconds) {
     _toastManager.setDuplicateFilterDuration(milliseconds);
@@ -87,7 +69,7 @@ class ComToast {
     ComToastConfig? config,
     bool skipDuplicateFilter,
   ) {
-    final defaultConfig = ComToastConfig.getDefaultConfig(type);
+    final defaultConfig = _toastManager.getDefaultForType(type);
     final finalConfig = config != null
         ? _mergeBuiltInConfig(defaultConfig, config, type)
         : defaultConfig;
@@ -119,6 +101,7 @@ class ComToast {
       shadowOffset: userConfig.shadowOffset,
       shadowBlurRadius: userConfig.shadowBlurRadius,
       icon: userConfig.icon ?? defaultConfig.icon,
+      iconWidget: userConfig.iconWidget,
       iconSize: userConfig.iconSize,
       iconColor: userConfig.iconColor ?? defaultConfig.iconColor,
       iconSpacing: userConfig.iconSpacing,
@@ -156,10 +139,13 @@ class ComToast {
   static void loading({
     String? message,
     bool barrierDismissible = false,
+    ComToastConfig? config,
   }) {
+    final themedConfig = config ?? _toastManager.getDefaultForType(ComToastType.loading);
     _loadingManager.showLoading(
       message: message,
       barrierDismissible: barrierDismissible,
+      config: themedConfig,
     );
   }
 

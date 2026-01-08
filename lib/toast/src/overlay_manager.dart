@@ -18,8 +18,11 @@ class ComOverlayManager {
 
   /// 获取可用的OverlayState
   OverlayState? _getOverlay() {
-    final context = ComContext.context;
-    return Overlay.maybeOf(context, rootOverlay: true);
+    try {
+      return ComContext.navigator.overlay;
+    } catch (e) {
+      return null;
+    }
   }
 
   /// 显示Toast Entry

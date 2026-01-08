@@ -53,17 +53,19 @@ class ComToastWidgetState extends State<ComToastWidget>
   }
 
   Widget _buildContent() {
+    final hasCustomIcon = widget.config.iconWidget != null;
     final hasIcon = widget.config.icon != null;
     final children = <Widget>[];
 
-    if (hasIcon) {
-      children.add(
-        Icon(
-          widget.config.icon,
-          size: widget.config.iconSize,
-          color: widget.config.iconColor ?? _getTextColor(),
-        ),
-      );
+    if (hasCustomIcon) {
+      children.add(widget.config.iconWidget!);
+      children.add(SizedBox(width: widget.config.iconSpacing));
+    } else if (hasIcon) {
+      children.add(Icon(
+        widget.config.icon,
+        size: widget.config.iconSize,
+        color: widget.config.iconColor ?? _getTextColor(),
+      ));
       children.add(SizedBox(width: widget.config.iconSpacing));
     }
 
@@ -94,6 +96,7 @@ class ComToastWidgetState extends State<ComToastWidget>
   double _getTopPosition() {
     final screenHeight = MediaQuery.of(context).size.height;
     final statusBarHeight = MediaQuery.of(context).padding.top;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     switch (widget.config.position) {
       case ComToastPosition.top:
@@ -101,7 +104,7 @@ class ComToastWidgetState extends State<ComToastWidget>
       case ComToastPosition.center:
         return screenHeight * 0.45;
       case ComToastPosition.bottom:
-        return screenHeight * 0.8;
+        return screenHeight - bottomPadding - 100;
     }
   }
 
