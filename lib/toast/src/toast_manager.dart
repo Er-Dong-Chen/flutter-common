@@ -129,6 +129,8 @@ class ComToastManager {
       iconColor: override.iconColor ?? base.iconColor,
       iconSpacing: override.iconSpacing,
       builder: override.builder ?? base.builder,
+      topMargin: override.topMargin,
+      bottomMargin: override.bottomMargin,
     );
   }
 
@@ -148,9 +150,11 @@ class ComToastManager {
 
     _overlayManager.showToastEntry(entry);
     _timer?.cancel();
-    _timer = Timer(Duration(milliseconds: config.duration), () {
-      _dismissWithAnimation();
-    });
+    if (config.duration > Duration.zero) {
+      _timer = Timer(config.duration, () {
+        _dismissWithAnimation();
+      });
+    }
   }
 
   void _dismissWithAnimation() async {

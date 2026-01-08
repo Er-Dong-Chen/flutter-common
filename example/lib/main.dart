@@ -78,7 +78,7 @@ Future<void> main() async {
           child: ComLoading(),
         ),
         clickThrough: false,
-        duration: -1,
+        duration: Duration.zero,
       ),
     ),
   );

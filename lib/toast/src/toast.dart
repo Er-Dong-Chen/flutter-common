@@ -106,6 +106,8 @@ class ComToast {
       iconColor: userConfig.iconColor ?? defaultConfig.iconColor,
       iconSpacing: userConfig.iconSpacing,
       builder: userConfig.builder,
+      topMargin: userConfig.topMargin,
+      bottomMargin: userConfig.bottomMargin,
     );
   }
 

@@ -93,20 +93,6 @@ class ComToastWidgetState extends State<ComToastWidget>
     );
   }
 
-  double _getTopPosition() {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
-
-    switch (widget.config.position) {
-      case ComToastPosition.top:
-        return statusBarHeight + 50;
-      case ComToastPosition.center:
-        return screenHeight * 0.45;
-      case ComToastPosition.bottom:
-        return screenHeight - bottomPadding - 100;
-    }
-  }
 
   /// 获取背景颜色（与主题形成反差对比）
   Color _getBackgroundColor() {
@@ -134,54 +120,57 @@ class ComToastWidgetState extends State<ComToastWidget>
       ignoring: widget.config.clickThrough,
       child: Material(
         color: Colors.transparent,
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                right: 0,
-                top: _getTopPosition(),
-                child: Center(
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: widget.config.type == ComToastType.custom
-                        ? widget.config.builder!(context)
-                        : Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 24),
-                            padding: widget.config.padding,
-                            decoration: BoxDecoration(
-                              color: _getBackgroundColor(),
-                              borderRadius: BorderRadius.circular(
-                                  widget.config.borderRadius),
-                              boxShadow: widget.config.showShadow
-                                  ? [
-                                      BoxShadow(
-                                        color: widget.config.shadowColor,
-                                        offset: widget.config.shadowOffset,
-                                        blurRadius:
-                                            widget.config.shadowBlurRadius,
-                                        spreadRadius: 1,
-                                      ),
-                                    ]
-                                  : null,
-                              border: Border.all(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                width: 0.5,
+        child: SafeArea(
+          top: widget.config.position == ComToastPosition.top,
+          bottom: widget.config.position == ComToastPosition.bottom,
+          child: Align(
+            alignment: widget.config.position == ComToastPosition.top
+                ? Alignment.topCenter
+                : widget.config.position == ComToastPosition.bottom
+                    ? Alignment.bottomCenter
+                    : Alignment.center,
+            child: Padding(
+              padding: widget.config.position == ComToastPosition.top
+                  ? EdgeInsets.only(top: widget.config.topMargin)
+                  : widget.config.position == ComToastPosition.bottom
+                      ? EdgeInsets.only(bottom: widget.config.bottomMargin)
+                      : EdgeInsets.zero,
+              child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: widget.config.type == ComToastType.custom
+                          ? widget.config.builder!(context)
+                          : Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              padding: widget.config.padding,
+                              decoration: BoxDecoration(
+                                color: _getBackgroundColor(),
+                                borderRadius: BorderRadius.circular(
+                                    widget.config.borderRadius),
+                                boxShadow: widget.config.showShadow
+                                    ? [
+                                        BoxShadow(
+                                          color: widget.config.shadowColor,
+                                          offset: widget.config.shadowOffset,
+                                          blurRadius: widget.config.shadowBlurRadius,
+                                          spreadRadius: 1,
+                                        ),
+                                      ]
+                                    : null,
+                                border: Border.all(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  width: 0.5,
+                                ),
                               ),
+                              constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width *
+                                    widget.config.maxWidth,
+                                minHeight: 52,
+                              ),
+                              child: _buildContent(),
                             ),
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width *
-                                  widget.config.maxWidth,
-                              minHeight: 52,
-                            ),
-                            child: _buildContent(),
-                          ),
-                  ),
-                ),
-              ),
-            ],
+                    ),
+            ),
           ),
         ),
       ),

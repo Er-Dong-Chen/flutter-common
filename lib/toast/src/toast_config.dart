@@ -17,8 +17,8 @@ class ComToastConfig {
   /// Toast 显示位置
   final ComToastPosition position;
 
-  /// Toast 显示时长（毫秒）
-  final int duration;
+  /// Toast 显示时长
+  final Duration duration;
 
   /// Toast 背景颜色（null表示使用主题适配）
   final Color? backgroundColor;
@@ -74,10 +74,16 @@ class ComToastConfig {
   /// Toast 自定义内容构建器
   final Widget Function(BuildContext context)? builder;
 
+  /// 顶部位置偏移
+  final double topMargin;
+
+  /// 底部位置偏移
+  final double bottomMargin;
+
   const ComToastConfig({
     this.type = ComToastType.normal,
     this.position = ComToastPosition.center,
-    this.duration = 2000,
+    this.duration = const Duration(milliseconds: 1500),
     this.backgroundColor,
     this.textColor,
     this.fontSize = 14.0,
@@ -96,12 +102,14 @@ class ComToastConfig {
     this.iconColor,
     this.iconSpacing = 8.0,
     this.builder,
+    this.topMargin = 50.0,
+    this.bottomMargin = 100.0,
   });
 
   ComToastConfig copyWith({
     ComToastType? type,
     ComToastPosition? position,
-    int? duration,
+    Duration? duration,
     Color? backgroundColor,
     Color? textColor,
     double? fontSize,
@@ -120,6 +128,8 @@ class ComToastConfig {
     Color? iconColor,
     double? iconSpacing,
     Widget Function(BuildContext context)? builder,
+    double? topMargin,
+    double? bottomMargin,
   }) {
     return ComToastConfig(
       type: type ?? this.type,
@@ -143,6 +153,8 @@ class ComToastConfig {
       iconColor: iconColor ?? this.iconColor,
       iconSpacing: iconSpacing ?? this.iconSpacing,
       builder: builder ?? this.builder,
+      topMargin: topMargin ?? this.topMargin,
+      bottomMargin: bottomMargin ?? this.bottomMargin,
     );
   }
 
@@ -176,8 +188,7 @@ class ComToastConfig {
       case ComToastType.loading:
         return const ComToastConfig(
           type: ComToastType.loading,
-          duration: -1,
-          clickThrough: false,
+          duration: Duration.zero,
         );
       default:
         return const ComToastConfig();
