@@ -3,62 +3,63 @@
 [![Pub Version](https://img.shields.io/pub/v/flutter_chen_common)](https://pub.dev/packages/flutter_chen_common)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourname/yourrepo/blob/master/LICENSE)
 
-## 🌟 简介
+## Overview
 
-Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发提供一站式解决方案。
+[English](README.md) | [中文](README_zh.md)
 
-- 可定制的主题系统
-- 完整的国际化支持
-- 企业级网络请求封装
-- 企业级日志体系封装
-- N+高质量常用组件
-- 常用开发工具及扩展集合
-- 智能刷新列表解决方案
-- 开箱即用的各类通用弹窗
-- 全局统一各状态布局
-- 全局无需Context的Toast
 
-## 特性
+Flutter Chen Common is a feature-rich Flutter utility library that provides a one-stop solution for app development.
 
-- 🎨 **主题系统**：通过 `ThemeExtension` 全局配置颜色/圆角/间距等样式
-- 🌍 **国际化支持**：内置中英文，支持自定义文本和动态语言切换
-- ⚡ **优先级覆盖**：支持全局配置 + 组件级参数覆盖
-- 📱 **自适应设计**：完美适配 iOS/Material 设计规范
-- 🔥 **企业级方案**：内置日志/网络/安全等通用模块，提供开箱即用的复杂场景解决方案
+- Customizable theme system
+- Enterprise-grade networking
+- Enterprise-grade logging
+- High-quality common widgets
+- Handy utilities and extensions
+- Smart refresh list solution
+- Ready-to-use common popups
+- Unified multi-state layout
+- Context-free global Toast
 
-## 📚 文档目录
+## Features
 
-### 核心功能
-- [网络请求](docs/network.md) - 企业级网络请求封装，内置日志打印、网络重试、token刷新等拦截器
-- [日志系统](docs/log.md) - 企业级日志体系，支持文件日志、日志过滤、自定义扩展等
-- [主题系统](docs/theme.md) - 可定制的主题系统，支持亮暗主题切换
-- [国际化](docs/localization.md) - 完整的国际化支持，内置中英文
+- 🎨 Theme system: configure colors, corners, spacing via `ThemeExtension`
+- 🌍 Internationalization: recommend official Flutter localization (built-in module deprecated)
+- ⚡ Priority overrides: global configuration + per-component overrides
+- 📱 Adaptive design: perfect fit for iOS/Material guidelines
+- 🔥 Enterprise-grade modules: logging/networking/security out of the box
 
-### UI 组件
-- [智能刷新](docs/refresh.md) - 智能刷新列表解决方案
-- [Toast](docs/toast.md) - 全局无需Context的Toast提示
-- [Marquee](docs/marquee.md) - 支持任意widget，满足所有场景的跑马灯
-- [PopupMenu](docs/popup_menu.md) - 智能美观的PopupMenu菜单
+## Documentation
+
+### Core
+- [Networking](https://juejin.cn/post/7492312857905315849) – Structured logs, retries, token refresh
+- [Logging](https://juejin.cn/post/7492398520583192585) – File logging, filters, custom outputs
+- [Theme](docs/theme.md) – Customizable theme with light/dark support
+
+### UI Components
+- [Smart Refresh](https://juejin.cn/post/7516846036586594355) – Refresh list solution
+- [Toast](https://juejin.cn/post/7512644310631940122) – Global Toast without BuildContext
+- [Marquee](https://juejin.cn/post/7516846036586512435) – Any widget marquee
+- [PopupMenu](https://juejin.cn/post/7520165877800222746?searchId=2026010823332660A8A22819C79196B6CF) – Beautiful popup menus
 
 ### [Online Demo](https://er-dong-chen.github.io/flutter_chen_common/)
 
-## 🚀 快速开始
+## Quick Start
 
-### 安装
+### Install
 
-在 `pubspec.yaml` 中添加依赖：
+Add dependency in `pubspec.yaml`:
 
 ```yaml
 dependencies:
   flutter_chen_common: latest version
 ```
 
-运行命令：
+Run:
 
 ```bash
 flutter pub get
 ```
-### 初始化配置
+### Initialization
 
 ```dart
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -66,9 +67,9 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 存储初始化
+  // shared_preferences
   await SpUtil.init();
-  // 日志初始化
+  // Logging
   Directory dir = await getApplicationDocumentsDirectory();
   await Log.init(
     LogConfig(
@@ -81,7 +82,7 @@ void main() async {
       logDirectory: kIsWeb ? null : Directory('${dir.path}/logs'),
     ),
   );
-  // 网络模块初始化
+  // Networking
   HttpClient.init(
     config: HttpConfig(
       baseUrl: 'https://api.example.com',
@@ -102,9 +103,9 @@ void main() async {
       },
    ),
   );
-  // 全局context服务初始化
+  // Global context for overlays
   ComContext.init(navigatorKey);
-  // 全局Toast配置（可选）
+  // Global Toast config (optional)
   ComToast.init(
     config: ComToastConfig(
       duration: const Duration(seconds: 2),
@@ -119,8 +120,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ComConfiguration(
       config: ComConfig.defaults().copyWith(
-        emptyWidget: CustomEmptyWidget(),
-        loadingWidget: CustomLoading(),
+        emptyWidget: CustomEmptyWidget(), // example
+        loadingWidget: CustomLoading(),   // example
       ),
       child: MaterialApp(
 		navigatorKey: navigatorKey,
@@ -133,24 +134,26 @@ class MyApp extends StatelessWidget {
           extensions: [ComTheme.dark()],
         ),
         home: MainPage(),
-        localizationsDelegates: [
-          ComLocalizations.delegate,
+        localizationsDelegates: const [ // official localization
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('zh', 'CN'),
-          const Locale('en', 'US'),
+        supportedLocales: const [
+          Locale('zh', 'CN'),
+          Locale('en', 'US'),
         ],
       ),
     );
   }
 }
 ```
-### 🌐 网络请求
+### 🌐 Networking
 
 ```dart
 HttpClient.instance.request(
   "/api",
-  method: HttpType.post.name,
+  method: HttpMethod.post,
   fromJson: (json) => User.fromJson(json),
   showLoading: true,
 )
@@ -162,23 +165,15 @@ HttpClient.instance.delete("/api");
 HttpClient.instance.uploadFile("/api","filePath");
 HttpClient.instance.downloadFile("/api", "savePath");
 
-HttpConfig({
-    required this.baseUrl,
-    this.connectTimeout = const Duration(seconds: 15),
-    this.receiveTimeout = const Duration(seconds: 15),
-    this.sendTimeout = const Duration(seconds: 15),
-    this.commonHeaders = const {},
-    this.interceptors = const [],
-    this.enableLog = true,
-    this.enableToken = true,
-    this.maxRetries = 3,
-    this.retriesDelay = const Duration(seconds: 1),
-    this.getToken,
-    this.onRefreshToken,
-    this.onRefreshTokenFailed,
-  });
+// HttpConfig key fields:
+// baseUrl, connectTimeout, receiveTimeout, sendTimeout,
+// commonHeaders(): Map<String, dynamic>,
+// interceptors: List<Interceptor>,
+// enableLog, enableToken, enableRetry,
+// maxRetries, retriesDelay,
+// getToken(), onRefreshToken(), onRefreshTokenFailed()
 
-// 打印样式如下
+// Sample log output
 ┌─────────────────────────────────────────────────────────────────────────────
 │ ✅ [HTTP] 2025-04-05 23:30:29 Request sent [Duration] 88ms
 │ Request: 200 GET http://www.weather.com.cn/data/sk/101010100.html?xxxx=xxxx
@@ -188,14 +183,14 @@ HttpConfig({
 └──────────────────────────────────────────────────────────────────────────────
 ```
 
-### 📝日志体系
+### 📝 Logging
 
 ```dart
 Log.d("debug message");
 Log.i("info message");
 Log.w("warning message");
 Log.e("error message");
-Log.console("console message 可完整打印不被截断并且无前缀");
+Log.console("console message printed fully without prefix");
 final Directory dir = await Log.getLogDir();
 
 class LogConfig {
@@ -234,93 +229,62 @@ Log.init(LogConfig(
 ));
 ```
 
+## Utils
 
-## 📦 工具类（Utils）
-
-| 文件名                  | 功能描述                                                     |
-| ----------------------- | ------------------------------------------------------------ |
-| `clipboard_util.dart`   | 剪贴板操作工具                                               |
-| `clone_util.dart`       | 对象克隆工具                                                 |
-| `color_util.dart`       | 颜色处理工具                                                 |
-| `date_util.dart`        | 日期时间工具                                                 |
-| `dialog_util.dart`      | 弹窗工具类（通用各类弹窗Toast、Android、iOS确定弹窗、弹窗、选择弹窗、底部弹窗等） |
-| `file_util.dart`        | 文件操作工具                                                 |
-| `function_util.dart`    | 防抖/节流函数工具                                           |
-| `image_util.dart`       | 图片处理工具                                                 |
-| `json_util.dart`        | JSON工具                                                     |
-| `keyboard_util.dart`    | 键盘工具                                                     |
-| `platform_util.dart`    | 平台判断工具                                                 |
-| `platform_util_web.dart`| Web平台专用工具                                             |
-| `sp_util.dart`          | 本地存储工具                                                 |
-| `text_util.dart`        | 文本处理工具                                                 |
-| `validation_util.dart`  | 数据验证工具                                                 |
-| `encrypt_util.dart`     | 加密解密工具（已移入module_base）
-| `permission_util.dart`  | 权限管理工具（已移入module_base）      |
+| File                    | Description          |
+| ----------------------- | -------------------- |
+| `clipboard_util.dart`   | Clipboard            |
+| `file_util.dart`        | File operations      |
+| `keyboard_util.dart`    | Keyboard helpers     |
+| `platform_util.dart`    | Platform detection   |
+| `platform_util_web.dart`| Web platform helpers |
+| `sp_util.dart`          | Local storage        |
+| `utils.dart`            | Utils entry          |
 
 ---
 
-## 🎨 通用组件（Widgets）
+## Widgets
 
-### 基础组件
+### Basic
 
-| 文件名                         | 功能描述                                                     |
-| ------------------------------ | ------------------------------------------------------------ |
-| `base_widget.dart`             | 基础组件基类（统一多状态管理，无网络自动切换该状态布局）     |
-| `com_album.dart`               | 图片九宫格组件（已移入到module_base）                        |
-| `com_arrow.dart`               | 方向箭头组件（支持上下左右箭头，常用于列表项导航）           |
-| `com_button.dart`              | 按钮组件（主按钮、线性按钮、禁用状态、渐变色、自定义样式）   |
-| `com_checkbox.dart`            | 复选框组件（支持radio效果）                                  |
-| `com_checkbox_list_tile.dart`  | 列表复选框组件（支持radio效果）                              |
-| `com_container.dart`           | 容器组件（带边框、阴影、圆角等功能的容器）                   |
-| `com_divider.dart`             | 下划线组件（CustomPainter实现的Divider,支持负数）            |
-| `com_empty.dart`               | 空状态组件（数据为空时展示占位图或提示文字）                 |
-| `com_list_group.dart`          | 分组列表组件（下划线分隔的列表项布局，自定义下划线）         |
-| `com_loading.dart`             | 加载组件（全局Loading，可自定义）                            |
-| `com_rating.dart`              | 评分组件（星级评分、支持半星、自定义图标）                   |
-| `com_sliver_header.dart`       | SliverPinnedHeader固定Header组件                             |
-| `com_tag.dart`                 | 标签组件（多颜色/尺寸、圆角样式）                            |
-| `com_title_bar.dart`           | 标题栏组件（左中右布局、标题居中、常用于底部弹窗标题）       |
+| File               | Description     |
+| ------------------ | --------------- |
+| `base_widget.dart` | Base (multi-state) |
+| `com_loading.dart` | Loading widget  |
 
-### 功能组件
+### Functional
 
-| 文件名                         | 功能描述                                                     |
-| ------------------------------ | ------------------------------------------------------------ |
-| `com_marquee.dart`             | 跑马灯组件（支持任意widget，满足所有场景的跑马灯）           |
-| `com_popup_menu.dart`          | 弹出菜单组件（自定义菜单项、位置调整）                       |
+| File                 | Description              |
+| -------------------- | ------------------------ |
+| `com_marquee.dart`   | Marquee                  |
+| `com_popup_menu.dart`| Popup menu               |
 
-### 刷新组件
+### Refresh
 
-| 文件名                         | 功能描述                                                     |
-| ------------------------------ | ------------------------------------------------------------ |
-| `back_top_widget.dart`         | 回到顶部组件                                                 |
-| `refresh_controller.dart`      | 刷新控制器                                                   |
-| `refresh_interface.dart`       | 刷新接口定义                                                 |
-| `refresh_state.dart`           | 刷新状态管理                                                 |
-| `refresh_strategy.dart`        | 刷新策略                                                     |
-| `refresh_widget.dart`          | 智能刷新组件                                                 |
+| File                    | Description        |
+| ----------------------- | ------------------ |
+| `back_top_widget.dart`  | Back to top        |
+| `refresh_controller.dart`| Refresh controller |
+| `refresh_interface.dart` | Refresh interface  |
+| `refresh_state.dart`     | Refresh state      |
+| `refresh_strategy.dart`  | Refresh strategy   |
+| `refresh_widget.dart`    | Smart refresh      |
 
 ---
 
-## 🎨 主题系统
+## Theme
 
-### 内置主题
+### Built-in
 
-| 主题名称    | 示例代码         |
-| ----------- | ---------------- |
-| Light Theme | `ComTheme.light` |
-| Dark Theme  | `ComTheme.dark`  |
+| Name        | Example           |
+| ----------- | ----------------- |
+| Light Theme | `ComTheme.light`  |
+| Dark Theme  | `ComTheme.dark`   |
 
-### 可配置属性
+### Configurable
 
 ```dart
 ComTheme(
-  // theme: ComColors.lightTheme,  // 颜色体系(已删除使用ColorScheme中颜色)
-  // primaryGradient: LinearGradient( //
-  //   colors: [
-  //     ComColors.lightTheme.shade500,
-  //     ComColors.lightTheme.shade600,
-  //   ],
-  // ),
   shapes: ComShapes.standard,
   spacing: ComSpacing.standard,
   success: Colors.green.shade600,
@@ -330,46 +294,24 @@ ComTheme(
 )
 ```
 
-## 🌍 国际化配置
+## Internationalization
+Built-in i18n module is deprecated. Use Flutter official `flutter_localizations` + `intl`.
+
+## Global State Layout
 
 ```dart
-// 语言新增或覆盖
-// 1. 创建法语本地化类
-class FrIntl extends ComIntl {
-  @override String get confirm => "xxx";
-  @override String get cancel => "xxx";
-  @override String get loading => "...";
-}
-
-// 2. 注册语言
-ComLocalizations.addLocalization('fr', FrIntl());
-
-// 3. 配置MaterialApp
-MaterialApp(
-  supportedLocales: [
-    Locale('fr'), // 新增法语支持
-  ],
-)
-```
-
-## 全局状态布局
-
-```dart
-// 全局配置或局部配置
+// Global or local configuration
 ComConfiguration(
   config: ComConfig.defaults().copyWith(
-    emptyWidget: const ComLoading(),
-    loadingWidget: const ComEmpty(),
-    errorWidget: const ComErrorWidget(),
-    noNetworkWidget: (VoidCallback? onReconnect) =>
-                    ComNoNetworkWidget(onReconnect: onReconnect),
+    emptyWidget: const ComLoading(), // example only
+    loadingWidget: const ComEmpty(), // example only
+    errorWidget: const ComErrorWidget(), // example only
+    noNetworkWidget: (VoidCallback? onReconnect) => ComNoNetworkWidget(onReconnect: onReconnect), // example only
   ),
   child: child,
 );
 
-// BaseWidget的各状态布局默认使用全局统一配置，局部可自定义
-// isConnected配合connectivity_plus库自动实现无网络情况显示无网络状态布局，网络正常情况显示正常布局
-// status控制页面各状态内容布局显示
+// BaseWidget states use global config by default; can be customized locally
 BaseWidget(
   isConnected: isConnected,
   status: LayoutStatus.loading,
@@ -381,7 +323,7 @@ BaseWidget(
   child: child,
 )
 
-// 状态类型说明
+// State types
 enum LayoutStatus {
   loading,
   success,
@@ -390,57 +332,26 @@ enum LayoutStatus {
   noNetwork,
 }
 
-// 全局统一使用
+// Global helpers
 BaseWidget.loadingWidget(context)
 BaseWidget.emptyWidget(context)
 BaseWidget.errorWidget(context)
 BaseWidget.noNetworkWidget(context)
 ...
 
-// 使用默认库中状态组件项目需要包含以下图片资源才能正常加载显示
-assets/images/empty.png
-assets/images/error.png
-assets/images/no_network.png
-
 ```
+ 
 
-## 全局日期时间
+## Contributing
 
-```dart
-// default_formatter默认实现中英文，使用示例
-Log.d(DateUtil.formatDate(DateTime.now()));
-Log.d(DateUtil.formatDateMs(DateTime.now().millisecondsSinceEpoch,
-    format: "yyyy/MM/dd"));
-Log.d(DateUtil.getTimeAgoByMs(DateTime.now().millisecondsSinceEpoch));
-Log.d(DateUtil.getTimeAgoForChatByMs(DateTime.now().millisecondsSinceEpoch));
+We welcome all contributions:
 
-// 自定义Formatter
-class IntlDateFormatter implements DateFormatterDelegate {
-  @override
-  String format(DateTime? dateTime, {String? pattern, Locale? locale}) {
-    if (dateTime == null) return '';
-    return DateFormat(pattern, locale?.languageCode).format(dateTime);
-  }
-  // 其他方法实现...
-}
+- 🐛 Bug reports
+- 💡 Feature ideas
+- 📚 Docs improvements
+- 🎨 Design assets
+- 💻 Code contributions
 
-// 初始化时注入
-void main() {
-  DateTimeFormatter.setDelegate(IntlDateFormatter());
-  runApp(MyApp());
-}
-```
+## License
 
-🤝 贡献指南
-
-我们欢迎各种形式的贡献，包括但不限于：
-
-- 🐛 Bug 报告
-- 💡 功能建议
-- 📚 文档改进
-- 🎨 设计资源
-- 💻 代码提交
-
-## 📄 许可证
-
-MIT License - 详情见 [LICENSE](LICENSE) 文件
+MIT License – see [LICENSE](LICENSE)
