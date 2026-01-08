@@ -14,8 +14,8 @@ dependencies:
     path: ../../../
 
   get: ^4.6.6
-  permission_handler: ^10.0.0
-  package_info_plus: ^8.0.0
+  permission_handler: ^12.0.0
+  package_info_plus: ^9.0.0
   crypto: ^3.0.0
   cached_network_image: ^3.3.0
   flutter_screenutil: ^5.9.3        # 屏幕适应
