@@ -18,7 +18,6 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ComContext.init(navigatorKey);
   await SpUtil.init();
   Directory dir = await getApplicationDocumentsDirectory();
   await Log.init(
@@ -69,8 +68,14 @@ Future<void> main() async {
         },
       ));
 
-  ComToast.initTheme(
-    theme: ComToastTheme(
+  // 全局context服务初始化
+  ComContext.init(navigatorKey);
+  ComToast.init(
+    config: const ComToastConfig(
+      duration: Duration(seconds: 2),
+      position: ComToastPosition.center,
+    ),
+    builder: ComToastWidgetBuilder(
       success: const ComToastConfig(
         iconWidget:
             Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20),

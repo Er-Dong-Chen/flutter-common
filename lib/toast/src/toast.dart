@@ -42,14 +42,14 @@ class ComToast {
     _toastManager.dismiss();
   }
 
-  /// 初始化全局配置
-  static void init({ComToastConfig? config}) {
-    _toastManager.init(config: config);
-  }
-
-  /// 初始化各状态的默认配置主题
-  static void initTheme({ComToastTheme? theme}) {
-    _toastManager.initTheme(theme: theme);
+  /// 初始化配置与构建器（可同时传入）
+  static void init({ComToastConfig? config, ComToastWidgetBuilder? builder}) {
+    if (config != null) {
+      _toastManager.init(config: config);
+    }
+    if (builder != null) {
+      _toastManager.initBuilder(builder: builder);
+    }
   }
 
   /// 设置重复消息过滤时间（毫秒）

@@ -202,14 +202,14 @@ enum ComToastPosition {
   bottom,
 }
 
-class ComToastTheme {
+class ComToastWidgetBuilder {
   final ComToastConfig? success;
   final ComToastConfig? error;
   final ComToastConfig? warning;
   final ComToastConfig? info;
   final ComToastConfig? loading;
 
-  const ComToastTheme({
+  const ComToastWidgetBuilder({
     this.success,
     this.error,
     this.warning,

@@ -108,16 +108,25 @@ void main() async {
   ComContext.init(navigatorKey);
   // 全局Toast配置（可选）
   ComToast.init(
-    config: ComToastConfig(
-      duration: const Duration(seconds: 2),
+    config: const ComToastConfig(
+      duration: Duration(seconds: 2),
       position: ComToastPosition.center,
     ),
-  );
-  ComToast.initTheme(
-    theme: ComToastTheme(
+    builder: ComToastWidgetBuilder(
       success: const ComToastConfig(
         iconWidget:
-            Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20),
+        Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20),
+      ),
+      error: const ComToastConfig(
+        iconWidget: Icon(Icons.cancel, color: Color(0xFFEF4444), size: 20),
+      ),
+      warning: const ComToastConfig(
+        iconWidget:
+        Icon(Icons.priority_high, color: Color(0xFFF59E0B), size: 20),
+      ),
+      info: const ComToastConfig(
+        iconWidget:
+        Icon(Icons.info_outline, color: Color(0xFF3B82F6), size: 20),
       ),
       loading: ComToastConfig(
         builder: (ctx) => const ComContainer(

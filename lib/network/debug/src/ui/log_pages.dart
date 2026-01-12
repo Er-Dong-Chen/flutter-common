@@ -176,7 +176,7 @@ class ComNetworkLogDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    log.timestamp.toString(),
+                    _formatTime(log.timestamp),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),

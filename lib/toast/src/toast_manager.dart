@@ -17,7 +17,7 @@ class ComToastManager {
   Timer? _timer;
   ComToastConfig? _globalConfig;
   GlobalKey<ComToastWidgetState>? _currentToastKey;
-  ComToastTheme? _theme;
+  ComToastWidgetBuilder? _builder;
 
   // 消息过滤相关
   String? _lastMessage;
@@ -28,13 +28,13 @@ class ComToastManager {
     _globalConfig = config;
   }
 
-  void initTheme({ComToastTheme? theme}) {
-    _theme = theme;
+  void initBuilder({ComToastWidgetBuilder? builder}) {
+    _builder = builder;
   }
 
   ComToastConfig getDefaultForType(ComToastType type) {
-    if (_theme != null) {
-      return _theme!.getFor(type);
+    if (_builder != null) {
+      return _builder!.getFor(type);
     }
     return ComToastConfig.getDefaultConfig(type);
   }

@@ -1,3 +1,7 @@
+## 4.2.0
+
+* TODO: Optimize ComToast config
+
 ## 4.1.0
 
 * TODO: Added Network debug log
