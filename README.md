@@ -33,6 +33,7 @@ Flutter Chen Common is a feature-rich Flutter utility library that provides a on
 ### Core
 - [Networking](https://juejin.cn/post/7492312857905315849) – Structured logs, retries, token refresh
 - [Logging](https://juejin.cn/post/7492398520583192585) – File logging, filters, custom outputs
+- [Network Debug](https://juejin.cn/post/7593702885881348132) - The network request debugging module provides lightweight packet capture functionality, visual logs, and more.
 - [Theme](docs/theme.md) – Customizable theme with light/dark support
 
 ### UI Components
@@ -112,6 +113,36 @@ void main() async {
       position: ComToastPosition.center,
     ),
   );
+  ComToast.initTheme(
+    theme: ComToastTheme(
+      success: const ComToastConfig(
+        iconWidget:
+            Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20),
+      ),
+      loading: ComToastConfig(
+        builder: (ctx) => const ComContainer(
+          width: 120,
+          child: ComLoading(),
+        ),
+        clickThrough: false,
+        duration: Duration.zero,
+      ),
+    ),
+  );
+
+  await ComDebugManager.instance.init(
+    dio: HttpClient.instance.dio,
+    comDebugConfig: ComDebugConfig(
+      enabled: Env.env != EnvEnum.prod,
+      maxLogCount: 100, // 最大日志缓存数量
+      sanitize: (log) {
+        // 敏感数据脱敏示例
+        if (log.request?.headers.containsKey('Authorization') ?? false) {
+          log.request?.headers['Authorization'] = '***';
+        }
+        return log;
+      },
+    ));
   runApp(MyApp());
 }
 
@@ -124,8 +155,12 @@ class MyApp extends StatelessWidget {
         loadingWidget: CustomLoading(),   // example
       ),
       child: MaterialApp(
-		navigatorKey: navigatorKey,
-        builder: ComToastBuilder(),
+		    navigatorKey: navigatorKey,
+        builder: (context, child) {
+          ComNetworkLogger.show(context);
+          child = ComToastBuilder()(context, child);
+          return child;
+        },
         navigatorObservers: [ComToastNavigatorObserver()],
         theme: ThemeData.light().copyWith(
           extensions: [ComTheme.light()],

@@ -33,6 +33,7 @@ Flutter Chen Common 是一个功能丰富的 Flutter 通用库，为应用开发
 ### 核心功能
 - [网络请求](https://juejin.cn/post/7492312857905315849) - 企业级网络请求封装，内置日志打印、网络重试、token刷新等拦截器
 - [日志系统](https://juejin.cn/post/7492398520583192585) - 企业级日志体系，支持文件日志、日志过滤、自定义扩展等
+- [Network Debug](https://juejin.cn/post/7593702885881348132) - 网络请求调试模块，提供了轻量级的抓包功能、可视化的日志等
 - [主题系统](docs/theme.md) - 可定制的主题系统，支持亮暗主题切换
 
 ### UI 组件
@@ -112,6 +113,36 @@ void main() async {
       position: ComToastPosition.center,
     ),
   );
+  ComToast.initTheme(
+    theme: ComToastTheme(
+      success: const ComToastConfig(
+        iconWidget:
+            Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20),
+      ),
+      loading: ComToastConfig(
+        builder: (ctx) => const ComContainer(
+          width: 120,
+          child: ComLoading(),
+        ),
+        clickThrough: false,
+        duration: Duration.zero,
+      ),
+    ),
+  );
+
+  await ComDebugManager.instance.init(
+    dio: HttpClient.instance.dio,
+    comDebugConfig: ComDebugConfig(
+      enabled: Env.env != EnvEnum.prod,
+      maxLogCount: 100, // 最大日志缓存数量
+      sanitize: (log) {
+        // 敏感数据脱敏示例
+        if (log.request?.headers.containsKey('Authorization') ?? false) {
+          log.request?.headers['Authorization'] = '***';
+        }
+        return log;
+      },
+    ));
   runApp(MyApp());
 }
 
@@ -124,8 +155,12 @@ class MyApp extends StatelessWidget {
         loadingWidget: CustomLoading(),
       ),
       child: MaterialApp(
-		navigatorKey: navigatorKey,
-        builder: ComToastBuilder(),
+		    navigatorKey: navigatorKey,
+        builder: (context, child) {
+          ComNetworkLogger.show(context);
+          child = ComToastBuilder()(context, child);
+          return child;
+        },
         navigatorObservers: [ComToastNavigatorObserver()],
         theme: ThemeData.light().copyWith(
           extensions: [ComTheme.light()],

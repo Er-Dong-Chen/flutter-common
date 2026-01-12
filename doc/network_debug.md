@@ -16,6 +16,8 @@
 *   **实用工具**：支持一键复制完整的请求/响应日志（包含 cURL 关键信息、Header、Body 等）。
 *   **安全配置**：支持敏感数据（如 Authorization）脱敏处理。
 
+![ComNetworkLogger 效果预览](https://er-dong-chen.github.io/images/demo/network_debug.gif)
+
 ## 🚀 快速开始
 
 ### 1. 初始化（自动接入拦截器）

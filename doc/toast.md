@@ -69,6 +69,34 @@ ComToast.show(
     showShadow: true,
   ),
 );
+
+ComToast.initTheme(
+  theme: ComToastTheme(
+    success: const ComToastConfig(
+      iconWidget:
+          Icon(Icons.check_circle, color: Color(0xFF10B981), size: 20),
+    ),
+    error: const ComToastConfig(
+      iconWidget: Icon(Icons.cancel, color: Color(0xFFEF4444), size: 20),
+    ),
+    warning: const ComToastConfig(
+      iconWidget:
+          Icon(Icons.priority_high, color: Color(0xFFF59E0B), size: 20),
+    ),
+    info: const ComToastConfig(
+      iconWidget:
+          Icon(Icons.info_outline, color: Color(0xFF3B82F6), size: 20),
+    ),
+    loading: ComToastConfig(
+      builder: (ctx) => const ComContainer(
+        width: 120,
+        child: ComLoading(),
+      ),
+      clickThrough: false,
+      duration: Duration.zero,
+    ),
+  ),
+);
 ```
 
 ### 自定义内容
