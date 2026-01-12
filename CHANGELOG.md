@@ -1,3 +1,7 @@
+## 4.0.1
+
+* Update: library 
+
 ## 4.0.0
 
 * Refactor: Remove non-generic features, retaining only commonly used core utilities.

@@ -39,7 +39,7 @@ Future<void> main() async {
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
       commonHeaders: () => {"Authorization": SpUtil.getString('token')},
-      interceptors: [NetworkInterceptor()],
+      interceptors: [NetworkInterceptor(), ComNetworkDebugInterceptor()],
       enableLog: true,
       enableToken: true,
       enableRetry: true,
@@ -54,6 +54,18 @@ Future<void> main() async {
       },
     ),
   );
+
+  await ComDebugManager.instance.init(
+      comDebugConfig: ComDebugConfig(
+    maxLogCount: 100, // 最大日志缓存数量
+    sanitize: (log) {
+      // 敏感数据脱敏示例
+      if (log.request?.headers.containsKey('Authorization') ?? false) {
+        log.request?.headers['Authorization'] = '***';
+      }
+      return log;
+    },
+  ));
 
   ComToast.initTheme(
     theme: ComToastTheme(
@@ -107,7 +119,11 @@ class MyApp extends StatelessWidget {
         footerBuilder: () => const ClassicFooter(),
         child: GetMaterialApp(
           navigatorKey: navigatorKey,
-          builder: ComToastBuilder(),
+          builder: (context, child) {
+            ComNetworkLogger.show(context);
+            child = ComToastBuilder()(context, child);
+            return child;
+          },
           navigatorObservers: [ComToastNavigatorObserver()],
           home: ComponentListPage(),
           title: 'Flutter Demo',
