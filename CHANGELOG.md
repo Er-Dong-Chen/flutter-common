@@ -1,7 +1,7 @@
 ## 4.1.0
 
 * TODO: Added Network debug log
-* 
+
 ## 4.0.1
 
 * TODO: Update: library 
