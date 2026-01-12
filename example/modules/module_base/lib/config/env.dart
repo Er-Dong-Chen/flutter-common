@@ -7,7 +7,7 @@ enum EnvEnum { dev, stage, prod }
 
 class Env {
   /// 当前环境，默认生产环境
-  static EnvEnum _currentEnv = EnvEnum.prod;
+  static EnvEnum _currentEnv = EnvEnum.dev;
 
   /// 设置环境
   static void setEnv(EnvEnum env) {

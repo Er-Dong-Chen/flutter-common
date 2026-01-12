@@ -8,6 +8,10 @@ class ComNetworkDebugInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (!ComDebugManager.instance.enabledNotifier.value) {
+      super.onRequest(options, handler);
+      return;
+    }
     final requestId = DateTime.now().microsecondsSinceEpoch.toString();
     final log = ComNetworkDebug(
       id: requestId,
@@ -29,6 +33,10 @@ class ComNetworkDebugInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (!ComDebugManager.instance.enabledNotifier.value) {
+      super.onResponse(response, handler);
+      return;
+    }
     final requestId = response.requestOptions.extra['com_debug_id'] as String?;
     final startTime =
         response.requestOptions.extra['com_debug_start_time'] as int?;
@@ -50,6 +58,10 @@ class ComNetworkDebugInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (!ComDebugManager.instance.enabledNotifier.value) {
+      super.onError(err, handler);
+      return;
+    }
     final requestId = err.requestOptions.extra['com_debug_id'] as String?;
     final startTime = err.requestOptions.extra['com_debug_start_time'] as int?;
     final log = ComDebugManager.instance.getLogById(requestId);
@@ -58,13 +70,13 @@ class ComNetworkDebugInterceptor extends Interceptor {
         errorMessage: err.message ?? 'Unknown Error',
         errorType: err.type.toString(),
         errorObject: err.error,
-        stackTrace: err.stackTrace?.toString(),
+        stackTrace: err.stackTrace.toString(),
       );
       if (err.response != null) {
         log.response = ComResponseDetails(
-          statusCode: err.response?.statusCode,
-          headers: err.response?.headers.map ?? {},
-          body: err.response?.data,
+          statusCode: err.response!.statusCode,
+          headers: err.response!.headers.map,
+          body: err.response!.data,
           timestamp: DateTime.now(),
         );
       }

@@ -11,23 +11,26 @@ class ComLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SpinKitPouringHourGlassRefined(
-          color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
-          size: size,
-        ),
-        SizedBox(height: context.comTheme.spacing.medium),
-        Text(
-          message ?? 'loading...',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: color ??
-                  Theme.of(context).colorScheme.surfaceContainerHighest),
-        ),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SpinKitPouringHourGlassRefined(
+            color:
+                color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+            size: size,
+          ),
+          SizedBox(height: context.comTheme.spacing.medium),
+          Text(
+            message ?? 'loading...',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: color ??
+                    Theme.of(context).colorScheme.surfaceContainerHighest),
+          ),
+        ],
+      ),
     );
   }
 }

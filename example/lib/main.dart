@@ -39,7 +39,7 @@ Future<void> main() async {
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
       commonHeaders: () => {"Authorization": SpUtil.getString('token')},
-      interceptors: [NetworkInterceptor(), ComNetworkDebugInterceptor()],
+      interceptors: [NetworkInterceptor()],
       enableLog: true,
       enableToken: true,
       enableRetry: true,
@@ -56,16 +56,18 @@ Future<void> main() async {
   );
 
   await ComDebugManager.instance.init(
+      dio: HttpClient.instance.dio,
       comDebugConfig: ComDebugConfig(
-    maxLogCount: 100, // 最大日志缓存数量
-    sanitize: (log) {
-      // 敏感数据脱敏示例
-      if (log.request?.headers.containsKey('Authorization') ?? false) {
-        log.request?.headers['Authorization'] = '***';
-      }
-      return log;
-    },
-  ));
+        enabled: Env.env != EnvEnum.prod,
+        maxLogCount: 100, // 最大日志缓存数量
+        sanitize: (log) {
+          // 敏感数据脱敏示例
+          if (log.request?.headers.containsKey('Authorization') ?? false) {
+            log.request?.headers['Authorization'] = '***';
+          }
+          return log;
+        },
+      ));
 
   ComToast.initTheme(
     theme: ComToastTheme(

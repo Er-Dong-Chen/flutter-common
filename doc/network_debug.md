@@ -18,27 +18,27 @@
 
 ## 🚀 快速开始
 
-### 1. 初始化拦截器与配置
+### 1. 初始化（自动接入拦截器）
 
-在应用启动或 `Dio` 初始化的位置，手动添加拦截器；如需配置最大日志条数或脱敏，可初始化 `ComDebugManager`：
+在应用启动或 `Dio` 初始化后，调用 `ComDebugManager.instance.init` 即可自动为给定的 `Dio` 接入网络调试拦截器，并设置调试配置：
 
 ```dart
 import 'package:flutter_chen_common/network/debug/network_debug.dart';
 import 'package:dio/dio.dart';
 
 void initNetwork() async {
-  final dio = Dio();
-  
-  // 仅在非生产环境添加调试拦截器
-  dio.interceptors.add(ComNetworkLogInterceptor());
+  // 例如使用内置 HttpClient
+  final dio = HttpClient.instance.dio;
 
-  // 如需自定义最大日志条数或脱敏，初始化 ComDebugManager
   await ComDebugManager.instance.init(
+    dio: dio,
     comDebugConfig: ComDebugConfig(
-      maxLogCount: 100,
+      enabled: Env.env != EnvEnum.prod,
+      maxLogCount: 100, // 最大日志缓存数量
       sanitize: (log) {
+        // 敏感数据脱敏示例
         if (log.request?.headers.containsKey('Authorization') ?? false) {
-          log.request!.headers['Authorization'] = '***';
+          log.request?.headers['Authorization'] = '***';
         }
         return log;
       },
@@ -47,14 +47,14 @@ void initNetwork() async {
 }
 ```
 
-如使用本库自带的 `HttpClient`，也可在初始化时添加：
+如不使用自动接入，也可以手动添加拦截器：
 
 ```dart
 HttpClient.init(
   config: HttpConfig(
     baseUrl: 'https://api.example.com',
     interceptors: [
-      ComNetworkLogInterceptor(), // 添加网络调试拦截器
+      ComNetworkLogInterceptor(), // 手动添加网络调试拦截器
     ],
   ),
 );
@@ -76,15 +76,11 @@ class MyApp extends StatelessWidget {
       ),
       builder: (context, child) {
         // 在此处挂载浮窗
-        // 建议配合环境判断显示
-        if (Env.env != EnvType.prod) {
-           ComNetworkLogger.show(
-             context, 
-             rootOverlay: true, // 是否挂载到根 Overlay
-             bottom: 100,       // 初始底部距离
-             right: 20          // 初始右侧距离
-           );
-        }
+        ComNetworkLogger.show(
+          context, 
+          bottom: 100,       // 初始底部距离
+          right: 20          // 初始右侧距离
+        );
         return child!;
       },
     );
@@ -92,10 +88,13 @@ class MyApp extends StatelessWidget {
 }
 ```
 
+当 `enabled` 关闭时，`ComNetworkLogger.show` 会直接不做任何操作（不插入浮窗、不占用资源）。
+
 ## ⚙️ 配置说明 (ComDebugConfig)
 
 | 参数 | 类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `enabled` | `bool` | `true` | 总开关；关闭后拦截器与浮窗均不生效、零开销。 |
 | `maxLogCount` | `int` | `100` | 内存中保留的最大日志条数，超过限制将移除最早的日志。 |
 | `sanitize` | `ComLogSanitizer?` | `null` | 日志脱敏回调函数。可在此处修改 `ComNetworkDebug` 对象（如隐藏 Token），返回处理后的日志对象。 |
 
@@ -113,5 +112,5 @@ class MyApp extends StatelessWidget {
 
 ## ⚠️ 注意事项
 
-*   建议仅在 `Debug` 或 `Profile` 模式下开启，避免在 `Release` 模式下泄露敏感信息或影响性能。
+*   建议仅在 `Debug`模式下或非生产环境开启。
 *   `maxLogCount` 不宜设置过大，以免占用过多内存。

@@ -14,7 +14,8 @@ class ComNetworkDebug {
   ComErrorDetails? error;
   int? durationMs;
   bool get isError =>
-      error != null || (response != null && (response!.statusCode ?? 200) >= 400);
+      error != null ||
+      (response != null && (response!.statusCode ?? 200) >= 400);
   int get statusCode => response?.statusCode ?? 0;
 }
 

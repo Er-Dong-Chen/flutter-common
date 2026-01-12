@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chen_common/config/com_context.dart';
 
 import 'log_pages.dart';
+import '../core/debug_manager.dart';
 
 class ComNetworkLogger extends StatefulWidget {
   const ComNetworkLogger._({
     required this.right,
     required this.bottom,
     required this.draggable,
-    super.key,
   });
   final double bottom;
   final double right;
@@ -20,6 +20,9 @@ class ComNetworkLogger extends StatefulWidget {
     double right = 30,
     bool draggable = true,
   }) {
+    if (!ComDebugManager.instance.enabledNotifier.value) {
+      return OverlayEntry(builder: (_) => const SizedBox());
+    }
     if (_ComNetworkDebugEntry.inserted || _ComNetworkDebugEntry.scheduled) {
       return _ComNetworkDebugEntry.entry ??
           OverlayEntry(builder: (_) => const SizedBox());

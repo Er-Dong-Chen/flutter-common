@@ -1,5 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_chen_common/network/debug/src/network/dio_interceptor.dart';
 
 import 'debug_config.dart';
 import 'log_models.dart';
@@ -9,28 +10,31 @@ class ComDebugManager {
   static ComDebugManager get instance => _instance;
 
   ComDebugManager._internal();
-  static const String _prefKeyEnabled = 'com_network_debug_enabled';
   ComDebugConfig config = const ComDebugConfig();
   final ValueNotifier<List<ComNetworkDebug>> logsNotifier = ValueNotifier([]);
   final ValueNotifier<bool> enabledNotifier = ValueNotifier(true);
   final Map<String, ComNetworkDebug> _logIndex = {};
   bool _initialized = false;
-  Future<void> init({ComDebugConfig? comDebugConfig}) async {
+  Future<void> init({Dio? dio, ComDebugConfig? comDebugConfig}) async {
     if (_initialized) {
       if (comDebugConfig != null) updateConfig(comDebugConfig);
       return;
     }
     if (comDebugConfig != null) config = comDebugConfig;
-    final prefs = await SharedPreferences.getInstance();
-    enabledNotifier.value = prefs.getBool(_prefKeyEnabled) ?? true;
+    if (dio != null) {
+      final exists =
+          dio.interceptors.any((i) => i is ComNetworkDebugInterceptor);
+      if (!exists) {
+        dio.interceptors.add(ComNetworkDebugInterceptor());
+      }
+    }
+    enabledNotifier.value = config.enabled;
     _initialized = true;
   }
 
   Future<void> setEnabled(bool enabled) async {
     if (enabledNotifier.value == enabled) return;
     enabledNotifier.value = enabled;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_prefKeyEnabled, enabled);
   }
 
   void updateConfig(ComDebugConfig newConfig) {
